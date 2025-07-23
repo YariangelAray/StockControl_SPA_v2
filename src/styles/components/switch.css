@@ -1,0 +1,38 @@
+.switch {
+  position: relative;
+  display: flex;
+  width: 60px;
+  height: 30px;
+  align-items: center;
+  box-shadow: 0 0 4px 1px #00000035 inset;
+  border-radius: 20px;
+  background-color: var(--verde-oscuro);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  left: 4px;
+  background-color: var(--blanco);
+  box-shadow: 0 0 4px var(--negro);
+  transition: all 0.3s ease-in-out;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.toggle{
+  display: none;
+}
+
+.toggle:checked + .switch{
+  background-color: var(--verde-claro);
+}
+
+.toggle:checked + .switch .slider{
+  transform: translateX(28px)
+  
+}

@@ -1,0 +1,173 @@
+.modal {
+  background-color: var(--gris-panel);
+  box-shadow: 0 2px 8px 0 #00000025;
+  margin: auto auto;
+  border: none;
+  outline: none;
+  border-radius: var(--borde-redondeado);
+  padding: 20px 30px 15px;
+  padding-top: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.modal.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+.modal::backdrop {
+  transition: background-color 300ms ease-in-out;
+}
+
+.modal:not(.visible)::backdrop {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.modal__header {
+  padding: 15px 0;
+  text-align: center;
+  background-color: var(--verde-oscuro);
+  margin: 0 -20px;
+}
+
+.modal__title {
+  color: var(--blanco);
+}
+
+.modal__body,
+.modal__body .input {
+  width: 100%;
+}
+
+.modal__body .form {
+  width: 100%;
+  padding: 10px;
+}
+
+.modal__body .form__control--stacked {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  align-items: start;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 20px;
+  padding: 15px 10px 10px;
+  position: relative;
+}
+
+.modal:not(.modal--small) .modal__actions .close-modal {
+  position: absolute;
+  right: 10px;
+}
+
+.modal--small {
+  grid-template-rows: 1fr auto;
+  padding-top: 20px;
+  max-width: 400px;
+}
+
+.modal--small .modal__actions {
+  justify-content: space-between;
+}
+
+.modal--small .modal__body {
+  text-align: center;
+}
+
+
+/* ========================================================
+───────────────── MODALES PERSONALIZADOS ─────────────────
+======================================================== */
+
+/* ──────────────── MODAL ELEMENTO ──────────────── */
+.modal--elemento {
+  width: 650px;
+}
+
+.modal--elemento .form,
+.modal--tipo-elemento .form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 30px;
+}
+
+/* ──────────────── MODAL REPORTE ──────────────── */
+.modal--reporte {
+  width: 600px;
+}
+
+.modal--reporte .form {
+  display: grid;
+  gap: 15px 20px;
+  grid-template-columns: 1.5fr 1fr;
+}
+
+.reporte__imagenes {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  max-width: 100%;
+  height: 200px;
+  padding: 5px 0;
+}
+
+.reporte__imagenes::-webkit-scrollbar-thumb {
+  background-color: var(--verde-claro);
+}
+
+.reporte__imagenes img {
+  height: 100%;
+  width: 150px;
+  border-radius: var(--borde-redondeado);
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* ──────────────── MODAL VISOR DE IMAGEN ──────────────── */
+.visor {
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: auto auto;
+  border-radius: var(--borde-redondeado);
+}
+
+.visor img {
+  max-width: 90vw;
+  max-height: 90vh;
+  cursor: default;
+}
+
+/* ──────────────── MODALES DE ACCESO Y CONFIG ──────────────── */
+.modal--pedir-acceso .form,
+.modal--configurar .form {
+  padding: 10px 0;
+}
+
+.modal--configurar,
+.modal--eliminar-cuenta {
+  max-width: 500px;
+}
+
+/* ──────────────── MODAL CÓDIGO DE ACCESO ──────────────── */
+.modal--codigo .codigo-acceso {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--verde-claro);
+  text-align: center;
+  margin: 10px 0;
+}

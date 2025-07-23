@@ -1,0 +1,50 @@
+.home{
+  height: inherit;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1.2fr 1fr;
+  background-image: linear-gradient(to top left ,var(--blanco), var(--verde-claro)60%, var(--verde-oscuro)100%),
+                    linear-gradient(hsla(0, 0%, 0%, 0.2), hsla(0, 0%, 0%, 0.2)65%);
+  background-blend-mode: color;
+  padding: 20px;
+}
+
+.home--signup {
+  background-image: linear-gradient(to top right, var(--blanco), var(--verde-claro)60%, var(--verde-oscuro)100%), 
+                    linear-gradient(hsla(0, 0%, 0%, 0.4), hsla(0, 0%, 0%, 0.4));  
+}
+
+.home__intro,
+.home__form,
+.home__logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.home__logos .separacion{
+  width: 3px;
+  height: 70%;
+  background-color: var(--blanco);
+}
+
+.home__title{
+  display: flex;
+  flex-direction: column;
+  width: 35vw;
+  row-gap: 40px;
+  padding: 0 20px;
+}
+
+.home__description{
+  color: var(--blanco);
+  font-size: 2.5vw;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.content--auth .form .button{      
+  min-width: 150px;
+  font-size: 1.1rem;
+}

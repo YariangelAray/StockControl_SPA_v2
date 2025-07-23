@@ -1,0 +1,93 @@
+<main class="home home--signup">
+    <section class="home__form">
+
+        <form action="" class="form form--signup" novalidate>
+            <div class="form__header">
+                <h2>Registrarse</h2>
+            </div>
+
+            <div class="form__body">
+
+                <div class="form__control">
+                    <input type="text" class="input" placeholder="Nombres" name="nombres" required>
+                </div>
+
+                <div class="form__control">
+                    <input type="text" class="input" placeholder="Apellidos" name="apellidos" required>
+                </div>
+
+                <div class="form__control">
+                    <select name="tipo_documento_id" class="input input--select" required>
+                        <option value="">Tipo de Documento</option>
+                        <option value="1">Cédula de Ciudadania</option>
+                        <option value="2">Tarjeta de Identidad</option>
+                        <option value="3">Cédula de Extranjería</option>
+                    </select>
+                </div>
+
+                <div class="form__control">
+                    <input type="text" class="input" placeholder="Número de Documento" name="documento" required>
+                </div>
+
+                <div class="form__control">
+                    <select name="programa" id="programa" class="input input--select" required>
+                        <option value="">Programa de Formación</option>
+                        <option value="1">(N/A) - No Aplica</option>
+                        <option value="2">(ADSO) - Análisis y Desarrollo de Software</option>
+                    </select>
+                </div>
+
+                <div class="form__control">
+                    <select name="ficha_id" class="input input--select" required>
+                        <option value="">Ficha</option>
+                        <option value="1">(N/A) - No Aplica</option>
+                        <option value="2">2894667</option>
+                    </select>
+                </div>
+
+                <div class="form__control">
+                    <input type="text" class="input" placeholder="Correo Electrónico" name="correo" required>
+                </div>
+
+                <div class="form__control">
+                    <input type="text" class="input" placeholder="Número de Télefono" name="telefono" required>
+                </div>
+
+                <div class="form__control">
+                    <select name="genero_id" class="input input--select" required>
+                        <option value="">Seleccione su Género</option>
+                        <option value="1">Masculino</option>
+                        <option value="2">Femenino</option>
+                        <option value="3">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form__control">
+                    <input type="password" class="input contrasena" placeholder="Contraseña" name="contrasena" required
+                        id="contrasena">
+                    <i class="icon ri-eye-line"></i>
+                </div>
+
+            </div>
+            <div class="form__action">
+                <button class="button">Registrarse</button>
+                <a href="index.html" class="link">Iniciar Sesión</a>
+            </div>
+        </form>
+
+    </section>
+
+    <section class="home__intro">
+        <div class="home__logos">
+            <img src="Img/SENA.png" alt="SENA">
+            <hr class="separacion">
+            <img src="Img/Logo.png" alt="logo">
+        </div>
+
+        <div class="home__title">
+            <img src="Img/Titulo.png" alt="Stock Control">
+            <p class="home__description">Sistema de <br> Administración y <br> Gestión de Inventario</p>
+        </div>
+
+    </section>
+</main>

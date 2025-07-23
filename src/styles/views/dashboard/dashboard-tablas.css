@@ -1,0 +1,17 @@
+.dashboard--table-section .dashboard__header .dashboard__actions {
+  padding: 0;
+  justify-content: space-between;
+}
+
+.dashboard--table-section .dashboard__header .dashboard__actions .dashboard__filters,
+.dashboard--table-section .dashboard__header .dashboard__actions .dashboard__buttons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.dashboard--table-section .dashboard__content {
+  display: flex;
+  overflow: hidden;
+  padding-top: 10px;
+}

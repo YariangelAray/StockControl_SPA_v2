@@ -1,0 +1,14 @@
+.text-details{
+  font-size: var(--fuente-pequena);
+  font-weight: 550;
+  color: var(--gris-letras);
+}
+
+.text-details--bold{
+  font-weight: 700;
+  color: var(--gris-letras-oscuras);
+}
+
+.text-details--medium-sized{
+  font-size: var(--fuente-normal);
+}

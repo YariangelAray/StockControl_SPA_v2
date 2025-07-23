@@ -1,0 +1,51 @@
+<main class="home">
+
+    <section class="home__intro">
+        <div class="home__title">
+            <img src="Img/Titulo.png" alt="Stock Control">
+            <p class="home__description">Sistema de <br> Administración y <br> Gestión de Inventario</p>
+        </div>
+    </section>
+
+    <section class="home__form">
+        <div class="home__logos">
+            <img src="Img/SENA.png" alt="SENA">
+            <hr class="separacion">
+            <img src="Img/Logo.png" alt="logo">
+        </div>
+
+        <form action="" class="form form--signin">
+            <div class="form__header">
+                <h2>Ingresar</h2>
+            </div>
+
+            <div class="form__body">
+
+                <div class="form__control">
+                    <select name="rol" id="rol" class="input input--select" required>
+                        <option value="">Seleccione su Rol</option>
+                        <option value="1">Usuario Administrativo</option>
+                        <option value="2">Usuario Corriente</option>
+                    </select>
+                </div>
+
+                <div class="form__control">
+                    <input type="text" class="input" placeholder="Número de Documento" name="documento" id="documento"
+                        required>
+                </div>
+
+                <div class="form__control">
+                    <input type="password" class="input contrasena" placeholder="Contraseña" name="contrasena" required
+                        id="contrasena">
+                    <i class="icon ri-eye-line"></i>
+                </div>
+
+            </div>
+            <div class="form__action">
+                <button class="button">Iniciar Sesión</button>
+                <a href="Registro.html" class="link">Registrarse</a>
+            </div>
+        </form>
+    </section>
+
+</main>

@@ -1,0 +1,25 @@
+.dashboard--profile .dashboard__content {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 20px 0;
+}
+
+.dashboard--profile .form__header {
+  justify-content: start;
+}
+
+.dashboard--profile .form__body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  height: auto;
+  padding: 0;
+}
+
+.dashboard--profile .form__action {
+  align-items: end;
+}
+
+.dashboard--profile .input {
+  border: 1px solid var(--verde-claro);
+}

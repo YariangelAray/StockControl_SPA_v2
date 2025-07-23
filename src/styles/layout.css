@@ -1,0 +1,30 @@
+body {
+    background-color: var(--blanco);
+    overflow: hidden;
+}
+
+.content,
+.content--auth {
+    height: 100vh;
+}
+
+.content--ui {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: 60px 1fr;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar main";
+}
+
+.sidebar {
+    grid-area: sidebar;
+}
+
+.header {
+    grid-area: header;
+}
+
+.dashboard{
+    grid-area: main;
+}

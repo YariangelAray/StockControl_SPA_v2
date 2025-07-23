@@ -1,0 +1,29 @@
+.dashboard--details-section {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.dashboard--details-section .dashboard__content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0;
+  align-items: normal;
+  padding: 0;
+}
+
+.access-info {
+  margin-top: 20px;
+  border: 2px solid var(--verde-claro);
+  border-radius: 12px;
+  padding: 8px 50px;
+}
+
+.access-info .text-details {
+  color: var(--verde-claro);
+}
+
+.dashboard--details-section .dashboard__actions .button--white {
+  position: absolute;
+  right: 10px;
+}

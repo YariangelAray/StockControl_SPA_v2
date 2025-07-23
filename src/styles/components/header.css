@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  padding-right: 80px;
+  width: 100%;
+  position: relative;
+}
+
+.header__title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--gris-letras);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.header__inventario {
+  display: inline-block;
+  max-width: 40vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+.header__seccion {
+  color: var(--gris-letras-oscuras);
+}

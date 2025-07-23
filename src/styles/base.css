@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Work Sans", sans-serif;
+  outline: none;
+}
+
+:root {
+  --verde-claro: #39A900;
+  --verde-oscuro: #007832;
+  --gris-panel: #F6F6F6;
+  --gris-letras: #777777;
+  --gris-letras-oscuras: #545454;
+  --gris-claro: #EEEEEE;
+  --gris-oscuro: #DDDDDD;
+  --blanco: #FFFFFF;
+  --negro: #000000;
+
+  /* Tamaños y formas */
+  --borde-redondeado-min: 12px;
+  --borde-redondeado: 15px;
+  --fuente-pequena: 0.8rem;
+  --fuente-normal: 1rem;
+  --fuente-grande: 2.5rem;
+
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+::selection{
+  background-color: hsla(100, 100%, 33%, 0.5);
+}
+
+.separacion {
+  border: none;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
