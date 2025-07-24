@@ -1,8 +1,3 @@
-body {
-    background-color: var(--blanco);
-    overflow: hidden;
-}
-
 .content,
 .content--auth {
     height: 100vh;

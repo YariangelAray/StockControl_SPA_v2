@@ -1,7 +1,9 @@
 .modal {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
   background-color: var(--gris-panel);
   box-shadow: 0 2px 8px 0 #00000025;
-  margin: auto auto;
   border: none;
   outline: none;
   border-radius: var(--borde-redondeado);
@@ -12,19 +14,20 @@
   overflow: hidden;
 
   opacity: 0;
-  transform: scale(0);
+  transform: translateY(-20px);
   pointer-events: none;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  justify-items: center;
 }
 
 .modal.visible {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0px);
   pointer-events: all;
 }
 
 .modal::backdrop {
-  transition: background-color 300ms ease-in-out;
+  transition: background-color 300ms ease;
 }
 
 .modal:not(.visible)::backdrop {
@@ -32,10 +35,11 @@
 }
 
 .modal__header {
+  width: 150%;
   padding: 15px 0;
   text-align: center;
   background-color: var(--verde-oscuro);
-  margin: 0 -20px;
+
 }
 
 .modal__title {
@@ -45,12 +49,15 @@
 .modal__body,
 .modal__body .input {
   width: 100%;
+  max-width: 100%;
 }
 
 .modal__body .form {
   width: 100%;
   padding: 10px;
+  max-width: 100%;
 }
+
 
 .modal__body .form__control--stacked {
   display: flex;
@@ -64,9 +71,10 @@
   gap: 20px;
   padding: 15px 10px 10px;
   position: relative;
+  width: 100%;
 }
 
-.modal:not(.modal--small) .modal__actions .close-modal {
+.modal:not(.modal--small) .modal__actions .button--final {
   position: absolute;
   right: 10px;
 }
@@ -90,8 +98,8 @@
 ───────────────── MODALES PERSONALIZADOS ─────────────────
 ======================================================== */
 
-/* ──────────────── MODAL ELEMENTO ──────────────── */
-.modal--elemento {
+.modal--elemento, 
+.modal--tipo-elemento, .modal--reporte {
   width: 650px;
 }
 
@@ -99,12 +107,7 @@
 .modal--tipo-elemento .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 30px;
-}
-
-/* ──────────────── MODAL REPORTE ──────────────── */
-.modal--reporte {
-  width: 600px;
+  gap: 10px 20px;
 }
 
 .modal--reporte .form {
@@ -159,7 +162,7 @@
 }
 
 .modal--configurar,
-.modal--eliminar-cuenta {
+.modal--desactivar-cuenta {
   max-width: 500px;
 }
 
@@ -170,4 +173,8 @@
   color: var(--verde-claro);
   text-align: center;
   margin: 10px 0;
+}
+
+.modal--codigo .modal__actions{
+  justify-content: center;
 }

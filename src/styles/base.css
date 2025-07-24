@@ -47,6 +47,7 @@
   border-radius: 5px;
 }
 
-.hidden {
-  display: none;
+body {
+  background-color: var(--blanco);
+  overflow: hidden;
 }

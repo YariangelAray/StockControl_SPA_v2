@@ -1,0 +1,37 @@
+<dialog class="modal modal--reporte modal--generar-reporte" backdrop-close="false">
+
+    <div class="modal__header">
+        <h2 class="modal__title">Reportar un problema</h2>
+    </div>
+
+    <div class="modal__body">
+        <form action="" class="form">
+
+            <div class="form__control form__control--stacked form__control--span">
+                <label for="asunto">Asunto:</label>            
+                <input type="text" class="input input--small" placeholder="Asunto" name="asunto" id="asunto" required>
+            </div>
+
+            <div class="form__control form__control--stacked form__control--span">
+                <label for="mensaje">Mensaje:</label>                
+                <textarea class="input input--small input--textarea" placeholder="Mensaje" name="mensaje" id="mensaje"></textarea>
+            </div>
+
+            <div class="form__control form__control--stacked form__control--span">
+                <label>Imágenes:</label>
+                
+                <div class="form__file-group">
+                    <input type="file" name="imagenes" id="imagenes" class="input input--small input--file" multiple accept="image/*">
+                    <label for="imagenes" class="input--file__label"><i class="ri-upload-2-line icon"></i> Subir imágenes</label>
+                    <p id="nombre-archivos" class="text-details">Ningún archivo seleccionado.</p>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="modal__actions">        
+        <button class="button confirmar">Reportar</button>
+        <button class="button button--red cancelar button--final">Cancelar</button>
+    </div>
+</dialog>

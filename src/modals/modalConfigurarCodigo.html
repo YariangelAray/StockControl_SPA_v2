@@ -1,0 +1,17 @@
+<dialog class="modal modal--small modal--configurar" backdrop-close="false">
+  <div class="modal__body">
+    <p class="modal__mensaje text-details text-details--medium-sized">      
+      Ingrese la cantidad de <strong class="text-details--bold">horas</strong> durante las cuales desea que el inventario esté <strong class="text-details--bold">disponible</strong> para su <strong class="text-details--bold">gestión</strong>. <br> 
+      <i class="ri-information-line"></i> (El valor máximo permitido es de <strong class="text-details--bold">6 horas</strong>)
+    </p>
+    <form action="" class="form">
+        <div class="form__control">
+            <input type="number" class="input input--small" min="1" max="6" name="horas-acceso">
+        </div>
+    </form>
+  </div>
+  <div class="modal__actions">
+    <button class="button confirmar">Aceptar</button>
+    <button class="button button--red cancelar">Cancelar</button>
+  </div>
+</dialog>

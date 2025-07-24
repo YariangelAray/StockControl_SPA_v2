@@ -17,7 +17,7 @@
 
   font-size: var(--fuente-normal);
   padding: 8px 12px;
-  height: 35px;
+  height: min-content;
 }
 
 .button .icon{
@@ -37,4 +37,16 @@
 
 .button--red{
   background-color: #D32F2F;
+}
+
+.link{
+  font-weight: 500;
+  font-size: var(--fuente-normal);
+  color: var(--verde-oscuro);
+  transition: all 0.3s ease-in-out;
+  text-decoration: underline;
+}
+
+.link:hover{
+  font-weight: 600;
 }

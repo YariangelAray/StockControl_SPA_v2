@@ -12,10 +12,10 @@
   border-radius: 12px;
   padding: 0 15px 0;
   transition: all 0.3s ease-in-out;
+  background-color: var(--blanco);
 }
 
 .input:disabled{
-  background-color: var(--blanco);
   opacity: 0.7;
 }
 
@@ -28,7 +28,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  background-image: url('Img/arrow-down-s-line.svg');
+  background-image: url('/img/arrow-down-s-line.svg');
   background-repeat: no-repeat;
   background-position: right 0.4rem center;
   background-size: 30px;
