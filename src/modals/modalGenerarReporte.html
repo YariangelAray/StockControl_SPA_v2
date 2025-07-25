@@ -5,7 +5,7 @@
     </div>
 
     <div class="modal__body">
-        <form action="" class="form">
+        <form action="" class="form" id="form-reportar" novalidate autocomplete="off">
 
             <div class="form__control form__control--stacked form__control--span">
                 <label for="asunto">Asunto:</label>            
@@ -14,7 +14,7 @@
 
             <div class="form__control form__control--stacked form__control--span">
                 <label for="mensaje">Mensaje:</label>                
-                <textarea class="input input--small input--textarea" placeholder="Mensaje" name="mensaje" id="mensaje"></textarea>
+                <textarea class="input input--small input--textarea" placeholder="Mensaje" name="mensaje" id="mensaje" required></textarea>
             </div>
 
             <div class="form__control form__control--stacked form__control--span">
@@ -31,7 +31,7 @@
     </div>
 
     <div class="modal__actions">        
-        <button class="button confirmar">Reportar</button>
+        <button class="button confirmar" type="submit" form="form-reportar">Reportar</button>
         <button class="button button--red cancelar button--final">Cancelar</button>
     </div>
 </dialog>

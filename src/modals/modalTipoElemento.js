@@ -1,5 +1,7 @@
 import { cerrarModal, mostrarConfirmacion } from "./modalsController";
 import { setLecturaForm } from "../helpers/setLecturaForm";
+import * as validaciones from "../helpers/Validaciones";
+
 
 export const configurarModalTipo = (modo, modal) => {
   const form = modal.querySelector('form');
@@ -37,32 +39,36 @@ export const configurarModalTipo = (modo, modal) => {
 
 export const initModalTipo = (modal) => {
   const form = modal.querySelector('form');
-  form.addEventListener('submit', (e) => {
+
+  const campos = [...form];
+  campos.forEach(campo => {
+    if (campo.hasAttribute('required'))
+      campo.addEventListener("input", validaciones.validarCampo);
+
+    if (campo.name == "nombre" || campo.name == "marca" || campo.name == "modelo")
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
+
+    if (campo.name == "observaciones")
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 250));
+  });
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!validaciones.validarFormulario(e)) return;
+    const confirmado = await mostrarConfirmacion();
+    if (confirmado) {
+      alert('El tipo será guardado.');
+      cerrarModal();
+    } else {
+      alert('Acción cancelada.');
+    }
   });
 
   modal.addEventListener('click', async (e) => {
 
-    if (e.target.closest('.crear')) {
-      const confirmado = await mostrarConfirmacion();
-      if (confirmado) {
-        alert('Tipo creado exitosamente.');
-        cerrarModal();
-      }
-    }
-
     if (e.target.closest('.editar')) {
       configurarModalTipo('editar_activo', modal);
       return;
-    }
-
-    if (e.target.closest('.guardar')) {
-      const confirmado = await mostrarConfirmacion();
-      if (confirmado) {
-        alert('El Tipo será actualizado.');
-      } else {
-        alert('Acción cancelada.');
-      }
     }
 
     if (e.target.closest('.cancelar')) {
@@ -70,13 +76,16 @@ export const initModalTipo = (modal) => {
       if (estaEditando) {
         configurarModalTipo('editar', modal); // volver a modo lectura
       } else {
-        cerrarModal(); // cerrar en modo crear
+        cerrarModal(); // cerrar en modo crear        
       }
+      form.querySelectorAll('.form__control').forEach(input => {
+        input.classList.remove('error'); 
+      });
     }
 
     if (e.target.closest('.aceptar')) {
       cerrarModal();
     }
-    
+
   })
 }

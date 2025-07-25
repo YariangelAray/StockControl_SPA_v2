@@ -5,18 +5,18 @@
   </div>
 
   <div class="modal__body">
-    <form action="" class="form">
+    <form action="" class="form" id="form-elemento" novalidate autocomplete="off">
 
       <div class="form__control form__control--stacked">
         <label for="placa">Placa:</label>
-        <input type="text" class="input input--small" placeholder="Placa" name="placa" id="placa" value="92241017676"
+        <input type="text" class="input input--small" placeholder="Placa" name="placa" id="placa" 
           required>
       </div>
 
       <div class="form__control form__control--stacked">
         <label for="serial">Serial:</label>
         <input type="text" class="input input--small" placeholder="Serial (opcional)" name="serial"
-          value="3H82240000650" id="serial">
+           id="serial">
       </div>
 
       <div class="form__control form__control--stacked form__control--span">
@@ -32,7 +32,7 @@
 
       <div class="form__control form__control--stacked">
         <label for="fecha_adquisicion">Fecha de Adquisición:</label>
-        <input type="date" class="input input--small" name="fecha_adquisicion" id="fecha_adquisicion" value="2024-12-13"
+        <input type="date" class="input input--small" name="fecha_adquisicion" id="fecha_adquisicion" 
           required>
       </div>
 
@@ -45,7 +45,7 @@
         <label for="estado">Estado:</label>
         <select name="estado_id" class="input input--small input--select" id="estado">
           <option value="">Seleccione el estado del elemento</option>
-          <option value="1" selected>Bueno</option>
+          <option value="1">Bueno</option>
           <option value="2">Regular</option>
           <option value="3">Malo</option>
         </select>
@@ -56,7 +56,7 @@
         <select name="ambiente_id" class="input input--small input--select" id="ambiente">
           <option value="">Seleccione el ambiente</option>
           <option value="1">Desarrollo de Software</option>
-          <option value="2" selected>Fábrica de Software</option>
+          <option value="2">Fábrica de Software</option>
         </select>
       </div>
 
@@ -72,8 +72,8 @@
     <button class="button editar">Editar
       <i class="ri-edit-fill icon"></i>
     </button>
-    <button class="button crear">Crear</button>
-    <button class="button guardar">Guardar</button>
+    <button type="submit" class="button crear" form="form-elemento">Crear</button>
+    <button type="submit" class="button guardar" form="form-elemento">Guardar</button>
     <button class="button button--red dar-baja">Dar de baja</button>
     <button class="button button--red reportar">Génerar reporte</button>
     <button class="button button--white aceptar button--final">Aceptar</button>

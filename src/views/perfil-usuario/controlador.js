@@ -1,7 +1,10 @@
 import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController";
 import { initModalEliminar } from "../../modals/modalDesactivarCuenta";
+import { initComponentes } from "../../helpers/initComponentes";
 
 export default async () => {
+    if (!initComponentes()) return;
+
     document.querySelector('.dashboard').className = "dashboard";
     document.querySelector('.dashboard').classList.add('dashboard--profile');
 

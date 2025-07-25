@@ -2,9 +2,11 @@ import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, ocu
 import { configurarModalTipo, initModalTipo } from "./modalTipoElemento";
 import { setLecturaForm } from "../helpers/setLecturaForm";
 import { initModalGenerarReporte } from "./modalGenerarReporte";
+import * as validaciones from "../helpers/Validaciones";
 
 export const configurarModalElemento = (modo, modal) => {
   const form = modal.querySelector('form');
+
   const botones = {
     editar: modal.querySelector('.editar'),
     crear: modal.querySelector('.crear'),
@@ -22,7 +24,7 @@ export const configurarModalElemento = (modo, modal) => {
     form.reset();
     setLecturaForm(form, false); // todos habilitados
     botones.crear.classList.remove('hidden');
-    modal.querySelector('#agregarTipo').classList.add('hidden');;    
+    modal.querySelector('#agregarTipo').classList.add('hidden');;
     botones.cancelar.classList.remove('hidden');
     modal.querySelector('.modal__title').textContent = 'Crear Elemento';
   }
@@ -47,12 +49,12 @@ export const configurarModalElemento = (modo, modal) => {
 
 export const initModalElemento = async (modal) => {
 
-  await initModales(['modalGenerarReporte', 'modalTipoElemento']);  
+  await initModales(['modalGenerarReporte', 'modalTipoElemento']);
   const { modalGenerarReporte, modalTipoElemento } = modales;
   initModalGenerarReporte(modalGenerarReporte);
   initModalTipo(modalTipoElemento);
 
-  const selectTipo = modal.querySelector('#tipo_elemento');  
+  const selectTipo = modal.querySelector('#tipo_elemento');
   const btnAgregarTipo = modal.querySelector('#agregarTipo');
   btnAgregarTipo.classList.add('hidden');
 
@@ -67,13 +69,47 @@ export const initModalElemento = async (modal) => {
 
   btnAgregarTipo.addEventListener('click', (e) => {
     e.preventDefault();
-    configurarModalTipo('crear', modalTipoElemento);    
+    configurarModalTipo('crear', modalTipoElemento);
     abrirModal(modalTipoElemento);
   });
 
   const form = modal.querySelector('form');
-  form.addEventListener('submit', (e) => {
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!validaciones.validarFormulario(e)) return;
+    const confirmado = await mostrarConfirmacion();
+    if (confirmado) {
+      alert('El elemento será guardado.');
+      cerrarModal();
+    } else {
+      alert('Acción cancelada.');
+    }
+  });
+
+  const campos = [...form];
+  campos.forEach(campo => {
+    if (campo.hasAttribute('required'))
+      campo.addEventListener("input", validaciones.validarCampo);
+
+    if (campo.name == "valor_monetario") {
+      campo.addEventListener("keydown", (e) => {
+        validaciones.validarNumero(e);
+        validaciones.validarLimite(e, 20);
+      });
+
+    }
+    if (campo.name == "placa" || campo.name == "serial")
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
+
+    if (campo.name == "fecha_adquisicion")
+      campo.addEventListener('input', (e) => validaciones.validarFecha(e.target))
+
+    if (campo.name == "placa")
+      campo.addEventListener("keydown", validaciones.validarNumero);
+
+    if (campo.name == "observaciones")
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 250));
   });
 
 
@@ -93,25 +129,6 @@ export const initModalElemento = async (modal) => {
       return;
     }
 
-    if (e.target.closest('.guardar')) {
-      const confirmado = await mostrarConfirmacion();
-      if (confirmado) {
-        alert('El elemento será actualizado.');
-      } else {
-        alert('Acción cancelada.');
-      }
-    }
-
-    if (e.target.closest('.crear')) {
-      const confirmado = await mostrarConfirmacion();
-      if (confirmado) {
-        alert('El elemento será guardado.');
-        cerrarModal();
-      } else {
-        alert('Acción cancelada.');
-      }
-    }
-
     if (e.target.closest('.cancelar')) {
       const estaEditando = modal.querySelector('.modal__title').textContent.includes('Editar');
       if (estaEditando) {
@@ -119,6 +136,9 @@ export const initModalElemento = async (modal) => {
       } else {
         cerrarModal(); // cerrar en modo crear
       }
+      form.querySelectorAll('.form__control').forEach(input => {
+        input.classList.remove('error'); 
+      });
     }
 
     if (e.target.closest('.aceptar')) {

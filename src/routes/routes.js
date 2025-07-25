@@ -12,13 +12,13 @@ export const routes = {
     inicio:{
         path: 'auth/inicio/index.html',
         controller: inicio,
-        noprivate: true,
+        public: true,
         nolayout: true
     },
     registro:{
         path: 'auth/registro/index.html',
         controller: registro,
-        noprivate: true,
+        public: true,
         nolayout: true
     },
     inventarios: {
@@ -39,7 +39,7 @@ export const routes = {
                 path: 'inventarios/elementos/index.html',
                 controller: elementos,
             },
-            tipos_elementos: {
+            "tipos-elementos": {
                 path: 'inventarios/elementos/tipos-elementos/index.html',
                 controller: tiposelementos,
             }
@@ -49,7 +49,7 @@ export const routes = {
             controller: reportes,
         },
     },
-    perfil_usuario: {
+    "perfil-usuario": {
         path: 'perfil-usuario/index.html',
         controller: perfil,
     }

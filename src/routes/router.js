@@ -1,70 +1,84 @@
+import controladorErrores from "../views/errors/controlador";
 import { routes } from "./routes";
-
 let hayLayout = false;
 
-// Función principal del enrutador SPA
 export const router = async () => {
-    const hash = location.hash.slice(2); // Eliminamos "#/"    
-    const segmentos = hash.split("/").filter(seg => seg); // Extrae y filtra los segmentos del hash
+    const hash = location.hash.slice(2);
+    const segmentos = hash.split("/").filter(Boolean);
 
-    if (segmentos.length === 0) {
-        redirigirARuta("inventarios");
-        return;
-    }    
-    // Buscar la ruta y extraer parámetros
     const ruta = encontrarRuta(routes, segmentos);
-    
+    const body = document.querySelector('body');
+
+    // const usuario = JSON.parse(localStorage.getItem('usuario')); // Control de sesión
+
+    // // Redirección por login
+    // if (!ruta?.public && !usuario) {
+    //     location.hash = '#/inicio';
+    //     return;
+    // }
+
+    // // Redirección por defecto
+    // if (segmentos.length === 0) {
+    //     location.hash = usuario ? '#/inventarios' : '#/inicio';
+    //     return;
+    // }
+
+    // Ruta no encontrada
+    // Ruta no encontrada
     if (!ruta) {
-        console.log("No hay ruta");
+        const usuario = JSON.parse(localStorage.getItem('rolUsuario'));    
+        const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());
+
+        if (!usuario) {
+            body.innerHTML = html;
+            body.classList.remove('content--ui');
+            body.classList.add('content--auth');            
+        } else {
+            const divError = document.createElement('div');
+            divError.innerHTML = html;
+            const vista = divError.querySelector('.error__container');
+            document.querySelector('.dashboard').innerHTML = '';
+            document.querySelector('.dashboard').appendChild(vista);
+            controladorErrores()            
+        }
         return;
     }
 
-    
-    const body = document.querySelector('body');
 
+    // Render sin layout
     if (ruta.nolayout) {
         hayLayout = false;
         const html = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
         body.innerHTML = html;
         body.classList.remove('content--ui');
         body.classList.add('content--auth');
-        return;
-    }
-
-    if (hayLayout) {
-        const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
-        document.querySelector('.dashboard').innerHTML = vista;
         ruta.controller();
         return;
     }
 
-    const layoutHtml = await fetch(`./src/layouts/mainLayout.html`).then(r => r.text());
-    body.innerHTML = layoutHtml;
-    body.classList.remove('content--auth');
-    body.classList.add('content--ui');
+    // Render con layout
+    if (!hayLayout) {
+        const layoutHtml = await fetch(`./src/layouts/mainLayout.html`).then(r => r.text());
+        body.innerHTML = layoutHtml;
+        body.classList.remove('content--auth');
+        body.classList.add('content--ui');
+        hayLayout = true;
+    }
 
     const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
     document.querySelector('.dashboard').innerHTML = vista;
-
-    hayLayout = true;
     ruta.controller();
+    hayLayout = true;
 };
-
-// Redirecciona a una ruta determinada
-const redirigirARuta = (ruta) => {
-    location.hash = `#/${ruta}`;
-};
-
 
 const encontrarRuta = (routes, segmentos) => {
 
-    let rutaActual = routes;    
-    
-    let rutaEncontrada = false;    
+    let rutaActual = routes;
+    let rutaEncontrada = false;
 
     // Recorremos los segmentos del hash para encontrar la ruta correspondiente
-    segmentos.forEach((segmento, index) => {        
-        
+    segmentos.forEach((segmento, index) => {
+
         // Si el segmento existe dentro del objeto de rutas actual, avanzamos al siguiente nivel
         if (rutaActual[segmento]) {
             rutaActual = rutaActual[segmento];
@@ -75,9 +89,9 @@ const encontrarRuta = (routes, segmentos) => {
         }
 
         // Si la ruta actual es un grupo de rutas (es decir, tiene más subniveles)    
-        
-        if (esGrupoRutas(rutaActual)) {                           
-            
+
+        if (esGrupoRutas(rutaActual)) {
+
             if (rutaActual["/"] && (index == segmentos.length - 1)) {
                 rutaActual = rutaActual["/"];
                 rutaEncontrada = true;
@@ -93,20 +107,6 @@ const encontrarRuta = (routes, segmentos) => {
     return rutaEncontrada ? rutaActual : null;
 
 }
-
-// Carga una vista HTML externa dentro de un elemento
-const cargarVista = async (path, elemento) => {
-    try {
-        const response = await fetch(`./src/Views/${path}`);
-        if (!response.ok) throw new Error("Vista no encontrada");
-
-        const contenido = await response.text();
-        elemento.innerHTML = contenido;
-    } catch (error) {
-        console.error(error);
-        elemento.innerHTML = `<h2>Error al cargar la vista</h2>`;
-    }
-};
 
 // Verifica si un objeto representa un grupo de rutas (todas sus claves son objetos)
 const esGrupoRutas = (obj) => {

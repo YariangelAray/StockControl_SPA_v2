@@ -1,32 +1,13 @@
-import { router } from './routes/router';
+import { router } from './routes/router.js';
 import './style.css';
 import './helpers/style.js';
 import 'remixicon/fonts/remixicon.css';
-import { initModales } from './modals/modalsController.js';
-import { marcarItem } from './helpers/marcarItem.js';
-
-// initModales([
-//   'modalCodigoAcceso',
-//   'modalConfigurarCodigo',
-//   'modalConfirmacion',
-//   'modalElemento',
-//   'modalEliminarCuenta',
-//   'modalGenerarReporte',
-//   'modalPedirCodigoAcceso',
-//   'modalReporte',
-//   'modalTipoElemento'
-// ]);
+import { initComponentes } from './helpers/initComponentes.js';
 
 window.addEventListener('hashchange', async (e) => {
-  router();
-  marcarItem();
+  router();  
 })
 
 window.addEventListener('DOMContentLoaded', async () => {
   router();
-  marcarItem();
 })
-
-document.querySelectorAll('form').forEach((form) => {
-  form.addEventListener('submit', (e) => e.preventDefault());
-});

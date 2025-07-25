@@ -94,16 +94,15 @@
 
         <div class="form__body">
             <div class="form__control form__control--stacked form__control--span">
-                <label for="contrasena-antigua">Contraseña anterior:</label>
+                <label for="contrasena_antigua">Contraseña anterior:</label>
                 <input type="password" class="input contrasena" placeholder="Contraseña anterior"
-                    name="contrasena-antigua" id="contrasena-antigua" required>
+                    name="contrasena_antigua" id="contrasena_antigua" required>
                 <i class="icon ri-eye-line"></i>
             </div>
 
             <div class="form__control form__control--stacked form__control--span">
-                <label for="contrasena-nueva">Contraseña nueva:</label>
-                <input type="password" class="input contrasena" placeholder="Contraseña nueva" name="contrasena-nueva"
-                    id="contrasena-nueva" required>
+                <label for="contrasena_nueva">Contraseña nueva:</label>
+                <input type="password" class="input contrasena" placeholder="Contraseña nueva" name="contrasena_nueva" required data-tipo="nueva" id="contrasena_nueva">
                 <i class="icon ri-eye-line"></i>
             </div>
 
@@ -124,7 +123,8 @@
             <button class="button">Actualizar contraseña</button>
         </div>
     </form>
-    <section style="width: 100%; display: flex; align-items: center; gap: 20px;">
-        <button class="button button--red" id="desactivarCuenta">Desactivar cuenta</button>
-    </section>
+</div>
+
+<div class="dashboard__actions">
+     <button class="button button--red" id="desactivarCuenta">Desactivar cuenta</button>
 </div>

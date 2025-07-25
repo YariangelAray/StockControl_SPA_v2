@@ -5,7 +5,7 @@
   </div>
 
   <div class="modal__body">
-    <form action="" class="form">
+    <form action="" class="form" id="form-tipo" novalidate autocomplete="off">
 
       <div class="form__control form__control--stacked form__control--span">
             <label for="nombre-tipo">Nombre:</label>
@@ -34,8 +34,8 @@
     <button class="button editar">Editar
       <i class="ri-edit-fill icon"></i>
     </button>
-    <button class="button crear">Crear</button>
-    <button class="button guardar">Guardar</button>
+    <button type="submit" form="form-tipo" class="button crear">Crear</button>
+    <button type="submit" form="form-tipo" class="button guardar">Guardar</button>
     <button class="button button--white aceptar button--final">Aceptar</button>
     <button class="button button--red cancelar button--final">Cancelar</button>
   </div>

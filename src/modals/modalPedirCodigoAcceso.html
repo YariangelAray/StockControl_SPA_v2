@@ -3,14 +3,14 @@
     <p class="modal__mensaje text-details text-details--medium-sized">
       Ingrese el código de acceso al inventario:
     </p>
-    <form action="" class="form" autocomplete="off">
+    <form action="" class="form" autocomplete="off" novalidate id="form-pedir-codigo">
         <div class="form__control">
-            <input type="text" class="input input--small input--square" placeholder="c0d1g0" name="codigo-acceso">
+            <input type="text" class="input input--small input--square" placeholder="c0d1g0" name="codigo-acceso" required>
         </div>
     </form>
   </div>
   <div class="modal__actions">
-    <button class="button confirmar">Aceptar</button>
+    <button class="button" type="submit" form="form-pedir-codigo">Verificar</button>
     <button class="button button--red cancelar">Cancelar</button>
   </div>
 </dialog>

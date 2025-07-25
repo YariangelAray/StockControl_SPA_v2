@@ -1,19 +1,9 @@
-import { generarSidebar } from "../../../helpers/generarSidebar";
+import { initComponentes } from "../../../helpers/initComponentes";
 import { configurarModalElemento, initModalElemento } from "../../../modals/modalElemento";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 
 export default async () => {
-    const inventario = localStorage.getItem('inventario');
-    const usuario = localStorage.getItem('rolUsuario');
-    
-    if (!inventario) {
-        window.location.hash = '#/inventarios';
-        return;
-    }
-    
-    if (!document.querySelector('.menu__items')) {
-        generarSidebar(usuario);
-    }
+    if (!initComponentes()) return;
 
     document.querySelector('.dashboard').className = "dashboard";
     document.querySelector('.dashboard').classList.add('dashboard--table-section');

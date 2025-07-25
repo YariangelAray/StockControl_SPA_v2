@@ -1,11 +1,14 @@
-import { generarSidebar } from "../../helpers/generarSidebar.js";
-import { marcarItem } from "../../helpers/marcarItem.js";
+import { initComponentes } from "../../helpers/initComponentes.js";
 import { initModalPedirCodigo } from "../../modals/modalPedirCodigoAcceso.js";
-import { abrirModal, cerrarModal, initModales, limpiarModales, modales } from "../../modals/modalsController.js";
+import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController.js";
 
 export default async () => {
     
+    const rolUsuario = {rol: 'admin'}; // Simulado, luego será dinámico
+    localStorage.setItem('rolUsuario', JSON.stringify(rolUsuario));
+    
     localStorage.removeItem('inventario');
+    // localStorage.removeItem('rolUsuario');
     
     const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
     const sidebarInfo = document.querySelector('.sidebar__menu .sidebar-info');
@@ -14,7 +17,7 @@ export default async () => {
     
     if (sidebarInfo.classList.contains('hidden')) sidebarInfo.classList.remove('hidden');
     
-    marcarItem();
+    initComponentes();
     
     document.querySelector('.dashboard').className = "dashboard";
     document.querySelector('.dashboard').removeAttribute('id'); 
@@ -22,22 +25,18 @@ export default async () => {
     
     limpiarModales();
     await initModales(['modalPedirCodigoAcceso']);
-    
     const {modalPedirCodigoAcceso} = modales;    
+    initModalPedirCodigo(modalPedirCodigoAcceso);
+    
     document.getElementById('dashboard-inventarios').addEventListener('click', (e) => {
         if (e.target.closest('.agregar-inventario')) {
-            initModalPedirCodigo(modalPedirCodigoAcceso);
             abrirModal(modalPedirCodigoAcceso);
         }
 
         if (e.target.closest('.ver-inventario')) {
-            const inventarioID = 'inventario1'; // Simulado, luego será dinámico
-            const rolUsuario = 'admin'; // Simulado, luego será dinámico
-
-            localStorage.setItem('inventario', inventarioID);
-            localStorage.setItem('rolUsuario', rolUsuario);
-
-            generarSidebar(rolUsuario);            
+            const inventario = {nombre: "Desarrollo de Software"}; // Simulado, luego será dinámico
+            localStorage.setItem('inventario', JSON.stringify(inventario));
+            
             window.location.hash = '#/inventarios/ambientes';
         }
     });

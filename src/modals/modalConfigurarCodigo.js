@@ -1,3 +1,4 @@
+import * as validaciones from "../helpers/Validaciones";
 import { abrirModal, cerrarModal, cerrarTodo, initModales, modales, ocultarModalTemporal } from "./modalsController";
 
 export const initModalConfigurar = async (modal) => {
@@ -6,29 +7,35 @@ export const initModalConfigurar = async (modal) => {
     const { modalCodigoAcceso } = modales;
 
     const form = modal.querySelector('form');
+    form.reset();
 
-    // Evita el submit (recarga)
+    const input = modal.querySelector('.input');    
+
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        const valor = input.value.trim();
+
+        if (valor === "") {
+            validaciones.agregarError(input.parentElement);
+            return;
+        }
+
+        const numero = Number(valor);
+
+        if (isNaN(numero) || numero < 1 || numero > 6) {
+            validaciones.agregarError(input.parentElement, "Solo se permiten valores entre 1 y 6.");
+            return;
+        }
+
+        validaciones.quitarError(input.parentElement);
+
+        ocultarModalTemporal(modal);
+        abrirModal(modalCodigoAcceso);
     });
 
-    const input = modal.querySelector('.input');
-    input.value = ''; // Valor por defecto
-    const teclasEspeciales = ["Backspace", "Tab", "Enter", "ArrowLeft", "ArrowRight", "Delete", "Home", "End"];
-    input.addEventListener('keydown', (e) => {
-        const val = e.key;
-        if (!teclasEspeciales.includes(val)) {
-            e.preventDefault();
-            if (/[1-6]/.test(val))
-                e.target.value = val;
-        }
-    });
 
     modal.addEventListener('click', (e) => {
-        if (e.target.closest('.confirmar')) {
-            ocultarModalTemporal(modal);
-            abrirModal(modalCodigoAcceso);
-        }
         if (e.target.closest('.cancelar')) {
             cerrarModal();
         }
