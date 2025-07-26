@@ -2,6 +2,7 @@ import inicio from '../views/auth/inicio/controlador';
 import registro from '../views/auth/registro/controlador';
 import inventarios from '../views/inventarios/controlador';
 import ambientes from '../views/inventarios/ambientes/controlador';
+import {initMapaView} from '../views/inventarios/ambientes/mapaController.js';
 import detalles from '../views/inventarios/detalles/controlador';
 import elementos from '../views/inventarios/elementos/controlador';
 import tiposelementos from '../views/inventarios/elementos/tipos-elementos/controlador';
@@ -27,8 +28,14 @@ export const routes = {
             controller: inventarios,
         },
         ambientes: {
-            path: 'inventarios/ambientes/index.html',
-            controller: ambientes,
+            "/":{
+                path: 'inventarios/ambientes/index.html',
+                controller: ambientes,            
+            },
+            mapa:{
+                path: 'inventarios/ambientes/mapa.html',
+                controller: initMapaView,     
+            }
         },
         detalles: {
             path: 'inventarios/detalles/index.html',

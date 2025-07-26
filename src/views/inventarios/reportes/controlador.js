@@ -4,7 +4,8 @@ import { initModalReporte } from "../../../modals/modalReporte";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 
 export default async () => {
-    if (!initComponentes()) return; 
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    initComponentes(usuario); 
     
     document.querySelector('.dashboard').className = "dashboard";
     document.querySelector('.dashboard').classList.add('dashboard--table-section');

@@ -1,5 +1,5 @@
 import { cerrarModal, mostrarConfirmacion } from "./modalsController";
-import * as validaciones from "../helpers/Validaciones";
+import * as validaciones from "../utils/Validaciones";
 
 export const initModalGenerarReporte = (modal) => {
 

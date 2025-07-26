@@ -1,12 +1,12 @@
 <div class="dashboard__header">
-    <h2 class="dashboard__title rol">Usario Administrativo</h2>
+    <h2 class="dashboard__title rol">Usuario</h2>
     <p class="dashboard__details text-details text-details--medium-sized">En este apartado se muestra su información
         personal. Puede editar ciertos datos según sea necesario.</p>
 </div>
 
 <div class="dashboard__content">
 
-    <form action="" class="form" autocomplete="off">
+    <form action="" class="form" autocomplete="off" id="form-usuario" novalidate>
 
         <div class="form__header">
             <h2 class="form__title-separacion">Datos Generales</h2>
@@ -15,68 +15,57 @@
         <div class="form__body">
             <div class="form__control form__control--stacked">
                 <label for="nombres">Nombres:</label>
-                <input type="text" class="input" placeholder="Nombres" name="nombres" id="nombres" value="Enzy Zulay"
+                <input type="text" class="input" placeholder="Nombres" name="nombres" id="nombres" 
                     required>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="apellidos">Apellidos:</label>
                 <input type="text" class="input" placeholder="Apellidos" name="apellidos" id="apellidos"
-                    value="Angarita Bermudez" required>
+                     required>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="tipo_documento">Tipo de Documento:</label>
-                <select name="tipo_documento_id" class="input input--select" required id="tipo_documento" disabled>
-                    <option value="">Tipo de Documento</option>
-                    <option value="1" selected>Cédula de Ciudadania</option>
-                    <option value="2">Tarjeta de Identidad</option>
-                    <option value="3">Cédula de Extranjería</option>
+                <select name="tipo_documento_id" class="input input--select" required id="tipos-documentos" disabled>
+                    <option value="">Tipo de Documento</option>>
                 </select>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="documento">N° Documento:</label>
-                <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento"
-                    value="1023456789" required disabled>
+                <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento" required disabled>
             </div>
             <div class="form__control form__control--stacked">
                 <label for="correo">Correo Electrónico:</label>
                 <input type="text" class="input" placeholder="Correo Electrónico" name="correo" id="correo"
-                    value="ejemplo@ejemplo.com" required>
+                     required>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="telefono">N° de Télefono:</label>
                 <input type="text" class="input" placeholder="Número de Télefono" name="telefono" id="telefono"
-                    value="3001234567" required>
+                     required>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="programa">Programa de Formación:</label>
-                <select name="programa" id="programa" class="input input--select" required disabled>
+                <select name="programas" id="programas-formacion" class="input input--select" required disabled>
                     <option value="">Programa de Formación</option>
-                    <option value="1" selected>(N/A) - No Aplica</option>
-                    <option value="2">(ADSO) - Análisis y Desarrollo de Software</option>
                 </select>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="ficha">Ficha:</label>
-                <select name="ficha_id" class="input input--select" id="ficha" required disabled>
+                <select name="ficha_id" class="input input--select" id="fichas" required disabled>
                     <option value="">Ficha</option>
-                    <option value="1" selected>(N/A) - No Aplica</option>
-                    <option value="2">2894667</option>
                 </select>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="genero">Género:</label>
-                <select name="genero_id" class="input input--select" id="genero" required>
+                <select name="genero_id" class="input input--select" id="generos" required>
                     <option value="">Seleccione su Género</option>
-                    <option value="1">Masculino</option>
-                    <option value="2" selected>Femenino</option>
-                    <option value="3">Otro</option>
                 </select>
             </div>
 
@@ -87,16 +76,16 @@
         </div>
     </form>
 
-    <form action="" class="form">
+    <form action="" class="form" id="form-contrasena" novalidate autocomplete="off">
         <div class="form__header">
             <h2 class="form__title-separacion">Seguridad</h2>
         </div>
 
         <div class="form__body">
             <div class="form__control form__control--stacked form__control--span">
-                <label for="contrasena_antigua">Contraseña anterior:</label>
-                <input type="password" class="input contrasena" placeholder="Contraseña anterior"
-                    name="contrasena_antigua" id="contrasena_antigua" required>
+                <label for="contrasena_actual">Contraseña actual:</label>
+                <input type="password" class="input contrasena" placeholder="Contraseña actual"
+                    name="contrasena_actual" id="contrasena_actual" required>
                 <i class="icon ri-eye-line"></i>
             </div>
 
@@ -105,18 +94,6 @@
                 <input type="password" class="input contrasena" placeholder="Contraseña nueva" name="contrasena_nueva" required data-tipo="nueva" id="contrasena_nueva">
                 <i class="icon ri-eye-line"></i>
             </div>
-
-            <!-- <div class="form__control form__control--stacked">
-            <label for="rol">Rol:</label>
-            <select name="rol" id="rol" class="input input--select rol" required>
-              <option value="">Seleccione su Rol</option>
-              <option value="1" selected>Usuario Administrativo</option>
-              <option value="2">Usuario Corriente</option>
-            </select>
-          </div>                          
-          <div class="form__control form__control--stacked form__control form__control--autoheight">
-            <label>Descripción:</label>
-          </div> -->
 
         </div>
         <div class="form__action">

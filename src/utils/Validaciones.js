@@ -38,7 +38,11 @@ export const validarContrasena = (campo) => {
     const tipo = campo.dataset.tipo;
     const valor = campo.value.trim();
 
-    if (valor === "") return true;
+    if (valor === "") {
+        agregarError(campo);
+        return false;
+    }
+
 
     // Solo se aplica validación estricta si es nueva contraseña
     if (tipo === "nueva") {
@@ -58,6 +62,7 @@ export const validarContrasena = (campo) => {
             return false;// Si la contraseña es inválida, el formulario no es válido
         }
     }
+    quitarError(campo);
     return true;
 }
 
@@ -88,10 +93,16 @@ export const validarFecha = (campo) => {
 export const validarCorreo = (campo) => {
     let regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Expresión regular para validar el correo electrónico
     // Validamos si el correo es válido
-    if (campo.value.trim() != "" && !regexCorreo.test(campo.value)) {
+
+    const valor = campo.value.trim();
+
+    if (valor === "") return true;
+
+    if (!regexCorreo.test(campo.value)) {
         agregarError(campo, "El correo electrónico no es válido."); // Agregamos el error
         return false; // Si el correo es inválido, el formulario no es válido
     }
+    quitarError(campo);
     return true;
 }
 
@@ -151,9 +162,10 @@ export const quitarError = (campo) => {
 // --------------------------------------------------------
 // Función para validar todos los campos del formulario
 
-export const datos = {}; // Objeto para almacenar los datos del formulario
+export let datos = {}; // Objeto para almacenar los datos del formulario
 export const validarFormulario = (event) => {
     let valido = true; // Variable para validar si el formulario es válido
+    datos = {};
 
     // Obtenemos todos los campos del formulario que tienen el atributo required y son de tipo input o select
     const campos = [...event.target].filter(
@@ -169,14 +181,20 @@ export const validarFormulario = (event) => {
 
         if (!validarSelectEspecial(campo)) valido = false;
 
-        if (campo.type == "date") 
+        if (campo.type == "date")
             if (!validarFecha(campo)) valido = false;
 
-        datos[campo.getAttribute("name")] = campo.value;
+        const valor = campo.value.trim();
+
+        if (campo.tagName === "SELECT" && /^\d+$/.test(valor)) {
+            datos[campo.getAttribute("name")] = parseInt(valor);
+        } else {
+            datos[campo.getAttribute("name")] = valor;
+        }
+
     });
 
     // Validación para la contraseña
-
     // Obtenemos los campo de la contraseña
     const contrasenas = campos.filter(campo => campo.classList.contains('contrasena'));
     contrasenas.forEach((campo) => {

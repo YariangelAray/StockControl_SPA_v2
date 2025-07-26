@@ -1,5 +1,6 @@
 import controladorErrores from "../views/errors/controlador";
 import { routes } from "./routes";
+import * as api from "../utils/api";
 let hayLayout = false;
 
 export const router = async () => {
@@ -9,41 +10,37 @@ export const router = async () => {
     const ruta = encontrarRuta(routes, segmentos);
     const body = document.querySelector('body');
 
-    // const usuario = JSON.parse(localStorage.getItem('usuario')); // Control de sesión
+    const usuario = JSON.parse(localStorage.getItem('usuario')); // Control de sesión
 
-    // // Redirección por login
-    // if (!ruta?.public && !usuario) {
-    //     location.hash = '#/inicio';
-    //     return;
-    // }
-
-    // // Redirección por defecto
-    // if (segmentos.length === 0) {
-    //     location.hash = usuario ? '#/inventarios' : '#/inicio';
-    //     return;
-    // }
-
-    // Ruta no encontrada
     // Ruta no encontrada
     if (!ruta) {
-        const usuario = JSON.parse(localStorage.getItem('rolUsuario'));    
         const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());
 
         if (!usuario) {
             body.innerHTML = html;
             body.classList.remove('content--ui');
-            body.classList.add('content--auth');            
+            body.classList.add('content--auth');
         } else {
             const divError = document.createElement('div');
             divError.innerHTML = html;
             const vista = divError.querySelector('.error__container');
             document.querySelector('.dashboard').innerHTML = '';
             document.querySelector('.dashboard').appendChild(vista);
-            controladorErrores()            
+            controladorErrores()
         }
         return;
     }
 
+    // Redirección por login
+    if (!ruta?.public && !usuario) {
+        location.hash = '#/inicio';
+        return;
+    }
+    // Redirección por defecto
+    if (segmentos.length === 0) {
+        location.hash = usuario ? '#/inventarios' : '#/inicio';
+        return;
+    }
 
     // Render sin layout
     if (ruta.nolayout) {
@@ -62,11 +59,21 @@ export const router = async () => {
         body.innerHTML = layoutHtml;
         body.classList.remove('content--auth');
         body.classList.add('content--ui');
+        const {data} = await api.get('roles/' + usuario.rol_id);
+        const campoRol = document.querySelector('.rol');
+        campoRol.textContent = "Usuario " + data.nombre;
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#logout')) {
+                localStorage.removeItem('usuario');
+                location.hash = '#/inicio'
+            }
+        })        
         hayLayout = true;
     }
 
     const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
-    document.querySelector('.dashboard').innerHTML = vista;
+    document.querySelector('.dashboard').innerHTML = vista;    
+    
     ruta.controller();
     hayLayout = true;
 };

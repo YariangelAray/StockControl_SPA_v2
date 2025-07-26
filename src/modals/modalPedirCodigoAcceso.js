@@ -1,5 +1,5 @@
 import { cerrarModal } from "./modalsController";
-import * as validaciones from "../helpers/Validaciones";
+import * as validaciones from "../utils/Validaciones";
 
 export const initModalPedirCodigo = (modal) => {
 

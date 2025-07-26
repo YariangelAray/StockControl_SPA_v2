@@ -1,8 +1,19 @@
-import * as validaciones from "../../../helpers/Validaciones";
+import { llenarSelect } from "../../../helpers/select";
+import * as validaciones from "../../../utils/Validaciones";
+import { error, success } from "../../../utils/alertas";
+import * as api from "../../../utils/api";
+
 export default async () => {
+
+    await llenarSelect({
+        endpoint: 'roles',
+        selector: '#roles',
+        optionMapper: rol => ({ id: rol.id, text: "Usuario " + rol.nombre })
+    });
+
     const formulario = document.querySelector(".form--signin");
 
-    const campos = [...formulario].filter((elemento) => elemento.hasAttribute("required") && (elemento.tagName == "INPUT" || elemento.tagName == "SELECT"));
+    const campos = [...formulario].filter((elemento) => elemento.hasAttribute("required"));
 
     campos.forEach((campo) => {
         campo.addEventListener("blur", validaciones.validarCampo);
@@ -18,7 +29,26 @@ export default async () => {
 
         if (!validaciones.validarFormulario(event)) return;
 
-        console.log(validaciones.datos);
-        formulario.reset()
+        try {
+            const respuesta = await api.post('usuarios/login', {
+                rol_id: validaciones.datos.rol,
+                documento: validaciones.datos.documento,
+                contrasena: validaciones.datos.contrasena
+            });
+
+            if (respuesta.success) {
+                await success("Inicio de sesión éxitoso");
+                localStorage.setItem('usuario', JSON.stringify({id:respuesta.data.id, nombres:respuesta.data.nombres, apellidos:respuesta.data.apellidos, rol_id: respuesta.data.rol_id}));
+                setTimeout(() => {
+                    location.hash = '#/inventarios';
+                },500);
+            } else {
+                error(respuesta);
+            }
+
+        } catch (e) {
+            console.error("Error inesperado:", e);
+            error({});
+        }
     })
 }

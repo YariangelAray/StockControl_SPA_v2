@@ -1,4 +1,4 @@
-import * as validaciones from "../helpers/Validaciones";
+import * as validaciones from "../utils/Validaciones";
 import { abrirModal, cerrarModal, cerrarTodo, initModales, modales, ocultarModalTemporal } from "./modalsController";
 
 export const initModalConfigurar = async (modal) => {

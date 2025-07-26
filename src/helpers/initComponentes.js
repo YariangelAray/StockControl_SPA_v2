@@ -1,26 +1,23 @@
-export const initComponentes = () => {    
+export const initComponentes = (usuario) => {        
+    
     const inventario = JSON.parse(localStorage.getItem('inventario'));
 
-    actualizarHeader();
+    actualizarHeader(usuario, inventario);
     marcarItem();
 
     const hash = location.hash.slice(2); // quitar "#/"
     const segmentos = hash.split('/').filter(seg => seg);
 
     if (!inventario && segmentos[0] === "inventarios") {
-        location.hash = '#/inventarios';
-        return false;
+        location.hash = '#/inventarios';        
     }
 
     if (inventario && !document.querySelector('.menu__items')) {
-        const rol = JSON.parse(localStorage.getItem('rolUsuario'));        
-        generarSidebar(rol.rol);
+        generarSidebar(usuario.rol_id);
     }
-
-    return true;
 }
 
-const generarSidebar = (rol = 'usuario') => {
+const generarSidebar = (rol = 2) => {
     
     const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
     const sidebarInfo = document.querySelector('.sidebar__menu .sidebar-info');
@@ -31,7 +28,7 @@ const generarSidebar = (rol = 'usuario') => {
     // Define menú según rol
     const listamenu = [
         { nombre: 'Ambientes', icono: 'ri-building-2-line' },
-        ...(rol == 'admin' ? [
+        ...(rol == 1 ? [
             { nombre: 'Detalles', icono: 'ri-file-list-line' },
             { nombre: 'Elementos', icono: 'ri-clipboard-line' },
             { nombre: 'Reportes', icono: 'ri-information-line' }
@@ -83,10 +80,9 @@ const marcarItem = () => {
     });
 };
 
-const actualizarHeader = () => {
+const actualizarHeader = (usuario, inventario) => {
     const header = document.querySelector('.header__title');
-    if (!header) return;
-
+    
     header.innerHTML = ''; // Limpiar contenido anterior
     const hash = location.hash.slice(2); // quitar "#/"
     const segmentos = hash.split('/').filter(seg => seg);
@@ -98,8 +94,7 @@ const actualizarHeader = () => {
         span.classList.add('nombre-usuario');
         span.textContent = 'ADMINISTRADOR';
         header.appendChild(texto);
-        header.appendChild(span);
-        return;
+        header.appendChild(span);        
     }
 
     // Caso especial: vista inicial
@@ -109,13 +104,17 @@ const actualizarHeader = () => {
         span.classList.add('nombre-usuario');
         span.textContent = 'ADMINISTRADOR';
         header.appendChild(texto);
-        header.appendChild(span);
-        return;
+        header.appendChild(span);        
     }
 
+    const camposNombre = document.querySelectorAll('.nombre-usuario');
+
+    camposNombre.forEach(campo => {
+        campo.textContent = usuario.nombres.split(" ")[0] +" "+ usuario.apellidos.split(" ")[0];
+    })
+
     // Caso: vistas de inventario
-    if (segmentos[0] === 'inventarios') {
-        const inventario = JSON.parse(localStorage.getItem('inventario'));
+    if (segmentos[0] === 'inventarios') {        
         if (!inventario) return;
 
         const nombreInventario = inventario.nombre;

@@ -1,23 +1,71 @@
-import * as validaciones from "../../../helpers/Validaciones";
+import { llenarSelect } from "../../../helpers/select";
+import * as validaciones from "../../../utils/Validaciones";
+import { error, success } from "../../../utils/alertas";
+import * as api from "../../../utils/api";
 
 export default async () => {
-    const formulario = document.querySelector(".form--signup");
 
-    const campos = [...formulario].filter((elemento) => elemento.hasAttribute("required") && (elemento.tagName == "INPUT" || elemento.tagName == "SELECT"));
+    await llenarSelect({
+        endpoint: 'tipos-documento',
+        selector: '#tipos-documentos',
+        optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre })
+    });
+
+    await llenarSelect({
+        endpoint: 'generos',
+        selector: '#generos',
+        optionMapper: genero => ({ id: genero.id, text: genero.nombre })
+    });
+
+    await llenarSelect({
+        endpoint: 'programas-formacion',
+        selector: '#programas-formacion',
+        optionMapper: programa => ({ id: programa.id, text: programa.nombre })
+    });
+    const programas = await api.get('programas-formacion');
+    if (!programas.success) console.log(programas.message || programas.errors);
+    console.log(programas);
+    
+    const selectProgramas = document.querySelector('#programas-formacion');
+    const selectFichas = document.querySelector('#fichas');
+
+    selectProgramas.addEventListener('change', (e) => {
+        const id = e.target.value;
+
+        while (selectFichas.options.length > 1) selectFichas.remove(1);
+
+        if (e.target.selectedIndex == 0) selectFichas.setAttribute('disabled', 'disabled');
+        else {
+            selectFichas.removeAttribute('disabled')
+            const programa = programas.data.find(p => p.id == id);
+            console.log(programa);
+            
+            programa.fichas.forEach((ficha) => {
+                const option = document.createElement('option');
+                option.value = ficha.id
+                option.textContent = ficha.ficha
+                selectFichas.appendChild(option);
+            })
+        }
+    })
+
+
+    const formulario = document.querySelector(".form--signup");
+    const campos = [...formulario].filter((elemento) => elemento.hasAttribute("required"));
 
     campos.forEach((campo) => {
         campo.addEventListener("blur", validaciones.validarCampo);
 
-        if (campo.name == "documento" || campo.name == "telefono") {            
-            campo.addEventListener("keydown", validaciones.validarNumero);            
-            campo.addEventListener("input", validaciones.validarCampo);            
+        if (campo.name == "documento" || campo.name == "telefono") {
+            campo.addEventListener("keydown", validaciones.validarNumero);
+            campo.addEventListener("input", validaciones.validarCampo);
             const limite = campo.name == "documento" ? 11 : 15;
             campo.addEventListener("keydown", event => validaciones.validarLimite(event, limite));
         } else {
 
             if (campo.name == "nombres" || campo.name == "apellidos") {
                 campo.addEventListener("keydown", event => validaciones.validarLimite(event, 100));
-                campo.addEventListener("input", validaciones.validarTexto);
+                campo.addEventListener("keydown", validaciones.validarTexto);
             }
 
             if (campo.name == "contrasena") {
@@ -27,7 +75,7 @@ export default async () => {
 
             if (campo.name == "correo") {
                 campo.addEventListener("keydown", event => validaciones.validarLimite(event, 100));
-                campo.addEventListener("input", () => validaciones.validarCorreo(campo));
+                campo.addEventListener("keydown", () => validaciones.validarCorreo(campo));
             }
         }
     });
@@ -35,33 +83,26 @@ export default async () => {
     formulario.addEventListener("submit", async event => {
         event.preventDefault();
 
-        if (!validaciones.validarFormulario(event)) return;
+        if (!validaciones.validarFormulario(event)) return;        
+        delete validaciones.datos.programas;        
 
-        validaciones.datos.tipo_documento_id = parseInt(validaciones.datos.tipo_documento_id);
-        validaciones.datos.genero_id = parseInt(validaciones.datos.genero_id);
-        validaciones.datos.ficha_id = parseInt(validaciones.datos.ficha_id);
-        // validaciones.datos.rol_id = 2;
-        delete validaciones.datos.programa;
+        try {
 
-        console.log(validaciones.datos);
-        formulario.reset()
+            const respuesta = await api.post('usuarios', validaciones.datos);
 
+            if (respuesta.success) {
+                await success("Usuario creado exitosamente");
+                localStorage.setItem('usuario', JSON.stringify(respuesta.data));
+                setTimeout(() => {
+                    location.hash = '#/inventarios';
+                },500);
+            } else {
+                error(respuesta);
+            }
 
-        // try {
-
-        //     // const respuesta = await api.post('usuarios', validaciones.datos);
-
-        //     if (respuesta.ok) {
-        //         alert("Usuario registrado exitosamente.");
-        //         window.location.href = "./index.html";
-        //     } else {
-        //         const resultado = await respuesta.json();
-        //         manejarErrores(resultado);
-        //     }
-
-        // } catch (error) {
-        //     console.error("Error inesperado:", error);
-        //     alert("❌ Error al conectar con el servidor.");
-        // }
+        } catch (e) {
+            console.error("Error inesperado:", e);
+            error({});
+        }
     });
 }

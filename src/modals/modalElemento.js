@@ -1,10 +1,14 @@
 import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, ocultarModalTemporal } from "./modalsController";
 import { configurarModalTipo, initModalTipo } from "./modalTipoElemento";
 import { setLecturaForm } from "../helpers/setLecturaForm";
+import { llenarSelect } from "../helpers/select";
 import { initModalGenerarReporte } from "./modalGenerarReporte";
-import * as validaciones from "../helpers/Validaciones";
+import * as validaciones from "../utils/Validaciones";
+import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
 
 export const configurarModalElemento = (modo, modal) => {
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+
   const form = modal.querySelector('form');
 
   const botones = {
@@ -32,7 +36,7 @@ export const configurarModalElemento = (modo, modal) => {
   if (modo === 'editar') {
     setLecturaForm(form, true); // lectura
     botones.editar.classList.remove('hidden');
-    botones.baja.classList.remove('hidden');
+    if (usuario.rol_id == 1) botones.baja.classList.remove('hidden');
     botones.reportar.classList.remove('hidden');
     botones.aceptar.classList.remove('hidden');
     modal.querySelector('.modal__title').textContent = 'Detalles del Elemento';
@@ -49,12 +53,28 @@ export const configurarModalElemento = (modo, modal) => {
 
 export const initModalElemento = async (modal) => {
 
+  await llenarSelect({
+    endpoint: 'ambientes',
+    selector: '#ambientes',
+    optionMapper: ambiente => ({ id: ambiente.id, text: ambiente.nombre })
+  });
+  await llenarSelect({
+    endpoint: 'estados',
+    selector: '#estados',
+    optionMapper: estado => ({ id: estado.id, text: estado.nombre })
+  });
+  await llenarSelect({
+    endpoint: 'tipos-elementos',
+    selector: '#tipos-elementos',
+    optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre + ". Marca:" + tipo.marca + ". Modelo:" + tipo.modelo })
+  });
+
   await initModales(['modalGenerarReporte', 'modalTipoElemento']);
   const { modalGenerarReporte, modalTipoElemento } = modales;
   initModalGenerarReporte(modalGenerarReporte);
   initModalTipo(modalTipoElemento);
 
-  const selectTipo = modal.querySelector('#tipo_elemento');
+  const selectTipo = modal.querySelector('#tipos-elementos');
   const btnAgregarTipo = modal.querySelector('#agregarTipo');
   btnAgregarTipo.classList.add('hidden');
 
@@ -81,6 +101,7 @@ export const initModalElemento = async (modal) => {
     const confirmado = await mostrarConfirmacion();
     if (confirmado) {
       alert('El elemento será guardado.');
+      localStorage.removeItem('elemento_temp');
       cerrarModal();
     } else {
       alert('Acción cancelada.');
@@ -131,18 +152,23 @@ export const initModalElemento = async (modal) => {
 
     if (e.target.closest('.cancelar')) {
       const estaEditando = modal.querySelector('.modal__title').textContent.includes('Editar');
+
       if (estaEditando) {
-        configurarModalElemento('editar', modal); // volver a modo lectura
+        const temp = JSON.parse(localStorage.getItem('elemento_temp'));
+        llenarCamposFormulario(temp, form); // Restaurar valores
+        configurarModalElemento('editar', modal);
       } else {
-        cerrarModal(); // cerrar en modo crear
+        cerrarModal();
+        localStorage.removeItem('elemento_temp');
       }
       form.querySelectorAll('.form__control').forEach(input => {
-        input.classList.remove('error'); 
+        input.classList.remove('error');
       });
     }
 
     if (e.target.closest('.aceptar')) {
       cerrarModal();
+      localStorage.removeItem('elemento_temp');
     }
 
     // Reportar

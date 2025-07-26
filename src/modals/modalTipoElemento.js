@@ -1,6 +1,6 @@
 import { cerrarModal, mostrarConfirmacion } from "./modalsController";
 import { setLecturaForm } from "../helpers/setLecturaForm";
-import * as validaciones from "../helpers/Validaciones";
+import * as validaciones from "../utils/Validaciones";
 
 
 export const configurarModalTipo = (modo, modal) => {

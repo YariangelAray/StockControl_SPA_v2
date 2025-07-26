@@ -128,12 +128,16 @@
 }
 
 .user-menu__item#logout{
+  background-color: var(--blanco);
+  outline: none;
   width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--gris-oscuro);
   border-radius: 12px;
   box-shadow: 0 0 1px 0 #00000047;
   transition: all 0.3s ease-in-out;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 .user-menu__item#logout .icon{
@@ -142,4 +146,5 @@
 
 .user-menu__item#logout:hover{
   background-color: var(--gris-claro);
+  cursor: pointer;
 }
