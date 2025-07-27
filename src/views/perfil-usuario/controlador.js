@@ -10,8 +10,10 @@ import { error, success } from "../../utils/alertas.js";
 export default async () => {
 
     const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuarioInfo);
-    const usuario = {data} = await api.get('usuarios/', usuarioInfo.id)
+    initComponentes(usuarioInfo);    
+    
+    const {data} = await api.get('usuarios/' + usuarioInfo.id);
+    const usuario = data;    
 
     document.querySelector('.dashboard').className = "dashboard";
     document.querySelector('.dashboard').classList.add('dashboard--profile');
@@ -19,10 +21,10 @@ export default async () => {
     document.querySelector('.dashboard').removeAttribute('id');
     document.querySelector('.dashboard').id = "dashboard-perfil";
 
-    const roles = await api.get('roles');
+    const roles = await api.get('roles/' + usuarioInfo.rol_id);
     const campoRol = document.querySelector('.dashboard__title.rol');
 
-    campoRol.textContent = "Usuario " + roles.data.find((rol => rol.id == usuario.rol_id)).nombre;
+    campoRol.textContent = "Usuario " + roles.data.nombre;
 
     await llenarSelect({
         endpoint: 'tipos-documento',

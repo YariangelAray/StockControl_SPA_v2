@@ -162,49 +162,75 @@ export const quitarError = (campo) => {
 // --------------------------------------------------------
 // Función para validar todos los campos del formulario
 
-export let datos = {}; // Objeto para almacenar los datos del formulario
-export const validarFormulario = (event) => {
-    let valido = true; // Variable para validar si el formulario es válido
-    datos = {};
+export let datos = {}; // Objeto global donde se almacenarán los datos validados del formulario
 
-    // Obtenemos todos los campos del formulario que tienen el atributo required y son de tipo input o select
-    const campos = [...event.target].filter(
-        (elemento) =>
-            elemento.hasAttribute("required") &&
-            (elemento.tagName == "INPUT" || elemento.tagName == "SELECT" || elemento.tagName == "TEXTAREA")
+export const validarFormulario = (event) => {
+    let valido = true;         // Bandera que indica si el formulario es válido
+    datos = {};                // Se reinicia el objeto datos en cada validación
+
+    const formulario = event.target; // Referencia al formulario que disparó el evento
+
+    // === 1. Obtener los campos requeridos del formulario ===
+    const camposRequeridos = [...formulario].filter(
+        (el) => el.hasAttribute("required") &&  // Solo elementos marcados como requeridos
+                (el.tagName === "INPUT" ||      // Que sean INPUT
+                 el.tagName === "SELECT" ||     // o SELECT
+                 el.tagName === "TEXTAREA")     // o TEXTAREA
     );
 
-
-    // Recorremos los campos y validamos cada uno de ellos
-    campos.forEach((campo) => {
+    // === 2. Validar todos los campos requeridos ===
+    camposRequeridos.forEach((campo) => {
+        // Validación genérica de campos (presencia, estilo de error, etc.)
         if (!validarCampo({ target: campo })) valido = false;
 
+        // Validación especial para selects que tengan estructura diferente
         if (!validarSelectEspecial(campo)) valido = false;
 
-        if (campo.type == "date")
-            if (!validarFecha(campo)) valido = false;
+        // Validación personalizada para campos de fecha
+        if (campo.type === "date" && !validarFecha(campo)) valido = false;
 
-        const valor = campo.value.trim();
+        // === 3. Almacenar los valores en el objeto datos ===
+        const valor = campo.value.trim(); // Se limpia el valor de espacios
 
+        // Si es un SELECT y contiene solo dígitos, se parsea a número
         if (campo.tagName === "SELECT" && /^\d+$/.test(valor)) {
-            datos[campo.getAttribute("name")] = parseInt(valor);
+            datos[campo.name] = parseInt(valor);
         } else {
-            datos[campo.getAttribute("name")] = valor;
+            // En cualquier otro caso se guarda como string
+            datos[campo.name] = valor;
         }
-
     });
 
-    // Validación para la contraseña
-    // Obtenemos los campo de la contraseña
-    const contrasenas = campos.filter(campo => campo.classList.contains('contrasena'));
+    // === 4. Procesar campos opcionales que sí tengan valor ===
+    const camposOpcionales = [...formulario].filter(
+        (el) =>
+            !el.hasAttribute("required") &&                  // Que no sean requeridos
+            (el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA") &&
+            el.value.trim() !== ""                          // Que no estén vacíos
+    );
+
+    camposOpcionales.forEach((campo) => {
+        const valor = campo.value.trim();
+
+        // Si es un SELECT y tiene valor numérico, se convierte a entero
+        if (campo.tagName === "SELECT" && /^\d+$/.test(valor)) {
+            datos[campo.name] = parseInt(valor);
+        } else {
+            datos[campo.name] = valor;
+        }
+    });
+
+    // === 5. Validaciones adicionales por tipo de campo ===
+
+    // Validar campos de contraseña (por clase personalizada)
+    const contrasenas = camposRequeridos.filter(c => c.classList.contains('contrasena'));
     contrasenas.forEach((campo) => {
         if (!validarContrasena(campo)) valido = false;
     });
 
-    // Validación para el correo electrónico
-    // Obtenemos el campo del correo electrónico
-    const correo = campos.find((campo) => campo.name == 'correo');
-    if (correo && !validarCorreo(correo)) valido = false; // Si el correo es inválido, el formulario no es válido
+    // Validar campo de correo electrónico si existe
+    const correo = camposRequeridos.find(campo => campo.name === 'correo');
+    if (correo && !validarCorreo(correo)) valido = false;
 
-    return valido; // Retornamos si el formulario es válido o no
+    return valido; // Se devuelve true si todas las validaciones fueron exitosas
 };

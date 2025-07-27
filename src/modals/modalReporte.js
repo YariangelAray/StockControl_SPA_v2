@@ -1,38 +1,29 @@
+import * as api from "../utils/api";
+import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
 import { configurarModalElemento, initModalElemento } from "./modalElemento";
 import { abrirModal, cerrarModal, initModales, modales, ocultarModalTemporal } from "./modalsController"
 
 export const initModalReporte = async (modal) => {
+
     await initModales(['modalElemento']);
     const { modalElemento } = modales;
     await initModalElemento(modalElemento);
 
-    const contenedor = document.querySelector('.reporte__imagenes');
-    const sinImagenes = contenedor.querySelector('.reporte__sin-imagenes');
-
-    // Simulando imágenes
-    const imagenes = [
-        'https://picsum.photos/200',
-        'https://picsum.photos/300/700',
-        'https://picsum.photos/500/400'
-    ];
-
-    // Mostrar imágenes si hay
-    if (imagenes.length > 0) {
-        sinImagenes.remove(); // quitar el mensaje
-        imagenes.forEach(src => {
-            const img = document.createElement('img');
-            img.src = src;
-            contenedor.appendChild(img);
-        });
-    }
-
     const visor = document.getElementById('visor-imagen');
     const visorImg = visor.querySelector('img');
 
-    modal.addEventListener('click', (e) => {
+    modal.addEventListener('click', async (e) => {
         if (e.target.closest('.ver-elemento')) {
-            ocultarModalTemporal(modal);
-            configurarModalElemento("editar", modalElemento);
+            const id_elemento = modal.querySelector("#placa").dataset.id;
+
+            const { data } = await api.get('elementos/' + id_elemento)      
+
+            localStorage.setItem('elemento_temp', JSON.stringify(data));
+            const form = modales.modalElemento.querySelector('form');
+
+            llenarCamposFormulario(data, form);
+            configurarModalElemento('editar', modalElemento);
+            ocultarModalTemporal(modal);            
             abrirModal(modalElemento);
         }
 
@@ -60,3 +51,38 @@ export const initModalReporte = async (modal) => {
         }
     });
 }
+
+export const configurarModalReporte = async (reporte, modal, id_elemento) => {
+
+    // 1. Insertar datos en los <p>
+    modal.querySelector("#fecha").textContent = reporte.fecha || "Sin fecha";
+    modal.querySelector("#usuario").textContent = reporte.usuario || "Sin usuario";
+    modal.querySelector("#asunto").textContent = reporte.asunto || "Sin asunto";
+    modal.querySelector("#placa").textContent = reporte.placa || "Sin placa";
+    modal.querySelector("#placa").dataset.id = id_elemento;
+    modal.querySelector("#mensaje").textContent = reporte.mensaje || "Sin mensaje";
+
+    // 2. Mostrar imágenes
+    const contenedor = modal.querySelector('.reporte__imagenes');
+    const sinImagenes = contenedor.querySelector('.reporte__sin-imagenes');
+    contenedor.innerHTML = ""; // Limpiar contenedor
+
+    try {
+        const { data } = await api.get('fotos/reporte/' + reporte.id);        
+        
+
+        if (data && data.length > 0) {
+            data.forEach(({url}) => {
+                const img = document.createElement('img');
+                img.src = url;
+                contenedor.appendChild(img);
+            });
+        } else {
+            contenedor.appendChild(sinImagenes);
+        }
+
+    } catch (err) {
+        console.error("Error cargando imágenes del reporte:", err);
+        contenedor.appendChild(sinImagenes);
+    }
+};

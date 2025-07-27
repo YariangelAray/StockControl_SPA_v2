@@ -1,10 +1,14 @@
-import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, ocultarModalTemporal } from "./modalsController";
+import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "./modalsController";
 import { configurarModalTipo, initModalTipo } from "./modalTipoElemento";
 import { setLecturaForm } from "../helpers/setLecturaForm";
 import { llenarSelect } from "../helpers/select";
+import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
 import { initModalGenerarReporte } from "./modalGenerarReporte";
 import * as validaciones from "../utils/Validaciones";
 import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
+import { error, success } from '../utils/alertas'
+import * as api from "../utils/api";
+import { elementoClick, formatearElemento } from '../views/inventarios/elementos/elemento';
 
 export const configurarModalElemento = (modo, modal) => {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
@@ -90,21 +94,30 @@ export const initModalElemento = async (modal) => {
   btnAgregarTipo.addEventListener('click', (e) => {
     e.preventDefault();
     configurarModalTipo('crear', modalTipoElemento);
-    abrirModal(modalTipoElemento);
+    ocultarModalTemporal(modal);
+    abrirModal(modalTipoElemento);    
   });
 
   const form = modal.querySelector('form');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const boton = e.submitter; // Este es el botón que disparó el submit
+    const claseBoton = boton.classList;
+
     if (!validaciones.validarFormulario(e)) return;
     const confirmado = await mostrarConfirmacion();
-    if (confirmado) {
-      alert('El elemento será guardado.');
-      localStorage.removeItem('elemento_temp');
-      cerrarModal();
-    } else {
-      alert('Acción cancelada.');
+    if (!confirmado) return;
+
+    validaciones.datos.valor_monetario = parseFloat(validaciones.datos.valor_monetario);
+    validaciones.datos.placa = parseInt(validaciones.datos.placa);
+    if (claseBoton.contains('crear')) {
+      // Acción para crear
+      await crearElemento(validaciones.datos);
+    } else if (claseBoton.contains('guardar')) {
+      // Acción para editar
+      await actualizarElemento(validaciones.datos);
+      configurarModalElemento('editar', modal);
     }
   });
 
@@ -138,11 +151,21 @@ export const initModalElemento = async (modal) => {
 
     if (e.target.closest('.dar-baja')) {
       const confirmado = await mostrarConfirmacion();
-      if (confirmado) {
-        alert('El elemento será dado de baja.');
-      } else {
-        alert('Acción cancelada.');
+      if (!confirmado) return;
+      const { id } = JSON.parse(localStorage.getItem('elemento_temp'));
+
+      const respuesta = await api.put('elementos/' + id + '/estado/' + false);
+      if (respuesta.success) {
+        const fila = document.querySelector(`tr[data-id="${id}"]`);
+        if (fila) fila.classList.add('table__row--red');
+        cerrarModal();
       }
+      else {
+        ocultarModalTemporal(modal);
+        await error(respuesta);
+        mostrarUltimoModal();
+      }
+      return;
     }
 
     if (e.target.closest('.editar')) {
@@ -155,12 +178,11 @@ export const initModalElemento = async (modal) => {
 
       if (estaEditando) {
         const temp = JSON.parse(localStorage.getItem('elemento_temp'));
-        llenarCamposFormulario(temp, form); // Restaurar valores
+        llenarCamposFormulario(temp, form); // Restaurar valores        
         configurarModalElemento('editar', modal);
-      } else {
-        cerrarModal();
-        localStorage.removeItem('elemento_temp');
-      }
+
+      } else cerrarModal();
+
       form.querySelectorAll('.form__control').forEach(input => {
         input.classList.remove('error');
       });
@@ -177,5 +199,74 @@ export const initModalElemento = async (modal) => {
       abrirModal(modalGenerarReporte);
     }
   });
+
+  modal.addEventListener('tipoElementoCreado', async (e) => {
+    const nuevoTipo = e.detail;        
+    
+    selectTipo.innerHtml = "";
+    const option = document.createElement('option');
+    option.value = "otro";
+    option.textContent = "Otro";
+    selectTipo.appendChild(option);
+
+    await llenarSelect({
+      endpoint: 'tipos-elementos',
+      selector: '#tipos-elementos',
+      optionMapper: tipo => ({
+        id: tipo.id,
+        text: tipo.nombre + ". Marca:" + tipo.marca??"No Aplica" + ". Modelo:" + tipo.modelo??"No Aplica"
+      })
+    });
+
+    selectTipo.value = nuevoTipo.id;
+    btnAgregarTipo.classList.add('hidden');
+  });
 };
 
+const crearElemento = async (datos) => {
+  const inventario = JSON.parse(localStorage.getItem('inventario'));
+  const respuesta = await api.post('elementos', {
+    ...datos,
+    inventario_id: inventario.id
+  })
+
+  if (!respuesta.success) {
+    ocultarModalTemporal(modales.modalElemento);
+    await error(respuesta);
+    mostrarUltimoModal();
+    return;
+  }
+  cerrarModal();
+  setTimeout(async () => {
+    await success('Elemento creado con éxito');
+  }, 500);
+  const datosFormateados = await formatearElemento(respuesta.data);
+  
+  const tbody = document.querySelector('#dashboard-elementos .table__body');
+  agregarFila(tbody, datosFormateados, elementoClick);
+
+}
+const actualizarElemento = async (datos) => {
+  const inventario = JSON.parse(localStorage.getItem('inventario'));
+  const elementoTemp = JSON.parse(localStorage.getItem('elemento_temp'));
+  const respuesta = await api.put('elementos/' + elementoTemp.id, {
+    ...datos,
+    inventario_id: inventario.id
+  });
+
+  if (!respuesta.success) {
+    ocultarModalTemporal(modales.modalElemento);
+    await error(respuesta);
+    mostrarUltimoModal();
+    return;
+  }
+  configurarModalElemento('editar', modales.modalElemento);
+  
+  localStorage.setItem('elemento_temp', JSON.stringify(respuesta.data));
+  console.log(respuesta.data);
+  
+  const datosFormateados = await formatearElemento(respuesta.data);
+
+  const tbody = document.querySelector('#dashboard-elementos .table__body');
+  reemplazarFila(tbody, datosFormateados);
+};

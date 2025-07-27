@@ -11,11 +11,13 @@ export const router = async () => {
     const body = document.querySelector('body');
 
     const usuario = JSON.parse(localStorage.getItem('usuario')); // Control de sesión
+    const pageTitle = document.querySelector('title');
+    pageTitle.textContent = "Stock Control";
 
     // Ruta no encontrada
     if (!ruta) {
         const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());
-
+        pageTitle.textContent = "No Encontrada"
         if (!usuario) {
             body.innerHTML = html;
             body.classList.remove('content--ui');
@@ -33,7 +35,7 @@ export const router = async () => {
 
     // Redirección por login
     if (!ruta?.public && !usuario) {
-        location.hash = '#/inicio';
+        location.hash = '#/inicio';        
         return;
     }
     // Redirección por defecto

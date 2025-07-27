@@ -31,7 +31,7 @@
 
 .table__row{
   position: relative;
-  min-height: 50px;
+  height: 50px;  
   transition: all 0.3s ease-in-out;
 }
 
@@ -74,4 +74,13 @@
 
 .table__row--red:hover {
   background-color: rgba(229, 115, 115, 0.35);
+}
+
+#dashboard-tipos-elementos .table__cell:first-child,
+#dashboard-tipos-elementos .table__head-cell:first-child {
+  width: 70px;
+}
+#dashboard-tipos-elementos .table__cell:last-child,
+#dashboard-tipos-elementos .table__head-cell:last-child {
+  width: 150%;
 }

@@ -70,6 +70,7 @@
 .new-card{
   width: 100%;
   height: inherit;
+  min-height: 380;
   background-color: var(--gris-claro);
   border-radius: var(--borde-redondeado);
   transition: all 0.3s ease-in-out;

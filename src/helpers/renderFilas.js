@@ -1,25 +1,51 @@
+// Crea una fila de tabla a partir de un registro y un callback
+export const crearFila = (registro, callbackClick) => {  
+  
+  const fila = document.createElement('tr');
+  fila.classList.add('table__row');
+  fila.dataset.id = registro[0];
+
+  registro.forEach((dato, index) => {
+    if (typeof dato === "boolean" || index === 0) return;
+    const td = document.createElement('td');
+    td.className = 'table__cell text-details';
+    td.textContent = dato ?? 'No Aplica';
+    fila.appendChild(td);
+  });  
+  
+  console.log(registro)
+  const estadoActivo = typeof registro[registro.length - 1] === "boolean" ? !registro[registro.length - 1] : false;
+  if (estadoActivo) fila.classList.add('table__row--red');
+
+  fila.addEventListener('click', () => callbackClick(fila.dataset.id));
+
+  return fila;
+};
+
+// Reemplaza el contenido del tbody con todas las filas generadas
 export const renderFilas = (registros, callbackClick) => {
-    const tbody = document.querySelector('.table__body');
-    tbody.innerHTML = '';
+  const tbody = document.querySelector('.table__body');
+  tbody.innerHTML = '';
 
-    registros.forEach(registro => {
-        const fila = document.createElement('tr');
-        fila.classList.add('table__row');
-        fila.dataset.id = registro[0];
+  registros.forEach(registro => {
+    const fila = crearFila(registro, callbackClick);
+    tbody.appendChild(fila);
+  });
+};
 
-        registro.forEach((dato, index) => {
-            if (index === registro.length - 1 || index === 0) return; // saltamos el booleano
-            const td = document.createElement('td');
-            td.className = 'table__cell text-details';
-            td.textContent = dato ?? '—';
-            fila.appendChild(td);
-        });
+// Agrega una nueva fila al inicio de la tabla
+export const agregarFila = (tbody, registro, callbackClick) => {
+  if (!tbody) return;
+  const fila = crearFila(registro, callbackClick);
+  tbody.insertAdjacentElement('afterbegin', fila);
+};
 
-        // Aplica color rojo si estado_activo es false
-        const estadoActivo = registro[registro.length - 1];
-        if (!estadoActivo) fila.classList.add('table__row--red');
+// Reemplaza una fila existente manteniendo su posición
+export const reemplazarFila = (tbody, registro, callbackClick) => {
+  if (!tbody) return;  
+  const filaAnterior = tbody.querySelector(`tr[data-id="${registro[0]}"]`);
+  if (!filaAnterior) return;
 
-        fila.addEventListener('click', () => callbackClick(fila.dataset.id));        
-        tbody.appendChild(fila);
-    });
+  const nuevaFila = crearFila(registro, callbackClick);
+  tbody.replaceChild(nuevaFila, filaAnterior);
 };

@@ -20,15 +20,15 @@ export const initModalGenerarReporte = (modal) => {
 
     const campos = [...form]
     campos.forEach(campo => {
-    if (campo.hasAttribute('required'))
-      campo.addEventListener("input", validaciones.validarCampo);
+        if (campo.hasAttribute('required'))
+            campo.addEventListener("input", validaciones.validarCampo);
 
-    if (campo.name == "asunto")
-      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
+        if (campo.name == "asunto")
+            campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
 
-    if (campo.name == "mensaje")
-      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 250));
-  });
+        if (campo.name == "mensaje")
+            campo.addEventListener("keydown", event => validaciones.validarLimite(event, 250));
+    });
 
     const inputFile = modal.querySelector('#imagenes');
     const nombreArchivo = modal.querySelector('#nombre-archivos');
@@ -47,8 +47,16 @@ export const initModalGenerarReporte = (modal) => {
             form.querySelectorAll('.form__control').forEach(input => {
                 input.classList.remove('error');
             });
-            cerrarModal();
             form.reset();
+            const newFileInput = document.createElement('input');
+            newFileInput.type = 'file';
+            newFileInput.id = 'imagenes';
+            newFileInput.name="imagenes"
+            newFileInput.className = "input input--small input--file"
+            newFileInput.multiple = true;
+            newFileInput.accept = "image/*";
+            inputFile.parentNode.replaceChild(newFileInput, inputFile);
+            cerrarModal();
         }
     })
 }

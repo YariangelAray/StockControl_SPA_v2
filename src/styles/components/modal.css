@@ -99,7 +99,7 @@
 ======================================================== */
 
 .modal--elemento, 
-.modal--tipo-elemento, .modal--reporte {
+.modal--tipo-elemento, .modal--reporte, .modal--generar-reporte {
   width: 650px;
 }
 
@@ -116,12 +116,20 @@
   grid-template-columns: 1.5fr 1fr;
 }
 
+.modal--reporte label + .text-details{
+  border: 2px solid var(--gris-claro);
+  width: 102%;
+  padding: 6px 8px 5px;
+  border-radius: 10px;
+  margin-left: -5px;
+}
+
 .reporte__imagenes {
   display: flex;
   gap: 10px;
   overflow-x: auto;
   max-width: 100%;
-  height: 200px;
+  max-height: 200px;
   padding: 5px 0;
 }
 

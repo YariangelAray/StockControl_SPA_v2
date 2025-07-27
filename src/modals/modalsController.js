@@ -25,10 +25,18 @@ export const abrirModal = (modal) => {
     requestAnimationFrame(() => modal.classList.add('visible'));
 };
 
+export const mostrarUltimoModal = () =>{
+    const modal = modalStack.at(-1);
+    modal.showModal();
+    requestAnimationFrame(() => modal.classList.add('visible'));
+}
+
 export const ocultarModalTemporal = (modal) => {
     modal.classList.remove('visible');
     setTimeout(() => modal.close(), 300);
 };
+
+
 
 export const cerrarModal = () => {
     const modal = modalStack.pop();

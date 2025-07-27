@@ -91,7 +91,7 @@ export default async () => {
             const respuesta = await api.post('usuarios', validaciones.datos);
 
             if (respuesta.success) {
-                await success("Usuario creado exitosamente");
+                await success("Registro éxitoso");
                 localStorage.setItem('usuario', JSON.stringify(respuesta.data));
                 setTimeout(() => {
                     location.hash = '#/inventarios';

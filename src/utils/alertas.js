@@ -40,7 +40,7 @@ export const error = (respuesta) => {
     mensaje = `❌ ${respuesta.message}`;
   }
 
-  Swal.fire({
+  return Swal.fire({
     ...configuracionBase,
     icon: 'error',
     title: 'Se produjo un error',

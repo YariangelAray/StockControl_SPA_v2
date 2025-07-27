@@ -82,6 +82,7 @@ const marcarItem = () => {
 
 const actualizarHeader = (usuario, inventario) => {
     const header = document.querySelector('.header__title');
+    const pageTitle = document.querySelector('title');
     
     header.innerHTML = ''; // Limpiar contenido anterior
     const hash = location.hash.slice(2); // quitar "#/"
@@ -94,7 +95,8 @@ const actualizarHeader = (usuario, inventario) => {
         span.classList.add('nombre-usuario');
         span.textContent = 'ADMINISTRADOR';
         header.appendChild(texto);
-        header.appendChild(span);        
+        header.appendChild(span);
+        pageTitle.textContent = "Perfil";
     }
 
     // Caso especial: vista inicial
@@ -104,7 +106,8 @@ const actualizarHeader = (usuario, inventario) => {
         span.classList.add('nombre-usuario');
         span.textContent = 'ADMINISTRADOR';
         header.appendChild(texto);
-        header.appendChild(span);        
+        header.appendChild(span);
+        pageTitle.textContent = "Stock Control"; 
     }
 
     const camposNombre = document.querySelectorAll('.nombre-usuario');
@@ -133,6 +136,7 @@ const actualizarHeader = (usuario, inventario) => {
             const seccion = document.createElement('span');
             seccion.classList.add('header__seccion');
             seccion.textContent = parte.split('-').shift();
+            pageTitle.textContent = seccion.textContent.charAt(0).toUpperCase() + seccion.textContent.slice(1);
             header.appendChild(seccion);
         });
     }
