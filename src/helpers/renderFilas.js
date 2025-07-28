@@ -12,8 +12,7 @@ export const crearFila = (registro, callbackClick) => {
     td.textContent = dato ?? 'No Aplica';
     fila.appendChild(td);
   });  
-  
-  console.log(registro)
+    
   const estadoActivo = typeof registro[registro.length - 1] === "boolean" ? !registro[registro.length - 1] : false;
   if (estadoActivo) fila.classList.add('table__row--red');
 

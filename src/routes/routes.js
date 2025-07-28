@@ -40,6 +40,7 @@ export const routes = {
         detalles: {
             path: 'inventarios/detalles/index.html',
             controller: detalles,
+            onlyAdmin: true,
         },
         elementos: {
             "/": {
@@ -49,11 +50,13 @@ export const routes = {
             "tipos-elementos": {
                 path: 'inventarios/elementos/tipos-elementos/index.html',
                 controller: tiposelementos,
+                onlyAdmin: true,
             }
         },
         reportes: {
             path: 'inventarios/reportes/index.html',
             controller: reportes,
+            onlyAdmin: true,
         },
     },
     "perfil-usuario": {

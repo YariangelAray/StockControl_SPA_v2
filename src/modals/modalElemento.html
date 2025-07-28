@@ -22,9 +22,7 @@
       <div class="form__control form__control--stacked form__control--span">
         <label for="tipo_elemento">Tipo de Elemento:</label>
         <div style="display: flex; width: 100%; align-items: center; gap: 20px;">
-          <select name="tipo_elemento_id" class="input input--small input--select" required id="tipos-elementos">
-            <option value="">Tipo de Elemento</option>
-            <option value="otro">Otro</option>
+          <select name="tipo_elemento_id" class="input input--small input--select" required id="tipos-elementos">                        
           </select>
           <button class="button" id="agregarTipo">Agregar tipo</button>
         </div>
@@ -44,14 +42,14 @@
       <div class="form__control form__control--stacked">
         <label for="estado">Estado:</label>
         <select name="estado_id" class="input input--small input--select" id="estados" required>
-          <option value="">Seleccione el estado del elemento</option>
+          <option value="" disabled selected>Seleccione el estado del elemento</option>
         </select>
       </div>
 
       <div class="form__control form__control--stacked">
         <label for="ambiente">Ubicación:</label>
         <select name="ambiente_id" class="input input--small input--select" id="ambientes" required>
-          <option value="">Seleccione el ambiente</option>
+          <option value="" disabled selected>Seleccione el ambiente</option>
         </select>
       </div>
 

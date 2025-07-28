@@ -1,9 +1,10 @@
 
 import { initComponentes } from "../../../helpers/initComponentes";
-import { renderFilas } from "../../../helpers/renderFilas";
+import { agregarFila, renderFilas } from "../../../helpers/renderFilas";
 import { configurarModalReporte, initModalReporte } from "../../../modals/modalReporte";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import * as api from '../../../utils/api';
+import { actualizarStorageReportes, cargarReportes, formatearReporte, reporteClick } from "./reporte";
 
 export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
@@ -21,40 +22,18 @@ export default async () => {
     const { modalReporte } = modales;
     await initModalReporte(modalReporte)
 
-    const respuesta = await api.get('reportes/inventario/' + inventario.id)
 
-    if (respuesta.success) {
-        const reportes = [];
+    let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes;
 
-        await Promise.all(respuesta.data.map(async reporte => {
-            const usuario = await api.get('usuarios/' + reporte.usuario_id);
-            const elemento = await api.get('elementos/' + reporte.elemento_id);
-
-            reportes.push([
-                reporte.id,
-                reporte.fecha,
-                usuario.data.nombres.split(" ")[0] + " " + usuario.data.apellidos.split(" ")[0],
-                elemento.data.placa,
-                reporte.asunto
-            ]);
-        }));
-        renderFilas(reportes, reporteClick);
+    
+    if (!reportes) {
+        const reportesFormateados = await cargarReportes(inventario);
+        localStorage.setItem('reportes', JSON.stringify({reportes: reportesFormateados}));
+        reportes = reportesFormateados;
     }
-}
 
-const reporteClick = async (id) => {
-    const { data } = await api.get('reportes/' + id)
-    const usuario = await api.get('usuarios/' + data.usuario_id);
-    const elemento = await api.get('elementos/' + data.elemento_id);
+    renderFilas(reportes, reporteClick);
 
-    localStorage.setItem('reporte_temp', JSON.stringify(data));
-    configurarModalReporte({
-        id: data.id,
-        fecha: data.fecha,
-        placa: elemento.data.placa,
-        usuario: usuario.data.nombres.split(" ")[0] + " " + usuario.data.apellidos.split(" ")[0], 
-        asunto: data.asunto, 
-        mensaje: data.mensaje
-    }, modales.modalReporte, elemento.data.id);
-    abrirModal(modales.modalReporte);
+    // Actualización en segundo plano
+    await actualizarStorageReportes(inventario);
 }

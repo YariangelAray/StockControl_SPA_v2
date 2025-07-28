@@ -135,6 +135,7 @@
 
 .reporte__imagenes::-webkit-scrollbar-thumb {
   background-color: var(--verde-claro);
+  height: 2px;
 }
 
 .reporte__imagenes img {

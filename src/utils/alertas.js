@@ -35,9 +35,9 @@ export const error = (respuesta) => {
   let mensaje = 'Error desconocido.';
 
   if (respuesta.hasOwnProperty('errors') && Array.isArray(respuesta.errors) && respuesta.errors.length > 0) {
-    mensaje = respuesta.errors.map(err => `❌ ${err}`).join('<br>');
+    mensaje = respuesta.errors.map(err => `${err}`).join('<br>');
   } else if (respuesta.message) {
-    mensaje = `❌ ${respuesta.message}`;
+    mensaje = `${respuesta.message}`;
   }
 
   return Swal.fire({

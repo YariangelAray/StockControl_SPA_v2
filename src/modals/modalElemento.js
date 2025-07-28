@@ -8,10 +8,12 @@ import * as validaciones from "../utils/Validaciones";
 import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
 import { error, success } from '../utils/alertas'
 import * as api from "../utils/api";
-import { elementoClick, formatearElemento } from '../views/inventarios/elementos/elemento';
+import { actualizarStorageElementos, elementoClick, formatearElemento } from '../views/inventarios/elementos/elemento';
+
+const usuario = JSON.parse(localStorage.getItem('usuario'));
+const inventario = JSON.parse(localStorage.getItem('inventario'));
 
 export const configurarModalElemento = (modo, modal) => {
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
 
   const form = modal.querySelector('form');
 
@@ -67,18 +69,25 @@ export const initModalElemento = async (modal) => {
     selector: '#estados',
     optionMapper: estado => ({ id: estado.id, text: estado.nombre })
   });
+
+  const selectTipo = modal.querySelector('#tipos-elementos');
+  reiniciarSelectTipo(selectTipo);
+
   await llenarSelect({
     endpoint: 'tipos-elementos',
     selector: '#tipos-elementos',
-    optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre + ". Marca:" + tipo.marca + ". Modelo:" + tipo.modelo })
+    optionMapper: tipo => ({
+      id: tipo.id,
+      text: `${tipo.nombre}. Marca: ${(tipo.marca ?? "No Aplica")}. Modelo: ${(tipo.modelo ?? "No Aplica")}`
+    })
   });
+
 
   await initModales(['modalGenerarReporte', 'modalTipoElemento']);
   const { modalGenerarReporte, modalTipoElemento } = modales;
   initModalGenerarReporte(modalGenerarReporte);
   initModalTipo(modalTipoElemento);
 
-  const selectTipo = modal.querySelector('#tipos-elementos');
   const btnAgregarTipo = modal.querySelector('#agregarTipo');
   btnAgregarTipo.classList.add('hidden');
 
@@ -95,7 +104,7 @@ export const initModalElemento = async (modal) => {
     e.preventDefault();
     configurarModalTipo('crear', modalTipoElemento);
     ocultarModalTemporal(modal);
-    abrirModal(modalTipoElemento);    
+    abrirModal(modalTipoElemento);
   });
 
   const form = modal.querySelector('form');
@@ -150,7 +159,7 @@ export const initModalElemento = async (modal) => {
   modal.addEventListener('click', async (e) => {
 
     if (e.target.closest('.dar-baja')) {
-      const confirmado = await mostrarConfirmacion();
+      const confirmado = await mostrarConfirmacion("¿Está seguro de dar de baja el elemento?");
       if (!confirmado) return;
       const { id } = JSON.parse(localStorage.getItem('elemento_temp'));
 
@@ -165,6 +174,7 @@ export const initModalElemento = async (modal) => {
         await error(respuesta);
         mostrarUltimoModal();
       }
+      await actualizarStorageElementos(inventario);
       return;
     }
 
@@ -195,36 +205,37 @@ export const initModalElemento = async (modal) => {
 
     // Reportar
     if (e.target.closest('.reportar')) {
+      const elemento = JSON.parse(localStorage.getItem('elemento_temp'));
+      localStorage.setItem('info_reporte', JSON.stringify({usuario_id: usuario.id, elemento_id:elemento.id}))
       ocultarModalTemporal(modal);
       abrirModal(modalGenerarReporte);
     }
   });
-
-  modal.addEventListener('tipoElementoCreado', async (e) => {
-    const nuevoTipo = e.detail;        
-    
-    selectTipo.innerHtml = "";
-    const option = document.createElement('option');
-    option.value = "otro";
-    option.textContent = "Otro";
-    selectTipo.appendChild(option);
-
-    await llenarSelect({
-      endpoint: 'tipos-elementos',
-      selector: '#tipos-elementos',
-      optionMapper: tipo => ({
-        id: tipo.id,
-        text: tipo.nombre + ". Marca:" + tipo.marca??"No Aplica" + ". Modelo:" + tipo.modelo??"No Aplica"
-      })
-    });
-
-    selectTipo.value = nuevoTipo.id;
-    btnAgregarTipo.classList.add('hidden');
-  });
 };
 
+document.addEventListener('tipoElementoCreado', async (e) => {
+  const nuevoTipo = e.detail;
+
+  const selectTipo = modales.modalElemento.querySelector('#tipos-elementos');
+  const btnAgregarTipo = modales.modalElemento.querySelector('#agregarTipo');
+
+  reiniciarSelectTipo(selectTipo);
+
+  await llenarSelect({
+    endpoint: 'tipos-elementos',
+    selector: '#tipos-elementos',
+    optionMapper: tipo => ({
+      id: tipo.id,
+      text: `${tipo.nombre}. Marca: ${(tipo.marca ?? "No Aplica")}. Modelo: ${(tipo.modelo ?? "No Aplica")}`
+    })
+  });
+
+
+  selectTipo.value = nuevoTipo.id;
+  btnAgregarTipo.classList.add('hidden');
+});
+
 const crearElemento = async (datos) => {
-  const inventario = JSON.parse(localStorage.getItem('inventario'));
   const respuesta = await api.post('elementos', {
     ...datos,
     inventario_id: inventario.id
@@ -239,15 +250,15 @@ const crearElemento = async (datos) => {
   cerrarModal();
   setTimeout(async () => {
     await success('Elemento creado con éxito');
-  }, 500);
+  }, 100);
   const datosFormateados = await formatearElemento(respuesta.data);
-  
+
   const tbody = document.querySelector('#dashboard-elementos .table__body');
   agregarFila(tbody, datosFormateados, elementoClick);
-
+  
+  await actualizarStorageElementos(inventario);
 }
-const actualizarElemento = async (datos) => {
-  const inventario = JSON.parse(localStorage.getItem('inventario'));
+const actualizarElemento = async (datos) => {  
   const elementoTemp = JSON.parse(localStorage.getItem('elemento_temp'));
   const respuesta = await api.put('elementos/' + elementoTemp.id, {
     ...datos,
@@ -261,12 +272,28 @@ const actualizarElemento = async (datos) => {
     return;
   }
   configurarModalElemento('editar', modales.modalElemento);
-  
+
   localStorage.setItem('elemento_temp', JSON.stringify(respuesta.data));
   console.log(respuesta.data);
-  
+
   const datosFormateados = await formatearElemento(respuesta.data);
 
   const tbody = document.querySelector('#dashboard-elementos .table__body');
   reemplazarFila(tbody, datosFormateados);
+  await actualizarStorageElementos(inventario);
+};
+
+const reiniciarSelectTipo = (select) => {
+  select.innerHTML = "";
+  const placeHolder = document.createElement('option');
+  placeHolder.value = "";
+  placeHolder.textContent = "Seleccione el tipo de elemento";
+  placeHolder.disabled = true;
+  placeHolder.selected = true;
+
+  const option = document.createElement('option');
+  option.value = "otro";
+  option.textContent = "Otro";
+
+  select.append(placeHolder, option);
 };

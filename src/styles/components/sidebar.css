@@ -75,3 +75,20 @@
   border-radius: 12px;
   pointer-events: none;
 }
+
+.sidebar .access-info{
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 20px);
+  padding: 8px 10px;  
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  border-width: 3px;
+}
+
+.sidebar .hidden{
+  display: none;
+}

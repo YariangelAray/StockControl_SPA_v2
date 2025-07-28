@@ -32,3 +32,22 @@ export const elementoClick = async (id) => {
   configurarModalElemento('editar', modales.modalElemento);
   abrirModal(modales.modalElemento);
 }
+
+export const cargarElementos = async (inventario) => {
+  const respuesta = await get('elementos/inventario/' + inventario.id)
+  const elementos = [];
+
+  if (respuesta.success) {
+
+    for (const elemento of respuesta.data) {
+      elementos.push(await formatearElemento(elemento));
+    }
+  }
+
+  return elementos;
+}
+
+export const actualizarStorageElementos = async (inventario) => {
+  const nuevosElementos = await cargarElementos(inventario);
+  localStorage.setItem('elementos', JSON.stringify({ elementos: nuevosElementos }));
+}

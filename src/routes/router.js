@@ -14,6 +14,12 @@ export const router = async () => {
     const pageTitle = document.querySelector('title');
     pageTitle.textContent = "Stock Control";
 
+    // Redirección por defecto
+    if (segmentos.length === 0) {
+        location.hash = usuario ? '#/inventarios' : '#/inicio';
+        return;
+    }
+
     // Ruta no encontrada
     if (!ruta) {
         const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());
@@ -35,14 +41,11 @@ export const router = async () => {
 
     // Redirección por login
     if (!ruta?.public && !usuario) {
-        location.hash = '#/inicio';        
+        location.hash = '#/inicio';
         return;
     }
-    // Redirección por defecto
-    if (segmentos.length === 0) {
-        location.hash = usuario ? '#/inventarios' : '#/inicio';
-        return;
-    }
+
+    if (ruta.onlyAdmin && usuario.rol_id != 1) location.hash = "#/no-encontrada";
 
     // Render sin layout
     if (ruta.nolayout) {
@@ -61,7 +64,7 @@ export const router = async () => {
         body.innerHTML = layoutHtml;
         body.classList.remove('content--auth');
         body.classList.add('content--ui');
-        const {data} = await api.get('roles/' + usuario.rol_id);
+        const { data } = await api.get('roles/' + usuario.rol_id);
         const campoRol = document.querySelector('.rol');
         campoRol.textContent = "Usuario " + data.nombre;
         document.addEventListener('click', (e) => {
@@ -69,13 +72,13 @@ export const router = async () => {
                 localStorage.removeItem('usuario');
                 location.hash = '#/inicio'
             }
-        })        
+        })
         hayLayout = true;
     }
 
     const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
-    document.querySelector('.dashboard').innerHTML = vista;    
-    
+    document.querySelector('.dashboard').innerHTML = vista;
+
     ruta.controller();
     hayLayout = true;
 };

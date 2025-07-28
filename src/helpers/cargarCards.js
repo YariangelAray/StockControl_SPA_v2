@@ -1,8 +1,5 @@
-export const cargarCards = (contenedor, data, config) => {    
-
-    console.log(data);
-    data.forEach(item => {
-        console.log(item);
+export const cargarCards = (contenedor, data, config) => {        
+    data.forEach(item => {        
         const card = document.createElement('div');
         card.classList.add('card');
         if (config.tipo === 'ambiente') card.classList.add('card--large');
@@ -58,7 +55,7 @@ export const cargarCards = (contenedor, data, config) => {
         button.className = 'button';
         button.textContent = config.tipo === 'inventario' ? 'Ver inventario' : 'Ver mapa';
 
-        button.addEventListener('click', () => config.onClick(item));
+        button.addEventListener('click', () => config.click(item));
         actions.appendChild(button);
         card.appendChild(actions);
 

@@ -10,19 +10,19 @@ export const initModalEliminar = (modal, usuario) => {
     campo.addEventListener('keydown', validaciones.validarCampo);
 
     const form = modal.querySelector('form');
-    form.addEventListener('submit',async (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!validaciones.validarFormulario(e) || campo.value.trim() == "") return;        
+        if (!validaciones.validarFormulario(e) || campo.value.trim() == "") return;
 
         try {
-            const respuesta = await api.put(`usuarios/${usuario.id}/desactivar`, {contrasena_actual:campo.value});            
+            const respuesta = await api.put(`usuarios/${usuario.id}/desactivar`, { contrasena_actual: campo.value });
 
             if (respuesta.success) {
                 cerrarModal();
                 await success("Cuenta desactivada exitosamente");
                 setTimeout(() => {
                     location.hash = '#/inicio';
-                }, 500);
+                }, 100);
 
             } else {
                 cerrarModal();
@@ -39,6 +39,9 @@ export const initModalEliminar = (modal, usuario) => {
     modal.addEventListener('click', (e) => {
         if (e.target.closest('.cancelar')) {
             cerrarModal();
+            form.querySelectorAll('.form__control').forEach(input => {
+                input.classList.remove('error');
+            });
         }
     })
 }

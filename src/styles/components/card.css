@@ -8,6 +8,7 @@
 .card{
   width: 100%;
   height: auto;
+  min-height: 250px;
   background-color: var(--blanco);
   box-shadow: 0 2px 6px 0 #00000025;
   border-radius: var(--borde-redondeado);
@@ -30,6 +31,10 @@
 .card__title{
   font-size: 1.5rem;
   font-weight: 600;
+  display: block;
+  max-height: 33px;
+  overflow-x: scroll;
+  width: 100%;
 }
 
 .card__content{
@@ -70,7 +75,7 @@
 .new-card{
   width: 100%;
   height: inherit;
-  min-height: 380;
+  min-height: 250px;
   background-color: var(--gris-claro);
   border-radius: var(--borde-redondeado);
   transition: all 0.3s ease-in-out;

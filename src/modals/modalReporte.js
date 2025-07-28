@@ -16,19 +16,20 @@ export const initModalReporte = async (modal) => {
         if (e.target.closest('.ver-elemento')) {
             const id_elemento = modal.querySelector("#placa").dataset.id;
 
-            const { data } = await api.get('elementos/' + id_elemento)      
+            const { data } = await api.get('elementos/' + id_elemento)
 
             localStorage.setItem('elemento_temp', JSON.stringify(data));
             const form = modales.modalElemento.querySelector('form');
 
             llenarCamposFormulario(data, form);
             configurarModalElemento('editar', modalElemento);
-            ocultarModalTemporal(modal);            
+            ocultarModalTemporal(modal);
             abrirModal(modalElemento);
         }
 
         if (e.target.closest('.aceptar')) {
             cerrarModal();
+            localStorage.removeItem('reporte_temp');
         }
         if (e.target.closest('.reporte__imagenes img')) {
             visorImg.src = e.target.src;
@@ -55,34 +56,37 @@ export const initModalReporte = async (modal) => {
 export const configurarModalReporte = async (reporte, modal, id_elemento) => {
 
     // 1. Insertar datos en los <p>
-    modal.querySelector("#fecha").textContent = reporte.fecha || "Sin fecha";
-    modal.querySelector("#usuario").textContent = reporte.usuario || "Sin usuario";
-    modal.querySelector("#asunto").textContent = reporte.asunto || "Sin asunto";
-    modal.querySelector("#placa").textContent = reporte.placa || "Sin placa";
+    modal.querySelector("#fecha").textContent = reporte.fecha;
+    modal.querySelector("#usuario").textContent = reporte.usuario;
+    modal.querySelector("#asunto").textContent = reporte.asunto;
+    modal.querySelector("#placa").textContent = reporte.placa;
     modal.querySelector("#placa").dataset.id = id_elemento;
-    modal.querySelector("#mensaje").textContent = reporte.mensaje || "Sin mensaje";
+    modal.querySelector("#mensaje").textContent = reporte.mensaje;
 
     // 2. Mostrar imágenes
     const contenedor = modal.querySelector('.reporte__imagenes');
-    const sinImagenes = contenedor.querySelector('.reporte__sin-imagenes');
     contenedor.innerHTML = ""; // Limpiar contenedor
 
-    try {
-        const { data } = await api.get('fotos/reporte/' + reporte.id);        
-        
+    const { data } = await api.get('fotos/reporte/' + reporte.id);
 
-        if (data && data.length > 0) {
-            data.forEach(({url}) => {
-                const img = document.createElement('img');
-                img.src = url;
-                contenedor.appendChild(img);
-            });
-        } else {
-            contenedor.appendChild(sinImagenes);
-        }
 
-    } catch (err) {
-        console.error("Error cargando imágenes del reporte:", err);
+    if (data && data.length > 0) {
+        data.forEach(({ url }) => {
+            const img = document.createElement('img');
+            img.src = 'http://localhost:8080/StockControl_API/' + url;
+            contenedor.appendChild(img);
+        });
+    } else {
+        const sinImagenes = document.createElement('p');
+        sinImagenes.classList.add('reporte__sin-imagenes', 'text-details');
+
+        const icono = document.createElement('i');
+        icono.classList.add('ri-camera-off-line');
+
+        // Añadimos el icono y el texto al `<p>`
+        sinImagenes.appendChild(icono);
+        sinImagenes.append(' No hay imágenes.');
+
         contenedor.appendChild(sinImagenes);
     }
 };

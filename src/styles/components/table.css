@@ -2,14 +2,15 @@
   min-width: 600px;
   width: 100%;
   height: 100%;
-  background-color: var(--gris-claro);
+  background-color: hsl(0, 0%, 98%);
   border-collapse: collapse;
   border-radius: 15px;
   overflow: hidden;
+  box-shadow: 0 0 2px #00000047;  
 }
 
 .table__head{
-  background-color: var(--gris-oscuro);
+  background-color: var(--verde-oscuro);
 }
 
 .table__body {
@@ -35,6 +36,10 @@
   transition: all 0.3s ease-in-out;
 }
 
+.table__row:nth-child(even) {
+  background-color: var(--gris-panel);
+}
+
 .table__row::after {
   content: '';
   position: absolute;
@@ -46,8 +51,7 @@
   background-color: var(--gris-oscuro);
 }
 
-.table__row:hover{
-  background-color: var(--gris-oscuro);
+.table__row:hover{  
   background-color: hsla(100, 50%, 85%, 0.8);
   cursor: pointer;
 }
@@ -57,14 +61,14 @@
   padding: 10px;
   text-align: center;  
   width: 100%;
-  word-wrap: break-word;
+  word-wrap: nowrap;
 }
 
 .table__head-cell{
-  color: var(--gris-letras-oscuras);
+  color: var(--blanco);
 }
 
-.table__row--red {
+.table__row.table__row--red {
   background-color: rgba(229, 115, 115, 0.2);
 }
 
@@ -78,7 +82,7 @@
 
 #dashboard-tipos-elementos .table__cell:first-child,
 #dashboard-tipos-elementos .table__head-cell:first-child {
-  width: 70px;
+  width: 80px;
 }
 #dashboard-tipos-elementos .table__cell:last-child,
 #dashboard-tipos-elementos .table__head-cell:last-child {

@@ -3,7 +3,7 @@ import { setLecturaForm } from "../helpers/setLecturaForm";
 import * as validaciones from "../utils/Validaciones";
 import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
 import * as api from "../utils/api";
-import { formatearTipo, tipoClick } from "../views/inventarios/elementos/tipos-elementos/tipos-elementos";
+import { actualizarStorageTipos, formatearTipo, tipoClick } from "../views/inventarios/elementos/tipos-elementos/tipos-elementos";
 import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
 import { error, success } from "../utils/alertas";
 
@@ -117,7 +117,7 @@ const crearTipo = async (datos) => {
   if (document.querySelector('#dashboard-tipos-elementos')){
     setTimeout(async () => {
       await success('Tipo de elemento creado con éxito');
-    }, 500);
+    }, 100);
   }
   
   const datosFormateados = formatearTipo(respuesta.data);
@@ -125,6 +125,7 @@ const crearTipo = async (datos) => {
   agregarFila(tbody, datosFormateados, tipoClick);
 
   document.dispatchEvent(new CustomEvent('tipoElementoCreado', { detail: respuesta.data }));  
+  await actualizarStorageTipos();
 }
 
 
@@ -146,4 +147,5 @@ const actualizarTipo = async (datos) => {
   const tbody = document.querySelector('#dashboard-tipos-elementos .table__body');
 
   reemplazarFila(tbody, datosFormateados, tipoClick);
+  await actualizarStorageTipos();
 };

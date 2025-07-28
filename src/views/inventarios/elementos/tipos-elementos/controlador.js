@@ -1,12 +1,13 @@
 import { initComponentes } from "../../../../helpers/initComponentes";
-import { renderFilas } from "../../../../helpers/renderFilas";
+import { agregarFila, renderFilas } from "../../../../helpers/renderFilas";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../../modals/modalsController";
 import { configurarModalTipo, initModalTipo } from "../../../../modals/modalTipoElemento";
 import * as api from '../../../../utils/api';
-import { formatearTipo, tipoClick } from "./tipos-elementos";
+import { actualizarStorageTipos, cargarTipos, formatearTipo, tipoClick } from "./tipos-elementos";
 
 export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
+
     initComponentes(usuario);
     if (usuario.rol_id != 1) location.hash = '#/inventarios';
 
@@ -21,16 +22,20 @@ export default async () => {
 
     initModalTipo(modalTipoElemento);
 
-    const respuesta = await api.get('tipos-elementos');
-    console.log(respuesta);
-    
-    if (respuesta.success) {
-        const tipos = [];
-        respuesta.data.map( tipo => {
-            tipos.push(formatearTipo(tipo));
-        });
-        renderFilas(tipos, tipoClick);
+    let tipos = JSON.parse(localStorage.getItem('tipos') || '{}').tipos;
+
+
+    if (!tipos) {
+        const tiposFormateados = await cargarTipos();
+        localStorage.setItem('tipos', JSON.stringify({ tipos: tiposFormateados }));
+        tipos = tiposFormateados;
     }
+
+    renderFilas(tipos, tipoClick);
+
+    // Actualización en segundo plano
+    await actualizarStorageTipos();
+
 
     document.getElementById('dashboard-tipos-elementos').addEventListener('click', (e) => {
         // Botón Agregar → AGREGAR

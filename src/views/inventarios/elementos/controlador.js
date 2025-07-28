@@ -1,19 +1,33 @@
 import { initComponentes } from "../../../helpers/initComponentes";
 import { renderFilas } from "../../../helpers/renderFilas";
+import { llenarSelect } from "../../../helpers/select";
 import { configurarModalElemento, initModalElemento } from "../../../modals/modalElemento";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
-import * as api from '../../../utils/api';
-import { elementoClick, formatearElemento } from "./elemento";
+import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTemporizadorAcceso";
+import { actualizarStorageElementos, cargarElementos, elementoClick } from "./elemento";
+
 
 export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     const inventario = JSON.parse(localStorage.getItem('inventario'));
+
     initComponentes(usuario);
 
     document.querySelector('.dashboard').className = "dashboard";
     document.querySelector('.dashboard').classList.add('dashboard--table-section');
     document.querySelector('.dashboard').removeAttribute('id');
     document.querySelector('.dashboard').id = "dashboard-elementos";
+
+    await llenarSelect({
+        endpoint: 'ambientes',
+        selector: '#filtro-ambientes',
+        optionMapper: ambiente => ({ id: ambiente.id, text: ambiente.nombre })
+    });
+    await llenarSelect({
+        endpoint: 'estados',
+        selector: '#filtro-estados',
+        optionMapper: estado => ({ id: estado.id, text: estado.nombre })
+    });
 
 
     limpiarModales();
@@ -35,14 +49,40 @@ export default async () => {
             }
         })
     }
-    
-    const respuesta = await api.get('elementos/inventario/' + inventario.id)    
-    if (respuesta.success) {
-        const elementos = [];
 
-        await Promise.all(respuesta.data.map(async elemento => {
-            elementos.push(await formatearElemento(elemento));
-        }));
-        renderFilas(elementos, elementoClick);
+    let elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos;
+
+    if (!elementos) {
+        const elementosFormateados = await cargarElementos(inventario);
+        localStorage.setItem('elementos', JSON.stringify({ elementos: elementosFormateados }));
+        elementos = elementosFormateados;
+    }
+
+    renderFilas(elementos, elementoClick);
+
+    // Actualización en segundo plano
+    await actualizarStorageElementos(inventario);
+
+    if (usuario.rol_id === 2) {
+        const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
+        const limpiar = () => {
+            document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+            localStorage.removeItem('codigoAccesoInfo');
+        }
+
+        if (codigoInfo) {
+            const expiracion = new Date(codigoInfo.expiracion);
+            const ahora = new Date();
+
+            if (expiracion > ahora) {
+                document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
+                await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
+            } else {
+                await eliminarAccesos(inventario.id, limpiar);
+                window.location.hash = '#/inventarios';
+            }
+        } else {
+            window.location.hash = '#/inventarios';
+        }
     }
 }
