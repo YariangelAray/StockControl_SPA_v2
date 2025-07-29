@@ -16,7 +16,16 @@ export default async () => {
     document.querySelector('.dashboard').removeAttribute('id');
     document.querySelector('.dashboard').id = "dashboard-ambientes";
 
-    await cargarAmbientes(inventario)
+    let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes;
+    if (!ambientes) {
+        const respuesta = await api.get(`inventarios/${inventario.id}/ambientes`);
+        if (respuesta.success) {
+            localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data }));
+            ambientes = respuesta.data;
+        }
+    }
+
+    await cargarAmbientes(ambientes, inventario)
 
     if (usuario.rol_id === 2) {
         const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
@@ -40,18 +49,22 @@ export default async () => {
             window.location.hash = '#/inventarios';
         }
     }
+
+    await actualizarStorageAmbientes(inventario);
 };
 
-const cargarAmbientes = async (inventario) => {
-    const respuesta = await api.get(`inventarios/${inventario.id}/ambientes`);
+const cargarAmbientes = async (ambientes) => {
     const contenedor = document.querySelector('.content-cards');
-    if (respuesta.success) {
-        cargarCards(contenedor, respuesta.data, {
-            tipo: 'ambiente',
-            filas: [
-                { valor: 'cantidad_elementos', clave: 'Cantidad de elementos:' }
-            ],
-            onClick: (ambiente) => { info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible") }
-        });
-    }
+    cargarCards(contenedor, ambientes, {
+        tipo: 'ambiente',
+        filas: [
+            { valor: 'cantidad_elementos', clave: 'Cantidad de elementos:' }
+        ],
+        click: (ambiente) => { info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible") }
+    });
 };
+
+const actualizarStorageAmbientes = async (inventario) => {
+    const respuesta = await api.get(`inventarios/${inventario.id}/ambientes`);
+    if (respuesta.success) localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data }));
+}

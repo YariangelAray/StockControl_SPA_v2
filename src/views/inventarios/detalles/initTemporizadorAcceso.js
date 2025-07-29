@@ -1,5 +1,5 @@
-// Importa la función `del` para hacer peticiones DELETE al backend
-import { del } from "../../../utils/api";
+import { info } from "../../../utils/alertas";
+import { del, get } from "../../../utils/api";
 
 /**
  * Inicia el temporizador que muestra cuánto tiempo queda para que expire
@@ -13,6 +13,7 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     // Selecciona el elemento donde se mostrará el tiempo restante
     let tiempoAcceso = usuario.rol_id == 1 ? document.querySelector('.dashboard .tiempo-acceso') : document.querySelector('.sidebar .tiempo-acceso');
+    const usuariosAcces = document.querySelector('.dashboard .access-info + .dashboard__row .usuarios-gestionando');
 
     // Variable para guardar el intervalo que actualiza el tiempo
     let intervalo;
@@ -34,9 +35,9 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
             if (usuario.rol_id === 2) {
                 const hash = location.hash;
 
-                const vistaDeInventario = hash != '#/inventario' && hash != '#/perfil-usuario';
+                const dentroDeInventario = hash == '#/inventario' || hash == '#/perfil-usuario';
 
-                if (vistaDeInventario) {
+                if (!dentroDeInventario) {
                     info("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
                     setTimeout(() => {
                         window.location.hash = '#/inventarios';
@@ -44,6 +45,11 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
                 }
             }
             return;
+        }
+
+        if (usuario.rol_id === 1) {            
+            const respuesta = await get('accesos-temporales/inventario/' + inventarioId); 
+            usuariosAcces.textContent = respuesta.success && respuesta.data ? respuesta.data.length : 0;
         }
 
         // Calcula las horas, minutos y segundos restantes

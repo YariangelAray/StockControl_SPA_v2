@@ -6,7 +6,7 @@
   border-collapse: collapse;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 0 2px #00000047;  
+  box-shadow: 0 1px 4px #00000047;  
 }
 
 .table__head{
@@ -37,7 +37,7 @@
 }
 
 .table__row:nth-child(even) {
-  background-color: var(--gris-panel);
+  background-color: var(--gris-claro);
 }
 
 .table__row::after {
@@ -82,9 +82,9 @@
 
 #dashboard-tipos-elementos .table__cell:first-child,
 #dashboard-tipos-elementos .table__head-cell:first-child {
-  width: 80px;
+  width: 50px;
 }
-#dashboard-tipos-elementos .table__cell:last-child,
-#dashboard-tipos-elementos .table__head-cell:last-child {
+#dashboard-tipos-elementos .table__cell:nth-last-child(2),
+#dashboard-tipos-elementos .table__head-cell:nth-last-child(2) {
   width: 150%;
 }

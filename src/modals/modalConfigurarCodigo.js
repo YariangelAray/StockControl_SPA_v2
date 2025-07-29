@@ -68,6 +68,7 @@ export const initModalConfigurar = async (modal) => {
         // Iniciar temporizador para mostrar el tiempo restante
         await initTemporizadorAcceso(fechaExpiracion, inventario.id, () => {
             document.querySelector('.dashboard .access-info').classList.add('hidden');        
+            document.querySelector('.dashboard .access-info + .dashboard__row').classList.add('hidden');        
             localStorage.removeItem('codigoAccesoInfo');
         });
     });
@@ -82,7 +83,8 @@ export const initModalConfigurar = async (modal) => {
     modalCodigoAcceso.addEventListener('click', (e) => {
         if (e.target.closest('.aceptar')) {
             cerrarTodo(); // Se cierra el modal
-            document.querySelector('.dashboard .access-info').classList.remove('hidden'); // esta es la fila que se muestra cuando se genera el codigo de acceso
+            document.querySelector('.dashboard .access-info').classList.remove('hidden');
+            document.querySelector('.dashboard .access-info  + .dashboard__row').classList.remove('hidden');
         }
     });
 };

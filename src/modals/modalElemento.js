@@ -20,6 +20,7 @@ export const configurarModalElemento = (modo, modal) => {
   const botones = {
     editar: modal.querySelector('.editar'),
     crear: modal.querySelector('.crear'),
+    reactivar: modal.querySelector('.reactivar'),
     guardar: modal.querySelector('.guardar'),
     baja: modal.querySelector('.dar-baja'),
     reportar: modal.querySelector('.reportar'),
@@ -42,7 +43,6 @@ export const configurarModalElemento = (modo, modal) => {
   if (modo === 'editar') {
     setLecturaForm(form, true); // lectura
     botones.editar.classList.remove('hidden');
-    if (usuario.rol_id == 1) botones.baja.classList.remove('hidden');
     botones.reportar.classList.remove('hidden');
     botones.aceptar.classList.remove('hidden');
     modal.querySelector('.modal__title').textContent = 'Detalles del Elemento';
@@ -165,8 +165,28 @@ export const initModalElemento = async (modal) => {
 
       const respuesta = await api.put('elementos/' + id + '/estado/' + false);
       if (respuesta.success) {
-        const fila = document.querySelector(`tr[data-id="${id}"]`);
+        const fila = document.querySelector(`#dashboard-elementos .table__row[data-id="${id}"]`);
         if (fila) fila.classList.add('table__row--red');
+        cerrarModal();
+      }
+      else {
+        ocultarModalTemporal(modal);
+        await error(respuesta);
+        mostrarUltimoModal();
+      }
+      await actualizarStorageElementos(inventario);
+      return;
+    }
+
+    if (e.target.closest('.reactivar')) {
+      const confirmado = await mostrarConfirmacion("¿Está seguro de reactivar el elemento?");
+      if (!confirmado) return;
+      const { id } = JSON.parse(localStorage.getItem('elemento_temp'));
+
+      const respuesta = await api.put('elementos/' + id + '/estado/' + true);
+      if (respuesta.success) {
+        const fila = document.querySelector(`#dashboard-elementos .table__row[data-id="${id}"]`);
+        if (fila) fila.classList.remove('table__row--red');
         cerrarModal();
       }
       else {
@@ -200,6 +220,7 @@ export const initModalElemento = async (modal) => {
 
     if (e.target.closest('.aceptar')) {
       cerrarModal();
+      form.reset();
       localStorage.removeItem('elemento_temp');
     }
 
@@ -248,15 +269,18 @@ const crearElemento = async (datos) => {
     return;
   }
   cerrarModal();
+
   setTimeout(async () => {
     await success('Elemento creado con éxito');
   }, 100);
   const datosFormateados = await formatearElemento(respuesta.data);
 
+  let elementos = JSON.parse(localStorage.getItem('elementos'))?.elementos || [];
+  elementos.unshift(datosFormateados); // agrega al principio
+  localStorage.setItem('elementos', JSON.stringify({ elementos }));
+
   const tbody = document.querySelector('#dashboard-elementos .table__body');
-  agregarFila(tbody, datosFormateados, elementoClick);
-  
-  await actualizarStorageElementos(inventario);
+  agregarFila(tbody, datosFormateados, elementoClick);  
 }
 const actualizarElemento = async (datos) => {  
   const elementoTemp = JSON.parse(localStorage.getItem('elemento_temp'));

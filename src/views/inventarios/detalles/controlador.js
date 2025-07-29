@@ -21,8 +21,7 @@ export default async () => {
     if (!respuesta.success) {
         console.warn(respuesta)
         return;
-    }
-
+    }    
     const inventario = respuesta.data
 
     // Asignar datos al resumen general
@@ -43,6 +42,7 @@ export default async () => {
     await initModalConfigurar(modalConfigurarCodigo); //Aqui se inicializan los eventos del modal
 
     const accessInfoRow = document.querySelector('.dashboard .access-info');
+    const usuariosAcces = document.querySelector('.dashboard .access-info + .dashboard__row');
     const codigoAccesoText = document.querySelector('.codigo-acceso');
 
     // Verificar si hay código activo en localStorage
@@ -50,6 +50,7 @@ export default async () => {
     
     const limpiar = () => {
         accessInfoRow.classList.add('hidden');
+        usuariosAcces.classList.add('hidden');
         localStorage.removeItem('codigoAccesoInfo');
     }
 
@@ -61,6 +62,7 @@ export default async () => {
         if (expiracion > ahora) {
             // Aún está vigente, restaurar UI
             accessInfoRow.classList.remove('hidden');
+            usuariosAcces.classList.remove('hidden');
             codigoAccesoText.textContent = codigoInfo.codigo;
 
             await initTemporizadorAcceso(expiracion, inventarioInfo.id, limpiar);
@@ -69,13 +71,14 @@ export default async () => {
         }
     } else {
         accessInfoRow.classList.add('hidden');
+        usuariosAcces.classList.add('hidden');
     }
 
 
     document.getElementById('dashboard-detalles').addEventListener('click', (e) => {
         if (e.target.closest('.generar-codigo')) {
             if (codigoInfo) {
-                const expiracion = new Date(codigoInfo.expiracion);
+                const expiracion = new Date(codigoInfo.expiracion);                                         
                 info("Código activo", `Ya existe un código de acceso generado. Por favor espera a que finalice antes de generar uno nuevo. Hora de expiración: ${expiracion.toLocaleTimeString('es-CO')}`);
                 return;
             }

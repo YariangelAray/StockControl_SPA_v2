@@ -67,11 +67,11 @@ export const configurarModalReporte = async (reporte, modal, id_elemento) => {
     const contenedor = modal.querySelector('.reporte__imagenes');
     contenedor.innerHTML = ""; // Limpiar contenedor
 
-    const { data } = await api.get('fotos/reporte/' + reporte.id);
+    const respuesta = await api.get('fotos/reporte/' + reporte.id);    
+    
 
-
-    if (data && data.length > 0) {
-        data.forEach(({ url }) => {
+    if (respuesta.data && respuesta.data.length > 0) {
+        respuesta.data.forEach(({ url }) => {
             const img = document.createElement('img');
             img.src = 'http://localhost:8080/StockControl_API/' + url;
             contenedor.appendChild(img);

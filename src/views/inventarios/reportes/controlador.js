@@ -16,13 +16,7 @@ export default async () => {
 
     document.querySelector('.dashboard').removeAttribute('id');
     document.querySelector('.dashboard').id = "dashboard-reportes";
-
-    limpiarModales();
-    await initModales(['modalReporte']);
-    const { modalReporte } = modales;
-    await initModalReporte(modalReporte)
-
-
+    
     let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes;
 
     
@@ -33,6 +27,13 @@ export default async () => {
     }
 
     renderFilas(reportes, reporteClick);
+    
+    limpiarModales();
+    await initModales(['modalReporte']);
+    const { modalReporte } = modales;
+    await initModalReporte(modalReporte)
+
+
 
     // Actualización en segundo plano
     await actualizarStorageReportes(inventario);

@@ -5,10 +5,11 @@ import { abrirModal, initModales, limpiarModales, modales } from "../../modals/m
 import * as api from "../../utils/api.js";
 import { initTemporizadorAcceso } from "./detalles/initTemporizadorAcceso.js";
 
-const usuario = JSON.parse(localStorage.getItem('usuario'));
 export default async () => {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
 
     localStorage.removeItem('inventario');
+    localStorage.removeItem('ambientes');
     localStorage.removeItem('elementos');
     localStorage.removeItem('reportes');
     localStorage.removeItem('tipos');
@@ -52,10 +53,7 @@ export default async () => {
 
 const cargarInventarios = async (usuario) => {
     const respuesta = usuario.rol_id == 1 ? await api.get('inventarios/usuario/' + usuario.id)
-        : await api.get('accesos-temporales/' + usuario.id);
-
-    console.log(respuesta);
-
+        : await api.get('accesos-temporales/' + usuario.id);    
 
     const contenedor = document.querySelector('.content-cards');
     if (respuesta.success) {

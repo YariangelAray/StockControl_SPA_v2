@@ -12,3 +12,14 @@
 .text-details--medium-sized{
   font-size: var(--fuente-normal);
 }
+
+.text-details--paragraph{
+  max-height: 100px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  word-break: break-all;
+}
+
+.text-details--paragraph::-webkit-scrollbar-thumb{
+  background-color: var(--gris-oscuro);
+}

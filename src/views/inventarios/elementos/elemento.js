@@ -22,6 +22,7 @@ export const formatearElemento = async (elemento) => {
 };
 
 export const elementoClick = async (id) => {
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
   const { data } = await get('elementos/' + id)
 
   localStorage.setItem('elemento_temp', JSON.stringify(data));
@@ -30,6 +31,8 @@ export const elementoClick = async (id) => {
   llenarCamposFormulario(data, form);
   modales.modalElemento.dataset.id = data.id;
   configurarModalElemento('editar', modales.modalElemento);
+  const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
+  if (usuario.rol_id == 1) btn.classList.remove('hidden');
   abrirModal(modales.modalElemento);
 }
 

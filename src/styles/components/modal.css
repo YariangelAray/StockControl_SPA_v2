@@ -114,14 +114,18 @@
   display: grid;
   gap: 15px 20px;
   grid-template-columns: 1.5fr 1fr;
+  border: 2px solid var(--verde-claro);
+  margin-top: 15px;
+  border-radius: var(--borde-redondeado);
+  padding: 0 20px 10px;
+  background-color: hsl(0, 0%, 98%);  
 }
 
 .modal--reporte label + .text-details{
-  border: 2px solid var(--gris-claro);
-  width: 102%;
-  padding: 6px 8px 5px;
-  border-radius: 10px;
-  margin-left: -5px;
+  border-bottom: 2px solid var(--gris-oscuro);
+  width: 100%;
+  padding: 0 5px;
+  overflow-x: scroll;  
 }
 
 .reporte__imagenes {

@@ -11,6 +11,7 @@ export const formatearTipo = (tipo) => {
         tipo.marca,
         tipo.modelo,
         tipo.detalles,
+        tipo.cantidadElementos,
     ]
 }
 
@@ -19,8 +20,8 @@ export const tipoClick = async (id) => {
     localStorage.setItem('tipo_temp', JSON.stringify(data));
     const form = modales.modalTipoElemento.querySelector('form');
 
-    llenarCamposFormulario(data, form);
     configurarModalTipo('editar', modales.modalTipoElemento);
+    llenarCamposFormulario(data, form);
     abrirModal(modales.modalTipoElemento);
 }
 

@@ -18,24 +18,6 @@ export default async () => {
     document.querySelector('.dashboard').removeAttribute('id');
     document.querySelector('.dashboard').id = "dashboard-elementos";
 
-    await llenarSelect({
-        endpoint: 'ambientes',
-        selector: '#filtro-ambientes',
-        optionMapper: ambiente => ({ id: ambiente.id, text: ambiente.nombre })
-    });
-    await llenarSelect({
-        endpoint: 'estados',
-        selector: '#filtro-estados',
-        optionMapper: estado => ({ id: estado.id, text: estado.nombre })
-    });
-
-
-    limpiarModales();
-    await initModales(['modalElemento']);
-
-    const { modalElemento } = modales;
-    await initModalElemento(modalElemento);
-
     if (usuario.rol_id == 1) {
         const crearBoton = document.getElementById('crearElemento');
         crearBoton.classList.remove('hidden');
@@ -59,6 +41,25 @@ export default async () => {
     }
 
     renderFilas(elementos, elementoClick);
+    
+    await llenarSelect({
+        endpoint: 'ambientes',
+        selector: '#filtro-ambientes',
+        optionMapper: ambiente => ({ id: ambiente.id, text: ambiente.nombre })
+    });
+    await llenarSelect({
+        endpoint: 'estados',
+        selector: '#filtro-estados',
+        optionMapper: estado => ({ id: estado.id, text: estado.nombre })
+    });
+
+
+    limpiarModales();
+    await initModales(['modalElemento']);
+
+    const { modalElemento } = modales;
+    await initModalElemento(modalElemento);    
+
 
     // Actualización en segundo plano
     await actualizarStorageElementos(inventario);

@@ -19,15 +19,15 @@ export const configurarModalTipo = (modo, modal) => {
   };
 
   Object.values(botones).forEach(btn => btn.classList.add('hidden'));
-
+  
   if (modo === 'crear') {
     form.reset();
     setLecturaForm(form, false); // lectura
     botones.crear.classList.remove('hidden');
     botones.cancelar.classList.remove('hidden');
-    modal.querySelector('.modal__title').textContent = 'Registrar Tipo';
+    modal.querySelector('.modal__title').textContent = 'Registrar Tipo';    
   }
-
+  
   if (modo === 'editar') {
     setLecturaForm(form, true); // lectura
     botones.editar.classList.remove('hidden');
@@ -98,6 +98,7 @@ export const initModalTipo = (modal) => {
 
     if (e.target.closest('.aceptar')) {
       cerrarModal();
+      form.reset();
       localStorage.removeItem('tipo_temp');
     }
 

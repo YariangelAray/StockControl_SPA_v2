@@ -2,7 +2,7 @@ import { cerrarModal, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTempo
 import * as validaciones from "../utils/Validaciones";
 import * as api from "../utils/api";
 import { error, success } from "../utils/alertas";
-import { actualizarStorageReportes } from "../views/inventarios/reportes/reporte";
+import { actualizarStorageReportes, formatearReporte } from "../views/inventarios/reportes/reporte";
 
 export const initModalGenerarReporte = (modal) => {
 
@@ -69,8 +69,12 @@ export const initModalGenerarReporte = (modal) => {
             }, 100);        
         }, 100);
         form.reset();
+
         localStorage.removeItem('info_reporte')
-        await actualizarStorageReportes(inventario);
+        let reportes = JSON.parse(localStorage.getItem('reportes'))?.reportes || [];
+        reportes.unshift(await formatearReporte(respuestaReporte.data)); // agrega al principio
+        localStorage.setItem('reportes', JSON.stringify({ reportes }));
+        // await actualizarStorageReportes(inventario);
     });
 
     const campos = [...form]
@@ -82,7 +86,7 @@ export const initModalGenerarReporte = (modal) => {
             campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
 
         if (campo.name == "mensaje")
-            campo.addEventListener("keydown", event => validaciones.validarLimite(event, 250));
+            campo.addEventListener("keydown", event => validaciones.validarLimite(event, 1000));
     });
 
     modal.addEventListener('click', async (e) => {

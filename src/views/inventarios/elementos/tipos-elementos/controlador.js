@@ -16,26 +16,25 @@ export default async () => {
     document.querySelector('.dashboard').removeAttribute('id');
     document.querySelector('.dashboard').id = "dashboard-tipos-elementos";
 
-    limpiarModales();
-    await initModales(['modalTipoElemento']);
-    const { modalTipoElemento } = modales;
-
-    initModalTipo(modalTipoElemento);
-
+    
     let tipos = JSON.parse(localStorage.getItem('tipos') || '{}').tipos;
-
-
+    
     if (!tipos) {
         const tiposFormateados = await cargarTipos();
         localStorage.setItem('tipos', JSON.stringify({ tipos: tiposFormateados }));
         tipos = tiposFormateados;
     }
-
     renderFilas(tipos, tipoClick);
 
+    
+    limpiarModales();
+    await initModales(['modalTipoElemento']);
+    const { modalTipoElemento } = modales;
+    
+    initModalTipo(modalTipoElemento);
+    
     // Actualización en segundo plano
     await actualizarStorageTipos();
-
 
     document.getElementById('dashboard-tipos-elementos').addEventListener('click', (e) => {
         // Botón Agregar → AGREGAR
