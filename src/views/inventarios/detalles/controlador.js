@@ -11,18 +11,12 @@ export default async () => {
 
     initComponentes(usuario);
 
-    document.querySelector('.dashboard').className = "dashboard";
-    document.querySelector('.dashboard').classList.add('dashboard--details-section');
-    document.querySelector('.dashboard').removeAttribute('id');
-    document.querySelector('.dashboard').id = "dashboard-detalles";
-    document.querySelector('.access-info').classList.add('hidden');
-
     const respuesta = await get('inventarios/' + inventarioInfo.id);
     if (!respuesta.success) {
         console.warn(respuesta)
         return;
     }    
-    const inventario = respuesta.data
+    const inventario = respuesta.data;
 
     // Asignar datos al resumen general
     document.querySelector('.nombre-inventario').textContent = inventario.nombre;
@@ -75,11 +69,11 @@ export default async () => {
     }
 
 
-    document.getElementById('dashboard-detalles').addEventListener('click', (e) => {
+    document.getElementById('dashboard-detalles').addEventListener('click', async (e) => {
         if (e.target.closest('.generar-codigo')) {
             if (codigoInfo) {
                 const expiracion = new Date(codigoInfo.expiracion);                                         
-                info("Código activo", `Ya existe un código de acceso generado. Por favor espera a que finalice antes de generar uno nuevo. Hora de expiración: ${expiracion.toLocaleTimeString('es-CO')}`);
+                await info("Código activo", `Ya existe un código de acceso generado. Por favor espera a que finalice antes de generar uno nuevo. Hora de expiración: ${expiracion.toLocaleTimeString('es-CO')}`);
                 return;
             }
             abrirModal(modalConfigurarCodigo); // Aqui se abre el modal para configurar el código

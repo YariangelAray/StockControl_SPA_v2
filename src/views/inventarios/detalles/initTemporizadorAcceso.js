@@ -12,7 +12,7 @@ import { del, get } from "../../../utils/api";
 export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limpiar) => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     // Selecciona el elemento donde se mostrará el tiempo restante
-    let tiempoAcceso = usuario.rol_id == 1 ? document.querySelector('.dashboard .tiempo-acceso') : document.querySelector('.sidebar .tiempo-acceso');
+    let tiempoAcceso = usuario.rol_id == 2 ? document.querySelector('.dashboard .tiempo-acceso') : document.querySelector('.sidebar .tiempo-acceso');
     const usuariosAcces = document.querySelector('.dashboard .access-info + .dashboard__row .usuarios-gestionando');
 
     // Variable para guardar el intervalo que actualiza el tiempo
@@ -32,13 +32,13 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
             tiempoAcceso.textContent = "Expirado"; // Muestra el texto "Expirado"
             await eliminarAccesos(inventarioId, limpiar); // Llama función para eliminar acceso            
 
-            if (usuario.rol_id === 2) {
+            if (usuario.rol_id === 3) {
                 const hash = location.hash;
 
                 const dentroDeInventario = hash == '#/inventario' || hash == '#/perfil-usuario';
 
                 if (!dentroDeInventario) {
-                    info("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
+                    await info("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
                     setTimeout(() => {
                         window.location.hash = '#/inventarios';
                     }, 500);
@@ -47,7 +47,7 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
             return;
         }
 
-        if (usuario.rol_id === 1) {            
+        if (usuario.rol_id === 2) {            
             const respuesta = await get('accesos-temporales/inventario/' + inventarioId); 
             usuariosAcces.textContent = respuesta.success && respuesta.data ? respuesta.data.length : 0;
         }

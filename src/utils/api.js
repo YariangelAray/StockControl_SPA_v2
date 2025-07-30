@@ -2,7 +2,10 @@ const url = 'http://localhost:8080/StockControl_API/api/';
 
 export const get = async (endpoint) => {
   
-  const respuesta = await fetch(url + endpoint);
+  const respuesta = await fetch(url + endpoint);  
+  if (respuesta.status == 204) 
+    return {success: true, data: null};
+  
   const datos = await respuesta.json();  
   return datos;
 

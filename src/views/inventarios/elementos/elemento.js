@@ -32,7 +32,7 @@ export const elementoClick = async (id) => {
   modales.modalElemento.dataset.id = data.id;
   configurarModalElemento('editar', modales.modalElemento);
   const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
-  if (usuario.rol_id == 1) btn.classList.remove('hidden');
+  if (usuario.rol_id == 2) btn.classList.remove('hidden');
   abrirModal(modales.modalElemento);
 }
 

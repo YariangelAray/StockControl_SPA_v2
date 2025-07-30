@@ -132,8 +132,10 @@ export const initModalElemento = async (modal) => {
 
   const campos = [...form];
   campos.forEach(campo => {
-    if (campo.hasAttribute('required'))
+    if (campo.hasAttribute('required')) {
       campo.addEventListener("input", validaciones.validarCampo);
+      campo.addEventListener("blur", validaciones.validarCampo);
+    }
 
     if (campo.name == "valor_monetario") {
       campo.addEventListener("keydown", (e) => {
@@ -172,7 +174,7 @@ export const initModalElemento = async (modal) => {
       else {
         ocultarModalTemporal(modal);
         await error(respuesta);
-        mostrarUltimoModal();
+        setTimeout(async() => mostrarUltimoModal(), 100);    
       }
       await actualizarStorageElementos(inventario);
       return;
@@ -192,7 +194,7 @@ export const initModalElemento = async (modal) => {
       else {
         ocultarModalTemporal(modal);
         await error(respuesta);
-        mostrarUltimoModal();
+        setTimeout(async() => mostrarUltimoModal(), 100);    
       }
       await actualizarStorageElementos(inventario);
       return;
@@ -227,7 +229,7 @@ export const initModalElemento = async (modal) => {
     // Reportar
     if (e.target.closest('.reportar')) {
       const elemento = JSON.parse(localStorage.getItem('elemento_temp'));
-      localStorage.setItem('info_reporte', JSON.stringify({usuario_id: usuario.id, elemento_id:elemento.id}))
+      localStorage.setItem('info_reporte', JSON.stringify({ usuario_id: usuario.id, elemento_id: elemento.id }))
       ocultarModalTemporal(modal);
       abrirModal(modalGenerarReporte);
     }
@@ -265,7 +267,7 @@ const crearElemento = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalElemento);
     await error(respuesta);
-    mostrarUltimoModal();
+    setTimeout(async() => mostrarUltimoModal(), 100);    
     return;
   }
   cerrarModal();
@@ -280,9 +282,9 @@ const crearElemento = async (datos) => {
   localStorage.setItem('elementos', JSON.stringify({ elementos }));
 
   const tbody = document.querySelector('#dashboard-elementos .table__body');
-  agregarFila(tbody, datosFormateados, elementoClick);  
+  agregarFila(tbody, datosFormateados, elementoClick);
 }
-const actualizarElemento = async (datos) => {  
+const actualizarElemento = async (datos) => {
   const elementoTemp = JSON.parse(localStorage.getItem('elemento_temp'));
   const respuesta = await api.put('elementos/' + elementoTemp.id, {
     ...datos,
@@ -292,7 +294,7 @@ const actualizarElemento = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalElemento);
     await error(respuesta);
-    mostrarUltimoModal();
+    setTimeout(async() => mostrarUltimoModal(), 100);    
     return;
   }
   configurarModalElemento('editar', modales.modalElemento);
@@ -303,7 +305,7 @@ const actualizarElemento = async (datos) => {
   const datosFormateados = await formatearElemento(respuesta.data);
 
   const tbody = document.querySelector('#dashboard-elementos .table__body');
-  reemplazarFila(tbody, datosFormateados);
+  reemplazarFila(tbody, datosFormateados, elementoClick);
   await actualizarStorageElementos(inventario);
 };
 

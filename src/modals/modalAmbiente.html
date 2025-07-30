@@ -1,0 +1,39 @@
+<dialog class="modal modal--elemento" backdrop-close="false">
+
+  <div class="modal__header">
+    <h2 class="modal__title">Detalles del Ambiente</h2>
+  </div>
+
+  <div class="modal__body">
+    <form action="" class="form" id="form-ambiente" novalidate autocomplete="off">
+
+      <div class="form__control form__control--stacked form__control--span">
+        <label for="nombre">Nombre:</label>
+        <input type="text" class="input input--small" placeholder="Nombre del Ambiente" name="nombre" id="nombre" 
+          required>
+      </div>
+
+      <div class="form__control form__control--stacked form__control--span">
+        <label for="centro">Centro:</label>
+        <select name="centro_id" class="input input--small input--select" id="centros" required>
+          <option value="" disabled selected>Seleccione el centro de formación al que pertenece</option>
+        </select>
+      </div>
+
+      <div class="form__control form__control--stacked form__control--span form__control--autoheight">
+        <label for="mapa">Mapa (formato json):</label>
+        <textarea class="input input--small input--textarea" placeholder="Mapa (opcional)" name="mapa"
+          id="mapa"></textarea>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal__actions">
+    <button class="button editar">Editar<i class="ri-edit-fill icon"></i></button>
+    <button type="submit" class="button crear" form="form-ambiente">Crear</button>
+    <button type="submit" class="button guardar" form="form-ambiente">Guardar</button>
+    <button type="submit" class="button ver-mapa">Ver mapa<i class="ri-map-2-line icon"></i></button>        
+    <button class="button button--white aceptar button--final">Aceptar</button>
+    <button class="button button--red cancelar button--final">Cancelar</button>
+  </div>
+</dialog>

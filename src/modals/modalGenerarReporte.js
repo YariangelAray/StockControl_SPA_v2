@@ -34,9 +34,9 @@ export const initModalGenerarReporte = (modal) => {
             ...info
         })
         if (!respuestaReporte.success) {
-            ocultarModalTemporal(modal); 
+            ocultarModalTemporal(modal);
             await error(respuestaReporte);
-            mostrarUltimoModal()
+            setTimeout(async() => mostrarUltimoModal(), 100);    
             return;
         }
 
@@ -54,7 +54,7 @@ export const initModalGenerarReporte = (modal) => {
                     const respuesta = await response.json()
 
                     if (!respuesta.success) {
-                        console.warn(`Error al subir la imagen ${archivo.name}:`, respuesta);                        
+                        console.warn(`Error al subir la imagen ${archivo.name}:`, respuesta);
                     }
                 } catch (err) {
                     console.error(`Error de red al subir ${archivo.name}:`, err);
@@ -63,10 +63,8 @@ export const initModalGenerarReporte = (modal) => {
         }
         ocultarModalTemporal(modal)
         setTimeout(async () => {
-            await success('Reporte generado exitosamente');
-            setTimeout(() => {
-                cerrarModal();            
-            }, 100);        
+            setTimeout(async() => await success('Reporte generado exitosamente'), 100);
+            cerrarModal()
         }, 100);
         form.reset();
 
@@ -79,8 +77,10 @@ export const initModalGenerarReporte = (modal) => {
 
     const campos = [...form]
     campos.forEach(campo => {
-        if (campo.hasAttribute('required'))
+        if (campo.hasAttribute('required')) {
             campo.addEventListener("input", validaciones.validarCampo);
+            campo.addEventListener("blur", validaciones.validarCampo);
+        }
 
         if (campo.name == "asunto")
             campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));

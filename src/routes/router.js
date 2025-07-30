@@ -16,7 +16,7 @@ export const router = async () => {
 
     // Redirección por defecto
     if (segmentos.length === 0) {
-        location.hash = usuario ? '#/inventarios' : '#/inicio';
+        location.hash = usuario ? (usuario.rol_id == 1 ? '#/super-admin' : '#/inventarios') : '#/inicio';
         return;
     }
 
@@ -25,9 +25,9 @@ export const router = async () => {
         const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());
         pageTitle.textContent = "No Encontrada"
         if (!usuario) {
-            body.innerHTML = html;
             body.classList.remove('content--ui');
             body.classList.add('content--auth');
+            body.innerHTML = html;
         } else {
             const divError = document.createElement('div');
             divError.innerHTML = html;
@@ -39,16 +39,20 @@ export const router = async () => {
         return;
     }
 
-    // Redirección por login
-    if (!ruta?.public && !usuario) {
-        location.hash = '#/inicio';
+    const meta = ruta.meta || {};    
+
+    if (!meta.public && !usuario) {
+        location.hash = "#/inicio";
         return;
     }
 
-    if (ruta.onlyAdmin && usuario.rol_id != 1) location.hash = "#/no-encontrada";
+    if (meta.rolesPermitidos && !meta.rolesPermitidos.includes(usuario.rol_id)) {
+        location.hash = "#/no-encontrada";
+        return;
+    }
 
     // Render sin layout
-    if (ruta.nolayout) {
+    if (meta.nolayout) {
         hayLayout = false;
         const html = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
         body.innerHTML = html;
@@ -64,12 +68,14 @@ export const router = async () => {
         body.innerHTML = layoutHtml;
         body.classList.remove('content--auth');
         body.classList.add('content--ui');
-        const { data } = await api.get('roles/' + usuario.rol_id);
+        const respuesta = await api.get('roles/' + usuario.rol_id);
         const campoRol = document.querySelector('.rol');
-        campoRol.textContent = "Usuario " + data.nombre;
+
+        campoRol.textContent = "Usuario " + respuesta.data.nombre;
+
         document.addEventListener('click', (e) => {
             if (e.target.closest('#logout')) {
-                localStorage.removeItem('usuario');
+                localStorage.clear();
                 location.hash = '#/inicio'
             }
         })

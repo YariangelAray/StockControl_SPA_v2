@@ -7,33 +7,26 @@ import { initTemporizadorAcceso } from "./detalles/initTemporizadorAcceso.js";
 
 export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
+    localStorage.clear();
+    localStorage.setItem('usuario', JSON.stringify(usuario));
 
-    localStorage.removeItem('inventario');
-    localStorage.removeItem('ambientes');
-    localStorage.removeItem('elementos');
-    localStorage.removeItem('reportes');
-    localStorage.removeItem('tipos');
-    localStorage.removeItem('codigoAccesoInfo');
-
-    const accessInfo = document.querySelector('.sidebar .access-info');
-    if (accessInfo) {
-        accessInfo.classList.add('hidden');
-        accessInfo.querySelector('.tiempo-acceso').textContent = ""; // opcional: limpiar el texto también
-    }
-
-
-    const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
-    const sidebarInfo = document.querySelector('.sidebar__menu .sidebar-info');
-
-    sidebarList.querySelector('.menu__items')?.remove();
-
-    if (sidebarInfo.classList.contains('hidden')) sidebarInfo.classList.remove('hidden');
 
     initComponentes(usuario);
 
-    document.querySelector('.dashboard').className = "dashboard";
-    document.querySelector('.dashboard').removeAttribute('id');
-    document.querySelector('.dashboard').id = "dashboard-inventarios";
+    const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
+    sidebarList.querySelector('.menu__items')?.remove();    
+
+    // Verificamos si el ítem ya fue insertado
+
+    const sidebarInfo = document.createElement('div');
+    sidebarInfo.classList.add('sidebar-info');
+    const sidebarInfoText = document.createElement('p');
+    sidebarInfoText.textContent = 'Ingrese a un inventario para continuar con su gestión';
+    sidebarInfo.append(sidebarInfoText);
+
+    sidebarList.append(sidebarInfo);
+
+
 
     limpiarModales();
     if (usuario.rol_id === 2) {
@@ -46,23 +39,26 @@ export default async () => {
                 abrirModal(modalPedirCodigoAcceso);
             }
         })
+        const accessInfo = document.querySelector('.sidebar .access-info');
+        if (accessInfo) {
+            accessInfo.classList.add('hidden');
+        }
     }
     await cargarInventarios(usuario);
 };
 
-
 const cargarInventarios = async (usuario) => {
-    const respuesta = usuario.rol_id == 1 ? await api.get('inventarios/usuario/' + usuario.id)
-        : await api.get('accesos-temporales/' + usuario.id);    
+    const respuesta = usuario.rol_id == 2 ? await api.get('inventarios/usuario/' + usuario.id)
+        : await api.get('accesos-temporales/' + usuario.id);
 
     const contenedor = document.querySelector('.content-cards');
     if (respuesta.success) {
-        cargarCards(contenedor, respuesta.data, {
+        cargarCards(contenedor, respuesta.data ?? [], {
             tipo: 'inventario',
             filas: [
                 { valor: 'cantidad_elementos', clave: 'Cantidad de elementos:' },
                 { valor: 'ambientes_cubiertos', clave: 'Ambientes cubiertos:' },
-                { valor: 'ultima_actualizacion', clave: 'Última actualización:' },
+                { valor: 'ultima_actualizacion', clave: 'Última actualización:' },  
             ],
             click: async (inventario) => {
                 localStorage.setItem('inventario', JSON.stringify({ id: inventario.id, nombre: inventario.nombre }));
@@ -83,7 +79,7 @@ const cargarInventarios = async (usuario) => {
                     }
                 }
                 const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-                if (usuario.rol_id == 2 && codigoInfo) {
+                if (usuario.rol_id === 3 && codigoInfo) {
                     const expiracion = new Date(codigoInfo.expiracion);
                     const ahora = new Date();
                     if (expiracion > ahora) {

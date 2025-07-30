@@ -1,66 +1,98 @@
 import inicio from '../views/auth/inicio/controlador';
 import registro from '../views/auth/registro/controlador';
+
 import inventarios from '../views/inventarios/controlador';
 import ambientes from '../views/inventarios/ambientes/controlador';
-import {initMapaView} from '../views/inventarios/ambientes/mapaController.js';
+import { initMapaView } from '../views/inventarios/ambientes/mapaController.js';
 import detalles from '../views/inventarios/detalles/controlador';
 import elementos from '../views/inventarios/elementos/controlador';
-import tiposelementos from '../views/inventarios/elementos/tipos-elementos/controlador';
 import reportes from '../views/inventarios/reportes/controlador';
+
+import tiposelementos from '../views/compartidas/tipos-elementos/controlador.js';
 import perfil from '../views/perfil-usuario/controlador';
 
+import superAdmin from '../views/super-admin/controlador.js';
+import gestionUsuarios from '../views/super-admin/usuarios/controlador.js';
+import gestionInventarios from '../views/super-admin/inventarios/controlador.js';
+import gestionAmbientes from '../views/super-admin/ambientes/controlador.js';
+
 export const routes = {
-    inicio:{
-        path: 'auth/inicio/index.html',
-        controller: inicio,
-        public: true,
-        nolayout: true
+  inicio: {
+    path: 'auth/inicio/index.html',
+    controller: inicio,
+    meta: { public: true, nolayout: true }
+  },
+  registro: {
+    path: 'auth/registro/index.html',
+    controller: registro,
+    meta: { public: true, nolayout: true }
+  },
+  inventarios: {
+    "/": {
+      path: 'inventarios/index.html',
+      controller: inventarios
     },
-    registro:{
-        path: 'auth/registro/index.html',
-        controller: registro,
-        public: true,
-        nolayout: true
+    ambientes: {
+      "/": {
+        path: 'inventarios/ambientes/index.html',
+        controller: ambientes
+      },
+      mapa: {
+        path: 'inventarios/ambientes/mapa.html',
+        controller: initMapaView
+      }
+    },
+    detalles: {
+      path: 'inventarios/detalles/index.html',
+      controller: detalles,
+      meta: { rolesPermitidos: [2] }
+    },
+    elementos: {
+      "/": {
+        path: 'inventarios/elementos/index.html',
+        controller: elementos
+      },
+      "tipos-elementos": {
+        path: 'compartidas/tipos-elementos/index.html',
+        controller: tiposelementos,
+        meta: { rolesPermitidos: [2] }
+      }
+    },
+    reportes: {
+      path: 'inventarios/reportes/index.html',
+      controller: reportes,
+      meta: { rolesPermitidos: [2] }
+    }
+  },
+  "perfil-usuario": {
+    path: 'perfil-usuario/index.html',
+    controller: perfil
+  },
+  "super-admin": {
+    "/": {
+      path: 'super-admin/index.html',
+      controller: superAdmin,
+      meta: { rolesPermitidos: [1] }
+    },
+    usuarios: {
+      path: 'super-admin/usuarios/index.html',
+      controller: gestionUsuarios,
+      meta: { rolesPermitidos: [1] }
+    },
+    ambientes: {
+      path: 'super-admin/ambientes/index.html',
+      controller: gestionAmbientes,
+      meta: { rolesPermitidos: [1] }
     },
     inventarios: {
-        "/": {
-            path: 'inventarios/index.html',
-            controller: inventarios,
-        },
-        ambientes: {
-            "/":{
-                path: 'inventarios/ambientes/index.html',
-                controller: ambientes,            
-            },
-            mapa:{
-                path: 'inventarios/ambientes/mapa.html',
-                controller: initMapaView,     
-            }
-        },
-        detalles: {
-            path: 'inventarios/detalles/index.html',
-            controller: detalles,
-            onlyAdmin: true,
-        },
-        elementos: {
-            "/": {
-                path: 'inventarios/elementos/index.html',
-                controller: elementos,
-            },
-            "tipos-elementos": {
-                path: 'inventarios/elementos/tipos-elementos/index.html',
-                controller: tiposelementos,
-                onlyAdmin: true,
-            }
-        },
-        reportes: {
-            path: 'inventarios/reportes/index.html',
-            controller: reportes,
-            onlyAdmin: true,
-        },
+      path: 'super-admin/inventarios/index.html',
+      controller: gestionInventarios,
+      meta: { rolesPermitidos: [1] },
     },
-    "perfil-usuario": {
-        path: 'perfil-usuario/index.html',
-        controller: perfil,
+    "tipos-elementos": {
+      path: 'compartidas/tipos-elementos/index.html',
+      controller: tiposelementos,
+      meta: { rolesPermitidos: [1] }
     }
+  }
 };

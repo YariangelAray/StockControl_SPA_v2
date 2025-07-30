@@ -6,20 +6,15 @@ import { llenarCamposFormulario } from "../../utils/llenarCamposFormulario.js";
 import { llenarSelect } from "../../helpers/select";
 import * as validaciones from "../../utils/Validaciones";
 import { error, success } from "../../utils/alertas.js";
+import { eliminarAccesos, initTemporizadorAcceso } from "../inventarios/detalles/initTemporizadorAcceso.js";
 
 export default async () => {
 
     const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuarioInfo);    
-    
-    const {data} = await api.get('usuarios/' + usuarioInfo.id);
-    const usuario = data;    
+    initComponentes(usuarioInfo);
 
-    document.querySelector('.dashboard').className = "dashboard";
-    document.querySelector('.dashboard').classList.add('dashboard--profile');
-
-    document.querySelector('.dashboard').removeAttribute('id');
-    document.querySelector('.dashboard').id = "dashboard-perfil";
+    const { data } = await api.get('usuarios/' + usuarioInfo.id);
+    const usuario = data;
 
     const roles = await api.get('roles/' + usuarioInfo.rol_id);
     const campoRol = document.querySelector('.dashboard__title.rol');
@@ -103,16 +98,15 @@ export default async () => {
         e.preventDefault();
         if (!validaciones.validarFormulario(e)) return;
         delete validaciones.datos.programas
-        validaciones.datos['contrasena'] = 'restringido';
-        validaciones.datos['rol_id'] = usuario.rol_id;
+        validaciones.datos['contrasena'] = 'restringido';        
 
         try {
 
             const respuesta = await api.put(`usuarios/${usuario.id}`, validaciones.datos);
-            
+
             if (respuesta.success) {
                 await success("Usuario actualizado exitosamente");
-                localStorage.setItem('usuario', JSON.stringify({id:respuesta.data.id, nombres:respuesta.data.nombres, apellidos:respuesta.data.apellidos, rol_id: respuesta.data.rol_id}));
+                localStorage.setItem('usuario', JSON.stringify({ id: respuesta.data.id, nombres: respuesta.data.nombres, apellidos: respuesta.data.apellidos, rol_id: respuesta.data.rol_id }));
 
                 const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
                 initComponentes(usuarioInfo);
@@ -163,6 +157,26 @@ export default async () => {
 
     const { modalDesactivarCuenta } = modales;
     initModalEliminar(modalDesactivarCuenta, usuario);
+
+    if (usuario.rol_id === 3) {
+        const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
+        const inventario = JSON.parse(localStorage.getItem('inventario') || '{}');
+        if (codigoInfo && inventario.id) {
+            const limpiar = () => {
+                document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+                localStorage.removeItem('codigoAccesoInfo');
+            }
+            const expiracion = new Date(codigoInfo.expiracion);
+            const ahora = new Date();
+
+            if (expiracion > ahora) {
+                document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
+                await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
+            } else {
+                await eliminarAccesos(inventario.id, limpiar);                
+            }                    
+        }
+    }
 
     document.getElementById('dashboard-perfil').addEventListener('click', (e) => {
         if (e.target.closest('#desactivarCuenta')) {

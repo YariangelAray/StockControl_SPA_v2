@@ -13,14 +13,11 @@ export default async () => {
 
     initComponentes(usuario);
 
-    document.querySelector('.dashboard').className = "dashboard";
-    document.querySelector('.dashboard').classList.add('dashboard--table-section');
-    document.querySelector('.dashboard').removeAttribute('id');
-    document.querySelector('.dashboard').id = "dashboard-elementos";
-
-    if (usuario.rol_id == 1) {
+    if (usuario.rol_id === 2) {
         const crearBoton = document.getElementById('crearElemento');
         crearBoton.classList.remove('hidden');
+
+        sessionStorage.setItem("rutaAnterior", location.hash);
         const verTiposBoton = document.getElementById('verTipos');
         verTiposBoton.classList.remove('hidden');
 
@@ -41,7 +38,7 @@ export default async () => {
     }
 
     renderFilas(elementos, elementoClick);
-    
+
     await llenarSelect({
         endpoint: 'ambientes',
         selector: '#filtro-ambientes',
@@ -58,20 +55,20 @@ export default async () => {
     await initModales(['modalElemento']);
 
     const { modalElemento } = modales;
-    await initModalElemento(modalElemento);    
+    await initModalElemento(modalElemento);
 
 
     // Actualización en segundo plano
     await actualizarStorageElementos(inventario);
 
-    if (usuario.rol_id === 2) {
+    if (usuario.rol_id === 3) {
         const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-        const limpiar = () => {
-            document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-            localStorage.removeItem('codigoAccesoInfo');
-        }
 
         if (codigoInfo) {
+            const limpiar = () => {
+                document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+                localStorage.removeItem('codigoAccesoInfo');
+            }
             const expiracion = new Date(codigoInfo.expiracion);
             const ahora = new Date();
 

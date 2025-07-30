@@ -44,8 +44,7 @@ export const initModalConfigurar = async (modal) => {
                 error(respuesta);
             }, 100);
             return;
-        }
-        console.log(respuesta);
+        }        
 
         const codigoGenerado = respuesta.data.codigo;
         const fechaExpiracion = new Date(respuesta.data.fecha_expiracion);

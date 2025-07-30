@@ -12,29 +12,26 @@ export default async () => {
     initComponentes(usuario);
 
     limpiarModales();
-    document.querySelector('.dashboard').className = "dashboard";
-    document.querySelector('.dashboard').removeAttribute('id');
-    document.querySelector('.dashboard').id = "dashboard-ambientes";
 
     let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes;
     if (!ambientes) {
         const respuesta = await api.get(`inventarios/${inventario.id}/ambientes`);
         if (respuesta.success) {
-            localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data }));
+            localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data ?? []}));
             ambientes = respuesta.data;
         }
     }
 
     await cargarAmbientes(ambientes, inventario)
 
-    if (usuario.rol_id === 2) {
+    if (usuario.rol_id === 3) {
         const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-        const limpiar = () => {
-            document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-            localStorage.removeItem('codigoAccesoInfo');
-        }
-
+        
         if (codigoInfo) {
+            const limpiar = () => {
+                document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+                localStorage.removeItem('codigoAccesoInfo');
+            }
             const expiracion = new Date(codigoInfo.expiracion);
             const ahora = new Date();
 
@@ -60,11 +57,11 @@ const cargarAmbientes = async (ambientes) => {
         filas: [
             { valor: 'cantidad_elementos', clave: 'Cantidad de elementos:' }
         ],
-        click: (ambiente) => { info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible") }
+        click: async (ambiente) => { await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible") }
     });
 };
 
 const actualizarStorageAmbientes = async (inventario) => {
     const respuesta = await api.get(`inventarios/${inventario.id}/ambientes`);
-    if (respuesta.success) localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data }));
+    if (respuesta.success) localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data ?? [] }));
 }

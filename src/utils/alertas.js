@@ -22,7 +22,7 @@ export const success = (mensaje = 'Operación realizada con éxito') => {
 };
 
 export const info = (titulo, mensaje) => {
-  Swal.fire({
+  return Swal.fire({
     ...configuracionBase,
     icon: 'info',
     title: titulo,

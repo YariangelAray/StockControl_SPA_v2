@@ -1,9 +1,9 @@
-import { cerrarModal, modales, mostrarConfirmacion } from "./modalsController";
+import { cerrarModal, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "./modalsController";
 import { setLecturaForm } from "../helpers/setLecturaForm";
 import * as validaciones from "../utils/Validaciones";
 import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
 import * as api from "../utils/api";
-import { actualizarStorageTipos, formatearTipo, tipoClick } from "../views/inventarios/elementos/tipos-elementos/tipos-elementos";
+import { actualizarStorageTipos, formatearTipo, tipoClick } from "../views/compartidas/tipos-elementos/tipos-elementos";
 import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
 import { error, success } from "../utils/alertas";
 
@@ -19,15 +19,15 @@ export const configurarModalTipo = (modo, modal) => {
   };
 
   Object.values(botones).forEach(btn => btn.classList.add('hidden'));
-  
+
   if (modo === 'crear') {
     form.reset();
     setLecturaForm(form, false); // lectura
     botones.crear.classList.remove('hidden');
     botones.cancelar.classList.remove('hidden');
-    modal.querySelector('.modal__title').textContent = 'Registrar Tipo';    
+    modal.querySelector('.modal__title').textContent = 'Registrar Tipo';
   }
-  
+
   if (modo === 'editar') {
     setLecturaForm(form, true); // lectura
     botones.editar.classList.remove('hidden');
@@ -47,8 +47,10 @@ export const initModalTipo = (modal) => {
 
   const campos = [...form];
   campos.forEach(campo => {
-    if (campo.hasAttribute('required'))
+    if (campo.hasAttribute('required')) {
       campo.addEventListener("input", validaciones.validarCampo);
+      campo.addEventListener("blur", validaciones.validarCampo);
+    }
 
     if (campo.name == "nombre" || campo.name == "marca" || campo.name == "modelo")
       campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
@@ -111,21 +113,21 @@ const crearTipo = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalTipoElemento);
     await error(respuesta);
-    mostrarUltimoModal();
+    setTimeout(async() => mostrarUltimoModal(), 100);    
     return;
   }
   cerrarModal();
-  if (document.querySelector('#dashboard-tipos-elementos')){
+  if (document.querySelector('#dashboard-tipos-elementos')) {
     setTimeout(async () => {
       await success('Tipo de elemento creado con éxito');
     }, 100);
   }
-  
+
   const datosFormateados = formatearTipo(respuesta.data);
   const tbody = document.querySelector('#dashboard-tipos-elementos .table__body');
   agregarFila(tbody, datosFormateados, tipoClick);
 
-  document.dispatchEvent(new CustomEvent('tipoElementoCreado', { detail: respuesta.data }));  
+  document.dispatchEvent(new CustomEvent('tipoElementoCreado', { detail: respuesta.data }));
   await actualizarStorageTipos();
 }
 
@@ -137,13 +139,13 @@ const actualizarTipo = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalTipoElemento);
     await error(respuesta);
-    mostrarUltimoModal();
+    setTimeout(async() => mostrarUltimoModal(), 100);    
     return;
   }
   configurarModalTipo('editar', modales.modalTipoElemento);
-  
+
   localStorage.setItem('tipo_temp', JSON.stringify(respuesta.data));
-  
+
   const datosFormateados = formatearTipo(respuesta.data);
   const tbody = document.querySelector('#dashboard-tipos-elementos .table__body');
 

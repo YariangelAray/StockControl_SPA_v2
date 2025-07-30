@@ -1,7 +1,7 @@
-import { abrirModal, modales } from "../../../../modals/modalsController"
-import { configurarModalTipo } from "../../../../modals/modalTipoElemento"
-import { get } from "../../../../utils/api"
-import { llenarCamposFormulario } from "../../../../utils/llenarCamposFormulario"
+import { abrirModal, modales } from "../../../modals/modalsController"
+import { configurarModalTipo } from "../../../modals/modalTipoElemento"
+import { get } from "../../../utils/api"
+import { llenarCamposFormulario } from "../../../utils/llenarCamposFormulario"
 
 export const formatearTipo = (tipo) => {
     return [
@@ -26,7 +26,10 @@ export const tipoClick = async (id) => {
 }
 
 export const cargarTipos = async () => {
-    const respuesta = await get('tipos-elementos');
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const inventario = JSON.parse(localStorage.getItem('inventario'));
+
+    const respuesta = usuario.rol_id === 1 ? await get('tipos-elementos/') : await get('tipos-elementos/inventario/' + inventario.id);
     const tipos = [];
 
     if (respuesta.success) {

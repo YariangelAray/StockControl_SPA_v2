@@ -10,12 +10,6 @@ export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     const inventario = JSON.parse(localStorage.getItem('inventario'));
     initComponentes(usuario);
-
-    document.querySelector('.dashboard').className = "dashboard";
-    document.querySelector('.dashboard').classList.add('dashboard--table-section');
-
-    document.querySelector('.dashboard').removeAttribute('id');
-    document.querySelector('.dashboard').id = "dashboard-reportes";
     
     let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes;
 

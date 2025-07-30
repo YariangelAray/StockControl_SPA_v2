@@ -1,15 +1,8 @@
-import { llenarSelect } from "../../../helpers/select";
 import * as validaciones from "../../../utils/Validaciones";
 import { error, success } from "../../../utils/alertas";
 import * as api from "../../../utils/api";
 
 export default async () => {
-
-    await llenarSelect({
-        endpoint: 'roles',
-        selector: '#roles',
-        optionMapper: rol => ({ id: rol.id, text: "Usuario " + rol.nombre })
-    });
 
     const formulario = document.querySelector(".form--signin");
 
@@ -30,8 +23,7 @@ export default async () => {
         if (!validaciones.validarFormulario(event)) return;
 
         try {
-            const respuesta = await api.post('usuarios/login', {
-                rol_id: validaciones.datos.rol,
+            const respuesta = await api.post('usuarios/login', {                
                 documento: validaciones.datos.documento,
                 contrasena: validaciones.datos.contrasena
             });
@@ -39,8 +31,8 @@ export default async () => {
             if (respuesta.success) {
                 await success("Inicio de sesión éxitoso");
                 localStorage.setItem('usuario', JSON.stringify({id:respuesta.data.id, nombres:respuesta.data.nombres, apellidos:respuesta.data.apellidos, rol_id: respuesta.data.rol_id}));
-                setTimeout(() => {
-                    location.hash = '#/inventarios';
+                setTimeout(() => {                    
+                    location.hash = respuesta.data.rol_id == 1 ? '#/super-admin' : '#/inventarios';
                 },500);
             } else {
                 error(respuesta);

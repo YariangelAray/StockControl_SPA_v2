@@ -1,107 +1,110 @@
-<div class="dashboard__header">
-    <h2 class="dashboard__title rol">Usuario</h2>
-    <p class="dashboard__details text-details text-details--medium-sized">En este apartado se muestra su información
-        personal. Puede editar ciertos datos según sea necesario.</p>
-</div>
+<section class="dashboard__layout dashboard--profile" id="dashboard-perfil">
+    <div class="dashboard__header">
+        <h2 class="dashboard__title rol">Usuario</h2>
+        <p class="dashboard__details text-details text-details--medium-sized">En este apartado se muestra su información
+            personal. Puede editar ciertos datos según sea necesario.</p>
+    </div>
 
-<div class="dashboard__content">
+    <div class="dashboard__content">
 
-    <form action="" class="form" autocomplete="off" id="form-usuario" novalidate>
+        <form action="" class="form" autocomplete="off" id="form-usuario" novalidate>
 
-        <div class="form__header">
-            <h2 class="form__title-separacion">Datos Generales</h2>
-        </div>
-
-        <div class="form__body">
-            <div class="form__control form__control--stacked">
-                <label for="nombres">Nombres:</label>
-                <input type="text" class="input" placeholder="Nombres" name="nombres" id="nombres" 
-                    required>
+            <div class="form__header">
+                <h2 class="form__title-separacion">Datos Generales</h2>
             </div>
 
-            <div class="form__control form__control--stacked">
-                <label for="apellidos">Apellidos:</label>
-                <input type="text" class="input" placeholder="Apellidos" name="apellidos" id="apellidos"
-                     required>
+            <div class="form__body">
+                <div class="form__control form__control--stacked">
+                    <label for="nombres">Nombres:</label>
+                    <input type="text" class="input" placeholder="Nombres" name="nombres" id="nombres" required>
+                </div>
+
+                <div class="form__control form__control--stacked">
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" class="input" placeholder="Apellidos" name="apellidos" id="apellidos" required>
+                </div>
+
+                <div class="form__control form__control--stacked">
+                    <label for="tipo_documento">Tipo de Documento:</label>
+                    <select name="tipo_documento_id" class="input input--select" required id="tipos-documentos"
+                        disabled>
+                        <option value="" disabled selected>Tipo de Documento</option>>
+                    </select>
+                </div>
+
+                <div class="form__control form__control--stacked">
+                    <label for="documento">N° Documento:</label>
+                    <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento"
+                        required disabled>
+                </div>
+                <div class="form__control form__control--stacked">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="text" class="input" placeholder="Correo Electrónico" name="correo" id="correo"
+                        required>
+                </div>
+
+                <div class="form__control form__control--stacked">
+                    <label for="telefono">N° de Télefono:</label>
+                    <input type="text" class="input" placeholder="Número de Télefono" name="telefono" id="telefono"
+                        required>
+                </div>
+
+                <div class="form__control form__control--stacked">
+                    <label for="programa">Programa de Formación:</label>
+                    <select name="programas" id="programas-formacion" class="input input--select" required disabled>
+                        <option value="" disabled selected>Programa de Formación</option>
+                    </select>
+                </div>
+
+                <div class="form__control form__control--stacked">
+                    <label for="ficha">Ficha:</label>
+                    <select name="ficha_id" class="input input--select" id="fichas" required disabled>
+                        <option value="" disabled selected>Ficha</option>
+                    </select>
+                </div>
+
+                <div class="form__control form__control--stacked">
+                    <label for="genero">Género:</label>
+                    <select name="genero_id" class="input input--select" id="generos" required>
+                        <option value="" disabled selected>Seleccione su Género</option>
+                    </select>
+                </div>
+
             </div>
 
-            <div class="form__control form__control--stacked">
-                <label for="tipo_documento">Tipo de Documento:</label>
-                <select name="tipo_documento_id" class="input input--select" required id="tipos-documentos" disabled>
-                    <option value="" disabled selected>Tipo de Documento</option>>
-                </select>
+            <div class="form__action">
+                <button class="button">Actualizar información</button>
+            </div>
+        </form>
+
+        <form action="" class="form" id="form-contrasena" novalidate autocomplete="off">
+            <div class="form__header">
+                <h2 class="form__title-separacion">Seguridad</h2>
             </div>
 
-            <div class="form__control form__control--stacked">
-                <label for="documento">N° Documento:</label>
-                <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento" required disabled>
+            <div class="form__body">
+                <div class="form__control form__control--stacked form__control--span">
+                    <label for="contrasena_actual">Contraseña actual:</label>
+                    <input type="password" class="input contrasena" placeholder="Contraseña actual"
+                        name="contrasena_actual" id="contrasena_actual" required>
+                    <i class="icon ri-eye-line"></i>
+                </div>
+
+                <div class="form__control form__control--stacked form__control--span">
+                    <label for="contrasena_nueva">Contraseña nueva:</label>
+                    <input type="password" class="input contrasena" placeholder="Contraseña nueva"
+                        name="contrasena_nueva" required data-tipo="nueva" id="contrasena_nueva">
+                    <i class="icon ri-eye-line"></i>
+                </div>
+
             </div>
-            <div class="form__control form__control--stacked">
-                <label for="correo">Correo Electrónico:</label>
-                <input type="text" class="input" placeholder="Correo Electrónico" name="correo" id="correo"
-                     required>
+            <div class="form__action">
+                <button class="button">Actualizar contraseña</button>
             </div>
+        </form>
+    </div>
 
-            <div class="form__control form__control--stacked">
-                <label for="telefono">N° de Télefono:</label>
-                <input type="text" class="input" placeholder="Número de Télefono" name="telefono" id="telefono"
-                     required>
-            </div>
-
-            <div class="form__control form__control--stacked">
-                <label for="programa">Programa de Formación:</label>
-                <select name="programas" id="programas-formacion" class="input input--select" required disabled>
-                    <option value="" disabled selected>Programa de Formación</option>
-                </select>
-            </div>
-
-            <div class="form__control form__control--stacked">
-                <label for="ficha">Ficha:</label>
-                <select name="ficha_id" class="input input--select" id="fichas" required disabled>
-                    <option value="" disabled selected>Ficha</option>
-                </select>
-            </div>
-
-            <div class="form__control form__control--stacked">
-                <label for="genero">Género:</label>
-                <select name="genero_id" class="input input--select" id="generos" required>
-                    <option value="" disabled selected>Seleccione su Género</option>
-                </select>
-            </div>
-
-        </div>
-
-        <div class="form__action">
-            <button class="button">Actualizar información</button>
-        </div>
-    </form>
-
-    <form action="" class="form" id="form-contrasena" novalidate autocomplete="off">
-        <div class="form__header">
-            <h2 class="form__title-separacion">Seguridad</h2>
-        </div>
-
-        <div class="form__body">
-            <div class="form__control form__control--stacked form__control--span">
-                <label for="contrasena_actual">Contraseña actual:</label>
-                <input type="password" class="input contrasena" placeholder="Contraseña actual"
-                    name="contrasena_actual" id="contrasena_actual" required>
-                <i class="icon ri-eye-line"></i>
-            </div>
-
-            <div class="form__control form__control--stacked form__control--span">
-                <label for="contrasena_nueva">Contraseña nueva:</label>
-                <input type="password" class="input contrasena" placeholder="Contraseña nueva" name="contrasena_nueva" required data-tipo="nueva" id="contrasena_nueva">
-                <i class="icon ri-eye-line"></i>
-            </div>
-
-        </div>
-        <div class="form__action">
-            <button class="button">Actualizar contraseña</button>
-        </div>
-    </form>
-</div>
-
-<div class="dashboard__actions">
-     <button class="button button--red" id="desactivarCuenta">Desactivar cuenta</button>
-</div>
+    <div class="dashboard__actions">
+        <button class="button button--red" id="desactivarCuenta">Desactivar cuenta</button>
+    </div>
+</section>

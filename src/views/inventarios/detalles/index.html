@@ -1,52 +1,54 @@
-<div class="dashboard__content">
+<section class="dashboard__layout dashboard--details-section" id="dashboard-detalles">
+    <div class="dashboard__content">
 
-    <h2 class="dashboard__title dashboard__title--separacion">Resumen general</h2>
-    <div class="dashboard__row">
-        <p class="text-details text-details--medium-sized">Nombre del inventario:</p>
-        <p class="text-details text-details--medium-sized text-details--bold nombre-inventario"></p>
-    </div>
-    <div class="dashboard__row">
-        <p class="text-details text-details--medium-sized">Responsable:</p>
-        <p class="text-details text-details--medium-sized text-details--bold nombre-completo-usuario"></p>
-    </div>
-    <div class="dashboard__row">
-        <p class="text-details text-details--medium-sized">Fecha de creación:</p>
-        <p class="text-details text-details--medium-sized text-details--bold fecha-creacion"></p>
-    </div>
-    <div class="dashboard__row">
-        <p class="text-details text-details--medium-sized">Última actualización:</p>
-        <p class="text-details text-details--medium-sized text-details--bold ultima-actualizacion"></p>
+        <h2 class="dashboard__title dashboard__title--separacion">Resumen general</h2>
+        <div class="dashboard__row">
+            <p class="text-details text-details--medium-sized">Nombre del inventario:</p>
+            <p class="text-details text-details--medium-sized text-details--bold nombre-inventario"></p>
+        </div>
+        <div class="dashboard__row">
+            <p class="text-details text-details--medium-sized">Responsable:</p>
+            <p class="text-details text-details--medium-sized text-details--bold nombre-completo-usuario"></p>
+        </div>
+        <div class="dashboard__row">
+            <p class="text-details text-details--medium-sized">Fecha de creación:</p>
+            <p class="text-details text-details--medium-sized text-details--bold fecha-creacion"></p>
+        </div>
+        <div class="dashboard__row">
+            <p class="text-details text-details--medium-sized">Última actualización:</p>
+            <p class="text-details text-details--medium-sized text-details--bold ultima-actualizacion"></p>
+        </div>
+
+        <h2 class="dashboard__title dashboard__title--separacion">Estadísticas</h2>
+        <div class="dashboard__row">
+            <p class="text-details text-details--medium-sized">Total de elementos registrados:</p>
+            <p class="text-details text-details--medium-sized text-details--bold total-bienes"></p>
+        </div>
+        <div class="dashboard__row">
+            <p class="text-details text-details--medium-sized">Valor monetario total:</p>
+            <p class="text-details text-details--medium-sized text-details--bold valor-monetario"></p>
+        </div>
+        <div class="dashboard__row">
+            <p class="text-details text-details--medium-sized">Ambientes cubiertos:</p>
+            <p class="text-details text-details--medium-sized text-details--bold ambientes-cubiertos"></p>
+        </div>
+
+        <div class="dashboard__row access-info hidden">
+            <p class="text-details text-details--medium-sized ">Código de Acceso:</p>
+            <p class="text-details text-details--medium-sized codigo-acceso"></p>
+            <p class="text-details text-details--medium-sized ">Expira en:</p>
+            <p class="text-details text-details--medium-sized tiempo-acceso"></p>
+        </div>
+
+        <div class="dashboard__row hidden">
+            <p class="text-details text-details--medium-sized">Usuarios gestionando:</p>
+            <p class="text-details text-details--medium-sized text-details--bolds usuarios-gestionando"></p>
+        </div>
     </div>
 
-    <h2 class="dashboard__title dashboard__title--separacion">Estadísticas</h2>
-    <div class="dashboard__row">
-        <p class="text-details text-details--medium-sized">Total de elementos registrados:</p>
-        <p class="text-details text-details--medium-sized text-details--bold total-bienes"></p>
+    <div class="dashboard__actions">
+        <button class="button">Exportar Excel <i class="ri-import-fill icon"></i></button>
+        <button class="button">Generar Informe <i class="ri-file-download-fill icon"></i></button>
+        <button class="button button--white generar-codigo">Generar Código de Acceso</button>
     </div>
-    <div class="dashboard__row">
-        <p class="text-details text-details--medium-sized">Valor monetario total:</p>
-        <p class="text-details text-details--medium-sized text-details--bold valor-monetario"></p>
-    </div>
-    <div class="dashboard__row">
-        <p class="text-details text-details--medium-sized">Ambientes cubiertos:</p>
-        <p class="text-details text-details--medium-sized text-details--bold ambientes-cubiertos"></p>
-    </div>
-
-    <div class="dashboard__row access-info hidden">
-        <p class="text-details text-details--medium-sized ">Código de Acceso:</p>
-        <p class="text-details text-details--medium-sized codigo-acceso"></p>
-        <p class="text-details text-details--medium-sized ">Expira en:</p>
-        <p class="text-details text-details--medium-sized tiempo-acceso"></p>
-    </div>
-
-    <div class="dashboard__row hidden">
-        <p class="text-details text-details--medium-sized">Usuarios gestionando:</p>
-        <p class="text-details text-details--medium-sized text-details--bolds usuarios-gestionando"></p>
-    </div>
-</div>
-
-<div class="dashboard__actions">
-    <button class="button">Exportar Excel <i class="ri-import-fill icon"></i></button>
-    <button class="button">Generar Informe <i class="ri-file-download-fill icon"></i></button>
-    <button class="button button--white generar-codigo">Generar Código de Acceso</button>
-</div>
+</section>

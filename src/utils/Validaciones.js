@@ -194,7 +194,7 @@ export const validarFormulario = (event) => {
 
         // Si es un SELECT y contiene solo dígitos, se parsea a número
         if (campo.tagName === "SELECT" && /^\d+$/.test(valor)) {
-            datos[campo.name] = parseInt(valor);
+            datos[campo.name] = parseInt(valor);            
         } else {
             // En cualquier otro caso se guarda como string
             datos[campo.name] = valor;
