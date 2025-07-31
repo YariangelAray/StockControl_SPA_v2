@@ -4,7 +4,7 @@
   height: 100%;
   background-image: linear-gradient(hsl(0, 0%, 98%) 60%, hsl(0, 0%, 96%));
   border-collapse: collapse;
-  border-radius: 12px;
+  border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 1px 4px #00000047;  
 }
@@ -69,7 +69,7 @@
 
 .table__head-cell{
   color: var(--blanco);
-  padding: 10px 15px;
+  padding:  12px 15px 10px;
 }
 
 .table__row.table__row--red {
@@ -84,8 +84,8 @@
   background-color: rgba(229, 115, 115, 0.35);
 }
 
-#dashboard-tipos-elementos .table__cell:first-child,
-#dashboard-tipos-elementos .table__head-cell:first-child {
+.table-first-small .table__cell:first-child,
+.table-first-small .table__head-cell:first-child {
   width: 50px;
 }
 #dashboard-tipos-elementos .table__cell:nth-last-child(2),

@@ -48,3 +48,9 @@ export const reemplazarFila = (tbody, registro, callbackClick) => {
   const nuevaFila = crearFila(registro, callbackClick);
   tbody.replaceChild(nuevaFila, filaAnterior);
 };
+
+export const removerFilar = (tbody, id) => {
+  if (!tbody) return;
+  const fila = tbody.querySelector(`tr[data-id="${id}"]`);
+  fila.remove();
+}

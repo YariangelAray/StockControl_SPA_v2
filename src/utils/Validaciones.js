@@ -172,10 +172,10 @@ export const validarFormulario = (event) => {
 
     // === 1. Obtener los campos requeridos del formulario ===
     const camposRequeridos = [...formulario].filter(
-        (el) => el.hasAttribute("required") &&  // Solo elementos marcados como requeridos
-                (el.tagName === "INPUT" ||      // Que sean INPUT
-                 el.tagName === "SELECT" ||     // o SELECT
-                 el.tagName === "TEXTAREA")     // o TEXTAREA
+        (campo) => campo.hasAttribute("required") && !campo.parentElement.classList.contains('hidden') &&  // Solo elementos marcados como requeridos
+                (campo.tagName === "INPUT" ||      // Que sean INPUT
+                 campo.tagName === "SELECT" ||     // o SELECT
+                 campo.tagName === "TEXTAREA")     // o TEXTAREA
     );
 
     // === 2. Validar todos los campos requeridos ===
@@ -203,10 +203,10 @@ export const validarFormulario = (event) => {
 
     // === 4. Procesar campos opcionales que sí tengan valor ===
     const camposOpcionales = [...formulario].filter(
-        (el) =>
-            !el.hasAttribute("required") &&                  // Que no sean requeridos
-            (el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA") &&
-            el.value.trim() !== ""                          // Que no estén vacíos
+        (campo) =>
+            !campo.hasAttribute("required") && !campo.parentElement.classList.contains('hidden') &&                  // Que no sean requeridos
+            (campo.tagName === "INPUT" || campo.tagName === "SELECT" || campo.tagName === "TEXTAREA") &&
+            campo.value.trim() !== ""                          // Que no estén vacíos
     );
 
     camposOpcionales.forEach((campo) => {

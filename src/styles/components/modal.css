@@ -98,12 +98,13 @@
 ───────────────── MODALES PERSONALIZADOS ─────────────────
 ======================================================== */
 
-.modal--elemento, 
+.modal--elemento, .modal--usuario,
 .modal--tipo-elemento, .modal--reporte, .modal--generar-reporte {
   width: 650px;
 }
 
 .modal--elemento .form,
+.modal--usuario .form,
 .modal--tipo-elemento .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -128,7 +129,7 @@
   overflow-x: scroll;  
 }
 
-.reporte__imagenes {
+.modal--reporte .reporte__imagenes {
   display: flex;
   gap: 10px;
   overflow-x: auto;
@@ -137,12 +138,12 @@
   padding: 5px 0;
 }
 
-.reporte__imagenes::-webkit-scrollbar-thumb {
+.modal--reporte .reporte__imagenes::-webkit-scrollbar-thumb {
   background-color: var(--verde-claro);
   height: 2px;
 }
 
-.reporte__imagenes img {
+.modal--reporte .reporte__imagenes img {
   height: 100%;
   width: 150px;
   border-radius: var(--borde-redondeado);
@@ -167,19 +168,19 @@
   max-height: 90vh;
   cursor: default;
 }
+/* ─────────────────────────────────────────────────────── */
 
-/* ──────────────── MODALES DE ACCESO Y CONFIG ──────────────── */
 .modal--pedir-acceso .form,
 .modal--configurar .form {
   padding: 10px 0;
 }
 
-.modal--configurar,
+.modal--configurar, .modal--ambiente, 
+.modal--inventario,
 .modal--desactivar-cuenta {
   max-width: 500px;
 }
 
-/* ──────────────── MODAL CÓDIGO DE ACCESO ──────────────── */
 .modal--codigo .codigo-acceso {
   font-size: 2rem;
   font-weight: bold;
@@ -190,4 +191,9 @@
 
 .modal--codigo .modal__actions{
   justify-content: center;
+}
+
+
+.modal--usuario .form__control.hidden{
+  display: none;
 }

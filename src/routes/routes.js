@@ -12,9 +12,9 @@ import tiposelementos from '../views/compartidas/tipos-elementos/controlador.js'
 import perfil from '../views/perfil-usuario/controlador';
 
 import superAdmin from '../views/super-admin/controlador.js';
-import gestionUsuarios from '../views/super-admin/usuarios/controlador.js';
-import gestionInventarios from '../views/super-admin/inventarios/controlador.js';
-import gestionAmbientes from '../views/super-admin/ambientes/controlador.js';
+import gestionUsuarios from '../views/super-admin/usuariosGestion/controlador.js';
+import gestionInventarios from '../views/super-admin/inventariosGestion/controlador.js';
+import gestionAmbientes from '../views/super-admin/ambientesGestion/controlador.js';
 
 export const routes = {
   inicio: {
@@ -75,17 +75,17 @@ export const routes = {
       meta: { rolesPermitidos: [1] }
     },
     usuarios: {
-      path: 'super-admin/usuarios/index.html',
+      path: 'super-admin/usuariosGestion/index.html',
       controller: gestionUsuarios,
       meta: { rolesPermitidos: [1] }
     },
     ambientes: {
-      path: 'super-admin/ambientes/index.html',
+      path: 'super-admin/ambientesGestion/index.html',
       controller: gestionAmbientes,
       meta: { rolesPermitidos: [1] }
     },
     inventarios: {
-      path: 'super-admin/inventarios/index.html',
+      path: 'super-admin/inventariosGestion/index.html',
       controller: gestionInventarios,
       meta: { rolesPermitidos: [1] },
     },

@@ -1,0 +1,89 @@
+<dialog class="modal modal--usuario" backdrop-close="false">
+
+    <div class="modal__header">
+        <h2 class="modal__title">Detalles del Elemento</h2>
+    </div>
+
+    <div class="modal__body">
+        <form action="" class="form" autocomplete="off" id="form-usuario" novalidate>
+
+            <div class="form__control form__control--stacked">
+                <label for="nombres">Nombres:</label>
+                <input type="text" class="input" placeholder="Nombres" name="nombres" id="nombres" required>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" class="input" placeholder="Apellidos" name="apellidos" id="apellidos" required>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="tipo_documento">Tipo de Documento:</label>
+                <select name="tipo_documento_id" class="input input--select" required id="tipos-documentos" disabled>
+                    <option value="" disabled selected>Tipo de Documento</option>>
+                </select>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="documento">N° Documento:</label>
+                <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento" required
+                    disabled>
+            </div>
+            <div class="form__control form__control--stacked">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="text" class="input" placeholder="Correo Electrónico" name="correo" id="correo" required>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="telefono">N° de Télefono:</label>
+                <input type="text" class="input" placeholder="Número de Télefono" name="telefono" id="telefono"
+                    required>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="programa">Programa de Formación:</label>
+                <select name="programas" id="programas-formacion" class="input input--select" required>
+                    <option value="" disabled selected>Programa de Formación</option>
+                </select>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="ficha">Ficha:</label>
+                <select name="ficha_id" class="input input--select" id="fichas" required disabled>
+                    <option value="" disabled selected>Ficha</option>
+                </select>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="genero">Género:</label>
+                <select name="genero_id" class="input input--select" id="generos" required>
+                    <option value="" disabled selected>Seleccione el Género</option>
+                </select>
+            </div>
+
+            <div class="form__control form__control--stacked">
+                <label for="rol">Rol:</label>
+                <select name="rol_id" class="input input--select" id="roles" required>
+                    <option value="" disabled selected>Seleccione el rol</option>
+                </select>
+            </div>
+            <div class="form__control form__control--stacked form__control--span" id="form__control-contrasena">                
+                <input type="password" class="input contrasena" placeholder="Contraseña" name="contrasena" required
+                    data-tipo="nueva">
+                <i class="icon ri-eye-line"></i>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal__actions">
+        <button class="button editar">Editar
+            <i class="ri-edit-fill icon"></i>
+        </button>
+        <button type="submit" class="button crear" form="form-usuario">Crear</button>
+        <button type="submit" class="button guardar" form="form-usuario">Guardar</button>
+        <button class="button reactivar">Reactivar</button>
+        <button class="button button--red desactivar">Desactivar</button>
+        <button class="button button--white aceptar button--final">Aceptar</button>
+        <button class="button button--red cancelar button--final">Cancelar</button>
+    </div>
+</dialog>

@@ -1,0 +1,39 @@
+<dialog class="modal modal--inventario" backdrop-close="false">
+
+  <div class="modal__header">
+    <h2 class="modal__title">Detalles del Ambiente</h2>
+  </div>
+
+  <div class="modal__body">
+    <form action="" class="form" id="form-inventario" novalidate autocomplete="off">
+
+      <div class="form__control form__control--stacked">
+        <label for="usuarios">Gestor:</label>
+        <select name="usuario_admin_id" class="input input--small input--select" id="usuarios" required>
+          <option value="" disabled selected>Seleccione el gestor</option>
+        </select>
+      </div>
+
+      <div class="form__control form__control--stacked">
+        <label for="nombre">Nombre:</label>
+        <input type="text" class="input input--small" placeholder="Nombre del Inventario" name="nombre" id="nombre" 
+          required>
+      </div>
+
+      <div class="form__control form__control--stacked">        
+        <label for="fecha_creacion">Fecha de Creación:</label>
+        <input type="date" class="input input--small" name="fecha_creacion" id="fecha_creacion" 
+          required>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal__actions">
+    <button class="button editar">Editar<i class="ri-edit-fill icon"></i></button>
+    <button type="submit" class="button crear" form="form-inventario">Crear</button>
+    <button type="submit" class="button guardar" form="form-inventario">Guardar</button>        
+    <button class="button button--red eliminar">Eliminar</button>        
+    <button class="button button--white aceptar button--final">Aceptar</button>
+    <button class="button button--red cancelar button--final">Cancelar</button>
+  </div>
+</dialog>

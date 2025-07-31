@@ -5,7 +5,7 @@ import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
 import * as validaciones from '../utils/Validaciones';
 import * as api from '../utils/api';
 import { cerrarModal, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal, modales } from "./modalsController";
-import { actualizarStorageAmbientes, ambienteClick, formatearAmbiente } from "../views/super-admin/ambientes/ambiente";
+import { actualizarStorageAmbientes, ambienteClick, formatearAmbiente } from "../views/super-admin/ambientesGestion/ambiente";
 import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
 
 export const configurarModalAmbiente = (modo, modal) => {
@@ -180,5 +180,5 @@ const actualizarAmbiente = async (datos) => {
 
   const tbody = document.querySelector('#dashboard-ambientes .table__body');
   reemplazarFila(tbody, datosFormateados, ambienteClick);
-  await actualizarStorageAmbientes(inventario);
+  await actualizarStorageAmbientes();
 };
