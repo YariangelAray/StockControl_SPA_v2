@@ -2,7 +2,6 @@ export const cargarCards = (contenedor, data, config) => {
     data.forEach(item => {        
         const card = document.createElement('div');
         card.classList.add('card');
-        if (config.tipo === 'ambiente') card.classList.add('card--large');
 
         // Header
         const header = document.createElement('div');

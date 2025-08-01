@@ -98,8 +98,11 @@
 ───────────────── MODALES PERSONALIZADOS ─────────────────
 ======================================================== */
 
-.modal--elemento, .modal--usuario,
-.modal--tipo-elemento, .modal--reporte, .modal--generar-reporte {
+.modal--elemento,
+.modal--usuario,
+.modal--tipo-elemento,
+.modal--reporte,
+.modal--generar-reporte {
   width: 650px;
 }
 
@@ -119,14 +122,27 @@
   margin-top: 15px;
   border-radius: var(--borde-redondeado);
   padding: 0 20px 10px;
-  background-color: hsl(0, 0%, 98%);  
+  background-color: hsl(0, 0%, 98%);
 }
 
-.modal--reporte label + .text-details{
+.modal--reporte label+.text-details {
   border-bottom: 2px solid var(--gris-oscuro);
   width: 100%;
-  padding: 0 5px;
-  overflow-x: scroll;  
+  padding: 3px 5px 0;
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  overflow-y: scroll;  
+  line-height: 1.2;
+  min-height: 30px;
+  max-height: 30px;
+}
+
+
+.modal--reporte label+.text-details--paragraph {
+  max-height: 100px;
+  /* overflow-y: scroll;
+  overflow-x: hidden;
+  word-break: break-all */
 }
 
 .modal--reporte .reporte__imagenes {
@@ -138,7 +154,8 @@
   padding: 5px 0;
 }
 
-.modal--reporte .reporte__imagenes::-webkit-scrollbar-thumb {
+.modal--reporte .reporte__imagenes::-webkit-scrollbar-thumb,
+.modal--reporte label+.text-details::-webkit-scrollbar-thumb {
   background-color: var(--verde-claro);
   height: 2px;
 }
@@ -168,6 +185,7 @@
   max-height: 90vh;
   cursor: default;
 }
+
 /* ─────────────────────────────────────────────────────── */
 
 .modal--pedir-acceso .form,
@@ -175,7 +193,8 @@
   padding: 10px 0;
 }
 
-.modal--configurar, .modal--ambiente, 
+.modal--configurar,
+.modal--ambiente,
 .modal--inventario,
 .modal--desactivar-cuenta {
   max-width: 500px;
@@ -189,11 +208,11 @@
   margin: 10px 0;
 }
 
-.modal--codigo .modal__actions{
+.modal--codigo .modal__actions {
   justify-content: center;
 }
 
 
-.modal--usuario .form__control.hidden{
+.modal--usuario .form__control.hidden {
   display: none;
 }

@@ -1,0 +1,54 @@
+<section class="dashboard__layout " id="dashboard-super-admin">
+    <div class="dashboard__header">
+        <h2 class="dashboard__title">Panel de Administración</h2>
+        <p class="text-details text-details--medium-sized dashboard__details">Desde aquí puede gestionar los usuarios,
+            roles, ambientes, inventarios y tipos de elementos del sistema.</p>
+    </div>
+    <div class="dashboard__content content-cards content-cards--super-admin">
+
+        <div class="card card--small" onclick="location.href='#/super-admin/usuarios'">
+            <div class="card__icon">
+                <i class="ri-group-line icon"></i>
+            </div>
+            <div class="card__content">
+                <h3 class="card__title">Gestión de Usuarios</h3>
+                <p class="card__count"><span class="cant-usuarios"></span> usuarios registrados</p>
+                <p class="card__description text-details text-details--medium-sized">Consultar, agregar y editar.</p>
+            </div>
+        </div>
+
+        <div class="card card--small" onclick="location.href='#/super-admin/ambientes'">
+            <div class="card__icon">
+                <i class="icon ri-community-line"></i>
+            </div>
+            <div class="card__content">
+                <h3 class="card__title">Gestión de Ambientes</h3>
+                <p class="card__count"><span class="cant-ambientes"></span> ambientes registrados</p>
+                <p class="card__description text-details text-details--medium-sized">Consultar, agregar y editar.</p>
+            </div>
+        </div>
+
+        <div class="card card--small" onclick="location.href='#/super-admin/inventarios'">
+            <div class="card__icon">
+                <i class="ri-archive-drawer-line icon"></i>
+            </div>
+            <div class="card__content">
+                <h3 class="card__title">Gestión de Inventarios</h3>
+                <p class="card__count"><span class="cant-inventarios"></span> inventarios registrados</p>
+                <p class="card__description text-details text-details--medium-sized">Consultar, agregar y editar.</p>
+            </div>
+        </div>
+
+        <div class="card card--small" onclick="location.href='#/super-admin/tipos-elementos'">
+            <div class="card__icon">
+                <i class="ri-gallery-view-2 icon"></i>
+            </div>
+            <div class="card__content">
+                <h3 class="card__title">Gestión de Tipos de Elementos</h3>
+                <p class="card__count"><span class="cant-tipos"></span> tipos registrados</p>
+                <p class="card__description text-details text-details--medium-sized">Consultar, agregar y editar.</p>
+            </div>
+        </div>
+
+    </div>
+</section>

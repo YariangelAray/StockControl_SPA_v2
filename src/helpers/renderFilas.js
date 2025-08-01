@@ -26,6 +26,14 @@ export const renderFilas = (registros, callbackClick) => {
   const tbody = document.querySelector('.table__body');
   tbody.innerHTML = '';
 
+  if (!registros || registros.length === 0) {
+    const texto = document.createElement('p');
+    texto.classList.add('text-floating')
+    texto.textContent = 'No se encontraron registros';
+    tbody.appendChild(texto);
+    return;
+  }
+
   registros.forEach(registro => {
     const fila = crearFila(registro, callbackClick);
     tbody.appendChild(fila);

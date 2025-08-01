@@ -10,9 +10,6 @@ import { error, success } from '../utils/alertas'
 import * as api from "../utils/api";
 import { actualizarStorageElementos, elementoClick, formatearElemento } from '../views/inventarios/elementos/elemento';
 
-const usuario = JSON.parse(localStorage.getItem('usuario'));
-const inventario = JSON.parse(localStorage.getItem('inventario'));
-
 export const configurarModalElemento = (modo, modal) => {
 
   const form = modal.querySelector('form');
@@ -58,6 +55,9 @@ export const configurarModalElemento = (modo, modal) => {
 
 
 export const initModalElemento = async (modal) => {
+
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const inventario = JSON.parse(localStorage.getItem('inventario'));
 
   await llenarSelect({
     endpoint: 'ambientes',
@@ -122,10 +122,10 @@ export const initModalElemento = async (modal) => {
     validaciones.datos.placa = parseInt(validaciones.datos.placa);
     if (claseBoton.contains('crear')) {
       // Acción para crear
-      await crearElemento(validaciones.datos);
+      await crearElemento(validaciones.datos, inventario);
     } else if (claseBoton.contains('guardar')) {
       // Acción para editar
-      await actualizarElemento(validaciones.datos);
+      await actualizarElemento(validaciones.datos, inventario);
       configurarModalElemento('editar', modal);
     }
   });
@@ -174,7 +174,7 @@ export const initModalElemento = async (modal) => {
       else {
         ocultarModalTemporal(modal);
         await error(respuesta);
-        setTimeout(async() => mostrarUltimoModal(), 100);    
+        setTimeout(async () => mostrarUltimoModal(), 100);
       }
       await actualizarStorageElementos(inventario);
       return;
@@ -194,7 +194,7 @@ export const initModalElemento = async (modal) => {
       else {
         ocultarModalTemporal(modal);
         await error(respuesta);
-        setTimeout(async() => mostrarUltimoModal(), 100);    
+        setTimeout(async () => mostrarUltimoModal(), 100);
       }
       await actualizarStorageElementos(inventario);
       return;
@@ -258,7 +258,7 @@ document.addEventListener('tipoElementoCreado', async (e) => {
   btnAgregarTipo.classList.add('hidden');
 });
 
-const crearElemento = async (datos) => {
+const crearElemento = async (datos, inventario) => {
   const respuesta = await api.post('elementos', {
     ...datos,
     inventario_id: inventario.id
@@ -267,7 +267,7 @@ const crearElemento = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalElemento);
     await error(respuesta);
-    setTimeout(async() => mostrarUltimoModal(), 100);    
+    setTimeout(async () => mostrarUltimoModal(), 100);
     return;
   }
   cerrarModal();
@@ -284,7 +284,7 @@ const crearElemento = async (datos) => {
   const tbody = document.querySelector('#dashboard-elementos .table__body');
   agregarFila(tbody, datosFormateados, elementoClick);
 }
-const actualizarElemento = async (datos) => {
+const actualizarElemento = async (datos, inventario) => {
   const elementoTemp = JSON.parse(localStorage.getItem('elemento_temp'));
   const respuesta = await api.put('elementos/' + elementoTemp.id, {
     ...datos,
@@ -294,7 +294,7 @@ const actualizarElemento = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalElemento);
     await error(respuesta);
-    setTimeout(async() => mostrarUltimoModal(), 100);    
+    setTimeout(async () => mostrarUltimoModal(), 100);
     return;
   }
   configurarModalElemento('editar', modales.modalElemento);

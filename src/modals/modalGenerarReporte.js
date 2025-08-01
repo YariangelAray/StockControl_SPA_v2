@@ -63,8 +63,8 @@ export const initModalGenerarReporte = (modal) => {
         }
         ocultarModalTemporal(modal)
         setTimeout(async () => {
-            setTimeout(async() => await success('Reporte generado exitosamente'), 100);
-            cerrarModal()
+            await success('Reporte generado exitosamente')
+            setTimeout(async () => cerrarModal(), 100);
         }, 100);
         form.reset();
 

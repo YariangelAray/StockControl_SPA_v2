@@ -134,7 +134,7 @@ export const initModalUsuario = async (modal) => {
         if (campo.name == "documento" || campo.name == "telefono") {
             campo.addEventListener("keydown", validaciones.validarNumero);
             campo.addEventListener("input", validaciones.validarCampo);
-            const limite = campo.name == "documento" ? 11 : 15;
+            const limite = campo.name == "documento" ? 10 : 15;
             campo.addEventListener("keydown", event => validaciones.validarLimite(event, limite));
         } else {
 
@@ -162,7 +162,11 @@ export const initModalUsuario = async (modal) => {
             
             if (respuesta.success) {
                 const fila = document.querySelector(`#dashboard-usuarios .table__row[data-id="${id}"]`);
-                if (fila) fila.classList.remove('table__row--red');
+                if (fila) {
+                    fila.classList.remove('table__row--red');
+                    const ultimaCelda = fila.querySelector('td:last-child');
+                    ultimaCelda.textContent = 'Activo';
+                }
                 cerrarModal();
             }
             else {
@@ -183,7 +187,11 @@ export const initModalUsuario = async (modal) => {
             const respuesta = await api.put('usuarios/' + id + '/estado/' + false + "/permiso/" + usuario.rol_id);
             if (respuesta.success) {
                 const fila = document.querySelector(`#dashboard-usuarios .table__row[data-id="${id}"]`);
-                if (fila) fila.classList.add('table__row--red');
+                if (fila) {
+                    fila.classList.add('table__row--red')
+                    const ultimaCelda = fila.querySelector('td:last-child');
+                    ultimaCelda.textContent = 'Inactivo';
+                }
                 cerrarModal();
             }
             else {

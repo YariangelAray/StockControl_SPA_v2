@@ -41,7 +41,13 @@ const generarSidebar = (rol) => {
 
             a.insertAdjacentElement('afterbegin', i);
             li.appendChild(a);
+            
             sidebarList.appendChild(li);
+            if (nombre === 'Inicio') {
+                const separacion = document.createElement('hr');
+                separacion.classList.add('separacion');
+                sidebarList.append(separacion);                
+            }
         });
     }
 

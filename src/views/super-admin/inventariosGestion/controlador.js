@@ -8,10 +8,10 @@ export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     initComponentes(usuario);
 
-    let inventarios = JSON.parse(localStorage.getItem('inventarios') || '{}').inventarios;
+    let inventarios = JSON.parse(localStorage.getItem('inventarios') || '{}').inventarios || [];
 
 
-    if (!inventarios) {
+    if (!inventarios || inventarios.length === 0) {
         const inventariosFormateados = await cargarInventarios();
         localStorage.setItem('inventarios', JSON.stringify({ inventarios: inventariosFormateados }));
         inventarios = inventariosFormateados;
@@ -34,5 +34,17 @@ export default async () => {
             await configurarModalInventario('crear', modalInventario);
             abrirModal(modalInventario);
         }
+    });
+    const search = document.querySelector('[type="search"]');
+    search.addEventListener('input', (e) => {
+        let inventarios = JSON.parse(localStorage.getItem('inventarios') || '{}').inventarios || [];
+        const valor = e.target.value.toLowerCase();
+        const inventariosFiltrados = inventarios.filter(inventario => {
+            for (const key in inventario) {
+                if (inventario[key] && inventario[key].toString().toLowerCase().includes(valor)) return true;
+            }
+            return false;
+        });
+        renderFilas(inventariosFiltrados, inventarioClick);
     });
 }

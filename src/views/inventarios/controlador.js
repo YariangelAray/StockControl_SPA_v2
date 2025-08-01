@@ -14,7 +14,7 @@ export default async () => {
     initComponentes(usuario);
 
     const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
-    sidebarList.querySelector('.menu__items')?.remove();    
+    sidebarList.querySelector('.menu__items')?.remove();
 
     // Verificamos si el ítem ya fue insertado
 
@@ -27,9 +27,8 @@ export default async () => {
     sidebarList.append(sidebarInfo);
 
 
-
     limpiarModales();
-    if (usuario.rol_id === 2) {
+    if (usuario.rol_id === 3) {
         await initModales(['modalPedirCodigoAcceso']);
         const { modalPedirCodigoAcceso } = modales;
         initModalPedirCodigo(modalPedirCodigoAcceso);
@@ -53,31 +52,29 @@ const cargarInventarios = async (usuario) => {
 
     const contenedor = document.querySelector('.content-cards');
     if (respuesta.success) {
-        cargarCards(contenedor, respuesta.data ?? [], {
+
+        cargarCards(contenedor, respuesta.data, {
             tipo: 'inventario',
             filas: [
                 { valor: 'cantidad_elementos', clave: 'Cantidad de elementos:' },
                 { valor: 'ambientes_cubiertos', clave: 'Ambientes cubiertos:' },
-                { valor: 'ultima_actualizacion', clave: 'Última actualización:' },  
+                { valor: 'ultima_actualizacion', clave: 'Última actualización:' },
             ],
             click: async (inventario) => {
                 localStorage.setItem('inventario', JSON.stringify({ id: inventario.id, nombre: inventario.nombre }));
 
                 if (!localStorage.getItem('codigoAccesoInfo')) {
 
-                    try {
-                        const respuesta = await api.get('codigos-acceso/inventario/' + inventario.id);
-                        if (respuesta.success) {
-                            // Guardar código específico en localStorage
-                            localStorage.setItem('codigoAccesoInfo', JSON.stringify({
-                                codigo: respuesta.data.codigo,
-                                expiracion: respuesta.data.fecha_expiracion
-                            }));
-                        }
-                    } catch (error) {
-
+                    const respuesta = await api.get('codigos-acceso/inventario/' + inventario.id);
+                    if (respuesta.success) {
+                        // Guardar código específico en localStorage
+                        localStorage.setItem('codigoAccesoInfo', JSON.stringify({
+                            codigo: respuesta.data.codigo,
+                            expiracion: respuesta.data.fecha_expiracion
+                        }));
                     }
                 }
+
                 const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
                 if (usuario.rol_id === 3 && codigoInfo) {
                     const expiracion = new Date(codigoInfo.expiracion);
@@ -93,5 +90,19 @@ const cargarInventarios = async (usuario) => {
                 window.location.hash = '#/inventarios/ambientes';
             }
         });
+    }
+    if (usuario.rol_id === 2 && !respuesta.data) {
+        const cardEmpty = document.createElement('div');
+        cardEmpty.classList.add('card-empty');
+
+        const icon = document.createElement('i');
+        icon.classList.add('ri-information-line', 'icon');
+        cardEmpty.appendChild(icon);
+        const texto = document.createElement('p');
+        texto.classList.add('text-details', 'text-details--medium-sized');
+        texto.textContent = 'No se encontraron inventarios a su cargo';
+        cardEmpty.appendChild(texto);
+        contenedor.appendChild(cardEmpty);
+        return;
     }
 };

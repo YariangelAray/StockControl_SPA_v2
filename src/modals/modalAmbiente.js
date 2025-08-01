@@ -1,4 +1,4 @@
-import { error, info } from "../utils/alertas";
+import { error, info, success } from "../utils/alertas";
 import { llenarSelect } from "../helpers/select";
 import { setLecturaForm } from "../helpers/setLecturaForm";
 import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";

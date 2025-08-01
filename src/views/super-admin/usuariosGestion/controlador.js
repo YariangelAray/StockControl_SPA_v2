@@ -8,10 +8,10 @@ export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     initComponentes(usuario);
 
-    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '{}').usuarios;
+    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '{}').usuarios || [];
 
 
-    if (!usuarios) {
+    if (!usuarios || usuarios.length === 0) {
         const usuariosFormateados = await cargarUsuarios();
         localStorage.setItem('usuarios', JSON.stringify({ usuarios: usuariosFormateados }));
         usuarios = usuariosFormateados;
@@ -34,5 +34,17 @@ export default async () => {
             await configurarModalUsuario('crear', modalUsuario);
             abrirModal(modalUsuario);
         }
+    });
+    const search = document.querySelector('[type="search"]');
+    search.addEventListener('input', (e) => {
+        let usuarios = JSON.parse(localStorage.getItem('usuarios') || '{}').usuarios || [];
+        const valor = e.target.value.toLowerCase();
+        const usuariosFiltrados = usuarios.filter(usuario => {
+            for (const dato of usuario) {
+                if (dato && dato.toString().toLowerCase().includes(valor)) return true;
+            }
+            return false;
+        });
+        renderFilas(usuariosFiltrados, usuarioClick);
     });
 }

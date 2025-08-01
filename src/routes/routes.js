@@ -30,12 +30,14 @@ export const routes = {
   inventarios: {
     "/": {
       path: 'inventarios/index.html',
-      controller: inventarios
+      controller: inventarios,
+      meta: { rolesPermitidos: [2, 3] }
     },
     ambientes: {
       "/": {
         path: 'inventarios/ambientes/index.html',
-        controller: ambientes
+        controller: ambientes,
+        meta: { rolesPermitidos: [2, 3] }
       },
       mapa: {
         path: 'inventarios/ambientes/mapa.html',
@@ -50,7 +52,8 @@ export const routes = {
     elementos: {
       "/": {
         path: 'inventarios/elementos/index.html',
-        controller: elementos
+        controller: elementos,
+        meta: { rolesPermitidos: [2, 3] }        
       },
       "tipos-elementos": {
         path: 'compartidas/tipos-elementos/index.html',
@@ -66,7 +69,8 @@ export const routes = {
   },
   "perfil-usuario": {
     path: 'perfil-usuario/index.html',
-    controller: perfil
+    controller: perfil,
+    meta: { rolesPermitidos: [1, 2, 3] }
   },
   "super-admin": {
     "/": {

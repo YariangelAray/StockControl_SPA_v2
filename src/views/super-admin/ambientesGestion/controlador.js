@@ -8,10 +8,10 @@ export default async () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
     initComponentes(usuario);
 
-    let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes;
+    let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes  || [];
 
 
-    if (!ambientes) {
+    if (!ambientes || ambientes.length === 0) {
         const ambientesFormateados = await cargarAmbientes();
         localStorage.setItem('ambientes', JSON.stringify({ ambientes: ambientesFormateados }));
         ambientes = ambientesFormateados;
@@ -34,5 +34,17 @@ export default async () => {
             configurarModalAmbiente('crear', modalAmbiente);
             abrirModal(modalAmbiente);
         }
+    });
+    const search = document.querySelector('[type="search"]');
+    search.addEventListener('input', (e) => {
+        let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes || [];
+        const valor = e.target.value.toLowerCase();
+        const ambientesFiltrados = ambientes.filter(ambiente => {
+            for (const dato of ambiente) {
+                if (dato && dato.toString().toLowerCase().includes(valor)) return true;
+            }
+            return false;
+        });
+        renderFilas(ambientesFiltrados, ambienteClick);
     });
 }

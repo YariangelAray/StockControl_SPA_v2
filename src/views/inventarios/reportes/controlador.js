@@ -11,10 +11,10 @@ export default async () => {
     const inventario = JSON.parse(localStorage.getItem('inventario'));
     initComponentes(usuario);
     
-    let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes;
+    let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes || [];
 
     
-    if (!reportes) {
+    if (!reportes || reportes.length === 0) {
         const reportesFormateados = await cargarReportes(inventario);
         localStorage.setItem('reportes', JSON.stringify({reportes: reportesFormateados}));
         reportes = reportesFormateados;
@@ -31,4 +31,16 @@ export default async () => {
 
     // Actualización en segundo plano
     await actualizarStorageReportes(inventario);
+    const search = document.querySelector('[type="search"]');
+    search.addEventListener('input', (e) => {
+        let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes || [];
+        const valor = e.target.value.toLowerCase();
+        const reportesFiltrados = reportes.filter(reporte => {
+            for (const dato of reporte) {
+                if (dato && dato.toString().toLowerCase().includes(valor)) return true;
+            }
+            return false;
+        });
+        renderFilas(reportesFiltrados, reporteClick);
+    });
 }

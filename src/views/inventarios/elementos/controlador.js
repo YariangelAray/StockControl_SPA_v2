@@ -29,9 +29,9 @@ export default async () => {
         })
     }
 
-    let elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos;
+    let elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
 
-    if (!elementos) {
+    if (!elementos || elementos.length === 0) {
         const elementosFormateados = await cargarElementos(inventario);
         localStorage.setItem('elementos', JSON.stringify({ elementos: elementosFormateados }));
         elementos = elementosFormateados;
@@ -40,7 +40,7 @@ export default async () => {
     renderFilas(elementos, elementoClick);
 
     await llenarSelect({
-        endpoint: 'ambientes',
+        endpoint: `inventarios/${inventario.id}/ambientes`,
         selector: '#filtro-ambientes',
         optionMapper: ambiente => ({ id: ambiente.id, text: ambiente.nombre })
     });
@@ -83,4 +83,52 @@ export default async () => {
             window.location.hash = '#/inventarios';
         }
     }
+    const search = document.querySelector('[type="search"]');
+    search.addEventListener('input', (e) => {
+        let elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
+        const valor = e.target.value.toLowerCase();
+        const elementosFiltrados = elementos.filter(elemento => {
+            for (const dato of elemento) {
+                if (dato && dato.toString().toLowerCase().includes(valor)) return true;
+            }
+            return false;
+        });
+        renderFilas(elementosFiltrados, elementoClick);
+    });
+
+    const filtroEstado = document.getElementById('filtro-estados');
+    const filtroAmbiente = document.getElementById('filtro-ambientes');
+
+    let estadoActual = '';
+    let ambienteActual = '';
+
+    filtroEstado.addEventListener('change', (e) => {
+        const indice = e.target.selectedIndex;
+        estadoActual = indice > 0 ? e.target.options[indice].textContent.trim() : '';
+
+        const elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
+        const resultado = filtrarElementos({ elementos, estado: estadoActual, ambiente: ambienteActual });
+
+        renderFilas(resultado, elementoClick);
+    });
+
+    filtroAmbiente.addEventListener('change', (e) => {
+        const indice = e.target.selectedIndex;
+        ambienteActual = indice > 0 ? e.target.options[indice].textContent.trim() : '';
+
+        const elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
+        const resultado = filtrarElementos({ elementos, estado: estadoActual, ambiente: ambienteActual });
+
+        renderFilas(resultado, elementoClick);
+    });
+
+
+}
+
+const filtrarElementos = ({ elementos, estado = '', ambiente = '' }) => {
+    return elementos.filter(lista => {
+        const contieneEstado = estado ? lista.some(d => d?.toString().toLowerCase() === estado.toLowerCase()) : true;
+        const contieneAmbiente = ambiente ? lista.some(d => d?.toString().toLowerCase() === ambiente.toLowerCase()) : true;
+        return contieneEstado && contieneAmbiente;
+    });
 }

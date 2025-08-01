@@ -78,3 +78,89 @@
   align-items: center;
   width: 100%;
 }
+
+.dashboard--table-section .dashboard__header .dashboard__actions {
+  padding: 0;
+  justify-content: space-between;
+}
+
+
+/* ========================================================
+───────── DASHBOARD CON ESTILOS PERSONALIZADOS ────────────
+======================================================== */
+
+.dashboard--table-section .dashboard__header .dashboard__actions .dashboard__filters,
+.dashboard--table-section .dashboard__header .dashboard__actions .dashboard__buttons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.dashboard--table-section .dashboard__content {
+  display: flex;
+  overflow: hidden;
+  padding-top: 10px;
+}
+
+.dashboard--details-section {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.dashboard--details-section .dashboard__content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0;
+  align-items: normal;
+  padding: 0;
+}
+
+.access-info {
+  margin-top: 20px;
+  border: 2px solid var(--verde-claro);
+  border-radius: 12px;
+  padding: 8px 50px;
+}
+
+.access-info .text-details {
+  color: var(--verde-claro);
+}
+
+.dashboard--details-section .dashboard__actions .button--white {
+  position: absolute;
+  right: 10px;
+}
+
+.dashboard--profile .dashboard__content {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 20px 0;
+  overflow: scroll;
+  row-gap: 0px;
+}
+
+.dashboard--profile .form__header {
+  justify-content: start;
+}
+
+.dashboard--profile .form__body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  height: auto;
+  padding: 0;
+}
+
+.dashboard--profile .form__action {
+  align-items: end;
+}
+
+.dashboard--profile .input {
+  border: 1px solid var(--verde-claro);
+}
+
+#dashboard-tipos-elementos .table__cell:nth-last-child(2),
+#dashboard-tipos-elementos .table__head-cell:nth-last-child(2) {
+  width: 120%;
+}
