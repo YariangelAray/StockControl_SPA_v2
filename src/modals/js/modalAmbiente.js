@@ -80,6 +80,9 @@ export const initModalAmbiente = async (modal) => {
     if (claseBoton.contains('crear')) {
       // Acción para crear
       await crearAmbiente(validaciones.datos);
+      form.querySelectorAll('.form__control').forEach(input => {
+        input.classList.remove('error');
+      });
     } else if (claseBoton.contains('guardar')) {
       // Acción para editar
       await actualizarAmbiente(validaciones.datos);

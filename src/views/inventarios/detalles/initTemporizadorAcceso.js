@@ -78,6 +78,7 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
  */
 export const eliminarAccesos = async (inventarioId, limpiar) => {
     // Realiza la petición DELETE al backend para eliminar accesos del inventario
+    limpiar();
     const respuesta = await del('accesos-temporales/inventario/' + inventarioId);
 
     // Si hubo un error, lo muestra en consola
@@ -86,5 +87,4 @@ export const eliminarAccesos = async (inventarioId, limpiar) => {
     }
 
     // Llama la función limpiar para actualizar la interfaz
-    limpiar();
 }

@@ -123,6 +123,9 @@ export const initModalElemento = async (modal) => {
     if (claseBoton.contains('crear')) {
       // Acción para crear
       await crearElemento(validaciones.datos, inventario);
+      form.querySelectorAll('.form__control').forEach(input => {
+        input.classList.remove('error');
+      });
     } else if (claseBoton.contains('guardar')) {
       // Acción para editar
       await actualizarElemento(validaciones.datos, inventario);

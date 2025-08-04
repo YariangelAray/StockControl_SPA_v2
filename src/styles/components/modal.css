@@ -102,6 +102,7 @@
 .modal--usuario,
 .modal--tipo-elemento,
 .modal--reporte,
+.modal--ambiente,
 .modal--generar-reporte {
   width: 650px;
 }
@@ -112,6 +113,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 20px;
+}
+.modal--configurar .form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.modal--configurar .form .input{
+  min-width: 100%;
 }
 
 .modal--reporte .form {
@@ -194,7 +203,6 @@
 }
 
 .modal--configurar,
-.modal--ambiente,
 .modal--inventario,
 .modal--desactivar-cuenta {
   max-width: 500px;

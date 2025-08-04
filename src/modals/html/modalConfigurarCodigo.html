@@ -1,12 +1,17 @@
 <dialog class="modal modal--small modal--configurar" backdrop-close="false">
   <div class="modal__body">
     <p class="modal__mensaje text-details text-details--medium-sized">      
-      Ingrese la cantidad de <strong class="text-details--bold">horas</strong> durante las cuales desea que el inventario esté <strong class="text-details--bold">disponible</strong> para su <strong class="text-details--bold">gestión</strong>. <br> <br>
+      Ingrese la cantidad de <strong class="text-details--bold">horas</strong> durante las cuales desea que el inventario esté <strong class="text-details--bold">disponible</strong> para su <strong class="text-details--bold">gestión</strong>. <br>
       <i class="ri-information-line"></i> (El valor máximo permitido es de <strong class="text-details--bold">6 horas</strong>)
     </p>
     <form action="" class="form" id="form-configurar" novalidate>
-        <div class="form__control">
-            <input type="number" class="input input--small" min="1" max="6" name="horas-acceso">
+        <div class="form__control form__control--stacked">
+          <label for="horas">Horas:</label>
+            <input type="number" class="input input--small" name="horas" id="horas">
+        </div>
+        <div class="form__control form__control--stacked">
+          <label for="minutos">Minutos:</label>
+            <input type="number" class="input input--small" name="minutos" id="minutos">
         </div>
     </form>
   </div>
