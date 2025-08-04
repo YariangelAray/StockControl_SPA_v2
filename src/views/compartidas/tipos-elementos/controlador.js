@@ -1,7 +1,7 @@
 import { initComponentes } from "../../../helpers/initComponentes";
 import { agregarFila, renderFilas } from "../../../helpers/renderFilas";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
-import { configurarModalTipo, initModalTipo } from "../../../modals/modalTipoElemento";
+import { configurarModalTipo, initModalTipo } from "../../../modals/js/modalTipoElemento";
 import { actualizarStorageTipos, cargarTipos, formatearTipo, tipoClick } from "./tipos-elementos";
 
 export default async () => {

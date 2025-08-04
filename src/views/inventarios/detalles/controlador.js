@@ -1,4 +1,4 @@
-import { initModalConfigurar } from "../../../modals/modalConfigurarCodigo";
+import { initModalConfigurar } from "../../../modals/js/modalConfigurarCodigo";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import { initComponentes } from "../../../helpers/initComponentes";
 import { get } from "../../../utils/api";

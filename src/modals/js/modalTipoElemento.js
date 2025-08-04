@@ -1,11 +1,11 @@
-import { cerrarModal, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "./modalsController";
-import { setLecturaForm } from "../helpers/setLecturaForm";
-import * as validaciones from "../utils/Validaciones";
-import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
-import * as api from "../utils/api";
-import { actualizarStorageTipos, formatearTipo, tipoClick } from "../views/compartidas/tipos-elementos/tipos-elementos";
-import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
-import { error, success } from "../utils/alertas";
+import { cerrarModal, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "../modalsController";
+import { setLecturaForm } from "../../helpers/setLecturaForm";
+import * as validaciones from "../../utils/Validaciones";
+import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
+import * as api from "../../utils/api";
+import { actualizarStorageTipos, formatearTipo, tipoClick } from "../../views/compartidas/tipos-elementos/tipos-elementos";
+import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
+import { error, success } from "../../utils/alertas";
 
 
 export const configurarModalTipo = (modo, modal) => {
@@ -52,6 +52,11 @@ export const initModalTipo = (modal) => {
       campo.addEventListener("blur", validaciones.validarCampo);
     }
 
+    if (campo.name == "consecutivo"){
+      campo.addEventListener("keydown", validaciones.validarNumero);
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 10));
+    }
+
     if (campo.name == "nombre" || campo.name == "marca" || campo.name == "modelo")
       campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
 
@@ -63,8 +68,8 @@ export const initModalTipo = (modal) => {
     e.preventDefault();
     const boton = e.submitter; // Este es el botón que disparó el submit
     const claseBoton = boton.classList;
-
     if (!validaciones.validarFormulario(e)) return;
+    validaciones.datos.consecutivo = parseInt(validaciones.datos.consecutivo);    
     const confirmado = await mostrarConfirmacion();
     if (!confirmado) return;
     if (claseBoton.contains('crear')) {

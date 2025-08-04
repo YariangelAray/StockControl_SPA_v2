@@ -1,14 +1,14 @@
-import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "./modalsController";
+import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "../modalsController";
 import { configurarModalTipo, initModalTipo } from "./modalTipoElemento";
-import { setLecturaForm } from "../helpers/setLecturaForm";
-import { llenarSelect } from "../helpers/select";
-import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
+import { setLecturaForm } from "../../helpers/setLecturaForm";
+import { llenarSelect } from "../../helpers/select";
+import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
 import { initModalGenerarReporte } from "./modalGenerarReporte";
-import * as validaciones from "../utils/Validaciones";
-import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
-import { error, success } from '../utils/alertas'
-import * as api from "../utils/api";
-import { actualizarStorageElementos, elementoClick, formatearElemento } from '../views/inventarios/elementos/elemento';
+import * as validaciones from "../../utils/Validaciones";
+import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
+import { error, success } from '../../utils/alertas'
+import * as api from "../../utils/api";
+import { actualizarStorageElementos, elementoClick, formatearElemento } from '../../views/inventarios/elementos/elemento';
 
 export const configurarModalElemento = (modo, modal) => {
 
@@ -78,7 +78,7 @@ export const initModalElemento = async (modal) => {
     selector: '#tipos-elementos',
     optionMapper: tipo => ({
       id: tipo.id,
-      text: `${tipo.nombre}. Marca: ${(tipo.marca ?? "No Aplica")}. Modelo: ${(tipo.modelo ?? "No Aplica")}`
+      text: `${tipo.consecutivo}: ${tipo.nombre}. Marca: ${(tipo.marca ?? "No Aplica")}. Modelo: ${(tipo.modelo ?? "No Aplica")}.`
     })
   });
 
@@ -145,7 +145,7 @@ export const initModalElemento = async (modal) => {
 
     }
     if (campo.name == "placa" || campo.name == "serial")
-      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 15));
 
     if (campo.name == "fecha_adquisicion")
       campo.addEventListener('input', (e) => validaciones.validarFecha(e.target))

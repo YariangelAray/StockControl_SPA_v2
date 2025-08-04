@@ -1,6 +1,6 @@
 import { cargarCards } from "../../helpers/cargarCards.js";
 import { initComponentes } from "../../helpers/initComponentes.js";
-import { initModalPedirCodigo } from "../../modals/modalPedirCodigoAcceso.js";
+import { initModalPedirCodigo } from "../../modals/js/modalPedirCodigoAcceso.js";
 import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController.js";
 import * as api from "../../utils/api.js";
 import { initTemporizadorAcceso } from "./detalles/initTemporizadorAcceso.js";

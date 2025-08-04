@@ -7,7 +7,7 @@ export const initModales = async (modalesUsar) =>{
         if (modales[modalNombre]) continue;
 
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = await (await fetch(`./src/modals/${modalNombre}.html`)).text();
+        tempDiv.innerHTML = await (await fetch(`./src/modals/html/${modalNombre}.html`)).text();
         const modal = tempDiv.querySelector('dialog');        
         
         document.body.appendChild(modal);
@@ -69,6 +69,8 @@ export const mostrarConfirmacion = async (mensaje = '¿Está seguro de continuar
             modalConfirmacion.classList.remove('visible');
             setTimeout(() => {
                 modalConfirmacion.close();
+                modalConfirmacion.remove();
+                modales.modalConfirmacion = null;
                 resolve(valor);
             }, 300);
         }

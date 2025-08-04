@@ -1,8 +1,8 @@
-import { cerrarModal, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "./modalsController";
-import * as validaciones from "../utils/Validaciones";
-import * as api from "../utils/api";
-import { error, success } from "../utils/alertas";
-import { actualizarStorageReportes, formatearReporte } from "../views/inventarios/reportes/reporte";
+import { cerrarModal, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "../modalsController";
+import * as validaciones from "../../utils/Validaciones";
+import * as api from "../../utils/api";
+import { error, success } from "../../utils/alertas";
+import { actualizarStorageReportes, formatearReporte } from "../../views/inventarios/reportes/reporte";
 
 export const initModalGenerarReporte = (modal) => {
 

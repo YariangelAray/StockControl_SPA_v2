@@ -27,7 +27,7 @@
                 <div class="form__control form__control--stacked">
                     <label for="tipo_documento">Tipo de Documento:</label>
                     <select name="tipo_documento_id" class="input input--select" required id="tipos-documentos"
-                        disabled>
+                        data-rol-permitido="1">
                         <option value="" disabled selected>Tipo de Documento</option>>
                     </select>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="form__control form__control--stacked">
                     <label for="documento">N° Documento:</label>
                     <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento"
-                        required disabled>
+                        required data-rol-permitido="1">
                 </div>
                 <div class="form__control form__control--stacked">
                     <label for="correo">Correo Electrónico:</label>
@@ -51,14 +51,14 @@
 
                 <div class="form__control form__control--stacked">
                     <label for="programa">Programa de Formación:</label>
-                    <select name="programas" id="programas-formacion" class="input input--select" required disabled>
+                    <select name="programas" id="programas-formacion" class="input input--select" required data-rol-permitido="1">
                         <option value="" disabled selected>Programa de Formación</option>
                     </select>
                 </div>
 
                 <div class="form__control form__control--stacked">
                     <label for="ficha">Ficha:</label>
-                    <select name="ficha_id" class="input input--select" id="fichas" required disabled>
+                    <select name="ficha_id" class="input input--select" id="fichas" required data-rol-permitido="1">
                         <option value="" disabled selected>Ficha</option>
                     </select>
                 </div>
@@ -104,7 +104,7 @@
         </form>
     </div>
 
-    <div class="dashboard__actions">
+    <div class="dashboard__actions hidden desactivar-cuenta">
         <button class="button button--red" id="desactivarCuenta">Desactivar cuenta</button>
     </div>
 </section>

@@ -1,7 +1,7 @@
-import { error, success } from "../utils/alertas";
-import * as api from "../utils/api";
-import * as validaciones from "../utils/Validaciones";
-import { cerrarModal } from "./modalsController";
+import { error, success } from "../../utils/alertas";
+import * as api from "../../utils/api";
+import * as validaciones from "../../utils/Validaciones";
+import { cerrarModal } from "../modalsController";
 
 export const initModalEliminar = (modal, usuario) => {
 

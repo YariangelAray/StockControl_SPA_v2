@@ -8,7 +8,7 @@ export const initComponentes = (usuario) => {
     const hash = location.hash.slice(2); // quitar "#/"
     const segmentos = hash.split('/').filter(seg => seg);
 
-    if (!inventario && segmentos[0] === "inventarios") {
+    if (usuario.rol_id !== 1 && !inventario && segmentos[0] === "inventarios") {
         location.hash = '#/inventarios';
     }
 
@@ -41,12 +41,12 @@ const generarSidebar = (rol) => {
 
             a.insertAdjacentElement('afterbegin', i);
             li.appendChild(a);
-            
+
             sidebarList.appendChild(li);
             if (nombre === 'Inicio') {
                 const separacion = document.createElement('hr');
                 separacion.classList.add('separacion');
-                sidebarList.append(separacion);                
+                sidebarList.append(separacion);
             }
         });
     }
@@ -77,6 +77,9 @@ const generarSidebar = (rol) => {
         }
 
         const sidebarInfo = document.querySelector('.sidebar__menu .sidebar-info');
+
+        if (location.hash.includes('perfil-usuario') && sidebarInfo) return;
+
         sidebarInfo?.remove();
 
         const menuItems = document.createElement('div');
@@ -181,6 +184,8 @@ const actualizarHeader = (usuario, inventario) => {
         const partes = segmentos.slice(1); // Omitir 'inventarios'
 
         partes.forEach(parte => {
+
+            if (parte == 'mapa') partes.splice(partes.length - 1, 1); // Eliminar el último segmento si es 'mapa' (ambiente_id=1&nombre=Ambiente 1)
             const flecha = document.createElement('i');
             flecha.classList.add('ri-arrow-right-s-line', 'header__flecha');
             header.appendChild(flecha);
@@ -193,15 +198,42 @@ const actualizarHeader = (usuario, inventario) => {
         });
     }
     else if (segmentos[0] === 'super-admin') {
-        const partes = segmentos.slice(1); // Omitir 'inventarios'
+        const partes = segmentos.slice(1); // Omitir 'super-admin'
 
-        partes.forEach(parte => {
-            let titulo = parte;
-            if (parte == "tipos-elementos")
-                titulo = "Tipos de elementos";
+        // Si estamos en super-admin/ambientes
+        if (partes[0] === 'ambientes') {
+            const seccion = document.createElement('span');
+            seccion.classList.add('header__seccion');
+            seccion.textContent = 'Ambientes';
+            header.appendChild(seccion);
+            pageTitle.textContent = 'Ambientes';
 
-            pageTitle.textContent = titulo.charAt(0).toUpperCase() + titulo.slice(1);
-            header.textContent = titulo;
-        });
+            // Si hay más segmentos (por ejemplo: super-admin/ambientes/mapa)
+            if (partes[1]) {
+                const flecha = document.createElement('i');
+                flecha.classList.add('ri-arrow-right-s-line', 'header__flecha');
+                header.appendChild(flecha);
+
+                const subSeccion = document.createElement('span');
+                subSeccion.classList.add('header__seccion');
+
+                subSeccion.textContent = partes[1];
+                pageTitle.textContent = partes[1].charAt(0).toUpperCase() + partes[1].slice(1);                
+                
+                header.appendChild(subSeccion);
+            }
+        }
+        else {
+            // Resto de casos en super-admin
+            partes.forEach(parte => {
+                let titulo = parte;
+                if (parte == "tipos-elementos")
+                    titulo = "Tipos de elementos";
+
+                pageTitle.textContent = titulo.charAt(0).toUpperCase() + titulo.slice(1);
+                header.textContent = titulo;
+            });
+        }
     }
+
 };

@@ -5,11 +5,7 @@ let hayLayout = false;
 
 export const router = async () => {
     const hash = location.hash.slice(2);
-    const segmentos = hash.split("/").filter(Boolean);
-
-    const ruta = encontrarRuta(routes, segmentos);
-    const body = document.querySelector('body');
-
+    const segmentos = hash.split("/").filter(seg => seg);
     const usuario = JSON.parse(localStorage.getItem('usuario')); // Control de sesión
     const pageTitle = document.querySelector('title');
     pageTitle.textContent = "Stock Control";
@@ -19,11 +15,13 @@ export const router = async () => {
         location.hash = usuario ? (usuario.rol_id == 1 ? '#/super-admin' : '#/inventarios') : '#/inicio';
         return;
     }
+    
+    const [ruta, parametros] = encontrarRuta(routes, segmentos);
+    const body = document.querySelector('body');
 
     // Ruta no encontrada
     if (!ruta) {
         const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());
-        pageTitle.textContent = "No Encontrada"
         if (!usuario) {
             body.classList.remove('content--ui');
             body.classList.add('content--auth');
@@ -36,10 +34,11 @@ export const router = async () => {
             document.querySelector('.dashboard').appendChild(vista);
             controladorErrores()
         }
+        pageTitle.textContent = "No Encontrada"
         return;
     }
 
-    const meta = ruta.meta || {};    
+    const meta = ruta.meta || {};
 
     if (!meta.public && !usuario) {
         location.hash = "#/inicio";
@@ -47,7 +46,20 @@ export const router = async () => {
     }
 
     if (meta.rolesPermitidos && !meta.rolesPermitidos.includes(usuario.rol_id)) {
-        location.hash = "#/no-encontrada";
+        const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());
+        if (!usuario) {
+            body.classList.remove('content--ui');
+            body.classList.add('content--auth');
+            body.innerHTML = html;
+        } else {
+            const divError = document.createElement('div');
+            divError.innerHTML = html;
+            const vista = divError.querySelector('.error__container');
+            document.querySelector('.dashboard').innerHTML = '';
+            document.querySelector('.dashboard').appendChild(vista);
+            controladorErrores()
+        }
+        pageTitle.textContent = "No Encontrada"
         return;
     }
 
@@ -85,7 +97,7 @@ export const router = async () => {
     const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
     document.querySelector('.dashboard').innerHTML = vista;
 
-    ruta.controller();
+    parametros ? ruta.controller(parametros) : ruta.controller();
     hayLayout = true;
 };
 
@@ -93,10 +105,19 @@ const encontrarRuta = (routes, segmentos) => {
 
     let rutaActual = routes;
     let rutaEncontrada = false;
+    let parametros = {}; 
+
+
+    // Si el último segmento contiene parámetros, los extraemos
+    if (segmentos[segmentos.length - 1].includes("=")) {
+        parametros = extraerParametros(segmentos[segmentos.length - 1]);
+        segmentos.pop(); // Quitamos el segmento de parámetros para procesar la ruta
+    }
 
     // Recorremos los segmentos del hash para encontrar la ruta correspondiente
     segmentos.forEach((segmento, index) => {
-
+        console.log(segmento);
+        
         // Si el segmento existe dentro del objeto de rutas actual, avanzamos al siguiente nivel
         if (rutaActual[segmento]) {
             rutaActual = rutaActual[segmento];
@@ -121,8 +142,9 @@ const encontrarRuta = (routes, segmentos) => {
 
     });
 
+    console.log(rutaActual, parametros);
     // Retornamos la ruta encontrada junto a sus parámetros, o null si no se halló una ruta válida
-    return rutaEncontrada ? rutaActual : null;
+    return rutaEncontrada ? [rutaActual, parametros] : [null, null];
 
 }
 
@@ -135,3 +157,14 @@ const esGrupoRutas = (obj) => {
     }
     return true;
 }
+
+// Extrae un objeto clave-valor desde un string de parámetros tipo "id=1&nombre=mesa"
+const extraerParametros = (parametros) => {
+  const pares = parametros.split("&");
+  const params = {};
+  pares.forEach(par => {
+    const [clave, valor] = par.split("=");
+    params[clave] = valor.includes('%20') ? valor.replace(/%20/g, ' ') : valor;
+  });
+  return params;
+};

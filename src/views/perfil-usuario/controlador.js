@@ -1,17 +1,21 @@
 import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController";
-import { initModalEliminar } from "../../modals/modalDesactivarCuenta";
+import { initModalEliminar } from "../../modals/js/modalDesactivarCuenta";
 import { initComponentes } from "../../helpers/initComponentes";
 import * as api from "../../utils/api.js";
-import { llenarCamposFormulario } from "../../utils/llenarCamposFormulario.js";
+import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario.js";
 import { llenarSelect } from "../../helpers/select";
 import * as validaciones from "../../utils/Validaciones";
 import { error, success } from "../../utils/alertas.js";
 import { eliminarAccesos, initTemporizadorAcceso } from "../inventarios/detalles/initTemporizadorAcceso.js";
+import { setLecturaForm } from "../../helpers/setLecturaForm.js";
 
 export default async () => {
 
     const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
     initComponentes(usuarioInfo);
+    
+    const contentDesactivar = document.querySelector('.desactivar-cuenta');
+    if (usuarioInfo.rol_id != 1) contentDesactivar.classList.remove('hidden');
 
     const { data } = await api.get('usuarios/' + usuarioInfo.id);
     const usuario = data;
@@ -20,6 +24,7 @@ export default async () => {
     const campoRol = document.querySelector('.dashboard__title.rol');
 
     campoRol.textContent = "Usuario " + roles.data.nombre;
+
 
     await llenarSelect({
         endpoint: 'tipos-documento',
@@ -69,6 +74,7 @@ export default async () => {
 
     const formUsuario = document.getElementById('dashboard-perfil').querySelector('#form-usuario');
     llenarCamposFormulario(usuario, formUsuario);
+    setLecturaForm(formUsuario, false);
 
     const camposUser = [...formUsuario].filter((elemento) => elemento.hasAttribute("required"));
 

@@ -5,6 +5,8 @@ import * as api from "../../../utils/api";
 
 export default async () => {
 
+    localStorage.clear();
+
     await llenarSelect({
         endpoint: 'tipos-documento',
         selector: '#tipos-documentos',
@@ -86,6 +88,7 @@ export default async () => {
         if (!validaciones.validarFormulario(event)) return;        
         delete validaciones.datos.programas;        
 
+        console.log(validaciones.datos);
         try {
 
             const respuesta = await api.post('usuarios', validaciones.datos);

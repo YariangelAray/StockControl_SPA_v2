@@ -1,7 +1,7 @@
-import { configurarModalElemento } from "../../../modals/modalElemento";
+import { configurarModalElemento } from "../../../modals/js/modalElemento";
 import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
-import { llenarCamposFormulario } from "../../../utils/llenarCamposFormulario";
+import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
 export const formatearElemento = async (elemento) => {
   const tipo = await get('tipos-elementos/' + elemento.tipo_elemento_id);
@@ -15,7 +15,7 @@ export const formatearElemento = async (elemento) => {
     tipo.data.nombre,
     tipo.data.modelo,
     elemento.fecha_adquisicion,
-    ambiente.data.nombre,
+    ambiente.data ? ambiente.data.nombre : 'No asignado',
     estado.data.nombre,
     elemento.estado_activo
   ];

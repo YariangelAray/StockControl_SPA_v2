@@ -1,7 +1,7 @@
 
 import { initComponentes } from "../../../helpers/initComponentes";
 import { agregarFila, renderFilas } from "../../../helpers/renderFilas";
-import { configurarModalReporte, initModalReporte } from "../../../modals/modalReporte";
+import { configurarModalReporte, initModalReporte } from "../../../modals/js/modalReporte";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import * as api from '../../../utils/api';
 import { actualizarStorageReportes, cargarReportes, formatearReporte, reporteClick } from "./reporte";

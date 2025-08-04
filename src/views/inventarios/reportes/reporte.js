@@ -1,4 +1,4 @@
-import { configurarModalReporte } from "../../../modals/modalReporte";
+import { configurarModalReporte } from "../../../modals/js/modalReporte";
 import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 

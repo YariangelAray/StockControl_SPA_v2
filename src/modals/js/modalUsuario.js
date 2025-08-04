@@ -1,12 +1,12 @@
-import { cerrarModal, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "./modalsController";
-import { setLecturaForm } from "../helpers/setLecturaForm";
-import { llenarSelect } from "../helpers/select";
-import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
-import * as validaciones from "../utils/Validaciones";
-import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
-import { error, success } from '../utils/alertas'
-import * as api from "../utils/api";
-import { usuarioClick, actualizarStorageUsuarios, formatearUsuario } from "../views/super-admin/usuariosGestion/usuario";
+import { cerrarModal, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "../modalsController";
+import { setLecturaForm } from "../../helpers/setLecturaForm";
+import { llenarSelect } from "../../helpers/select";
+import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
+import * as validaciones from "../../utils/Validaciones";
+import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
+import { error, success } from '../../utils/alertas'
+import * as api from "../../utils/api";
+import { usuarioClick, actualizarStorageUsuarios, formatearUsuario } from "../../views/super-admin/usuariosGestion/usuario";
 
 export const configurarModalUsuario = async (modo, modal) => {
 

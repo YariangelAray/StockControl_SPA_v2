@@ -1,12 +1,12 @@
-import { error, info, success } from "../utils/alertas";
-import { llenarSelect } from "../helpers/select";
-import { setLecturaForm } from "../helpers/setLecturaForm";
-import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
-import * as validaciones from '../utils/Validaciones';
-import * as api from '../utils/api';
-import { cerrarModal, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal, modales } from "./modalsController";
-import { actualizarStorageAmbientes, ambienteClick, formatearAmbiente } from "../views/super-admin/ambientesGestion/ambiente";
-import { agregarFila, reemplazarFila } from "../helpers/renderFilas";
+import { error, info, success } from "../../utils/alertas";
+import { llenarSelect } from "../../helpers/select";
+import { setLecturaForm } from "../../helpers/setLecturaForm";
+import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
+import * as validaciones from '../../utils/Validaciones';
+import * as api from '../../utils/api';
+import { cerrarModal, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal, modales } from "../modalsController";
+import { actualizarStorageAmbientes, ambienteClick, formatearAmbiente } from "../../views/super-admin/ambientesGestion/ambiente";
+import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
 
 export const configurarModalAmbiente = (modo, modal) => {
 
@@ -14,9 +14,9 @@ export const configurarModalAmbiente = (modo, modal) => {
 
   const botones = {
     editar: modal.querySelector('.editar'),
-    crear: modal.querySelector('.crear'),    
-    guardar: modal.querySelector('.guardar'),        
-    ver_mapa: modal.querySelector('.ver-mapa'),        
+    crear: modal.querySelector('.crear'),
+    guardar: modal.querySelector('.guardar'),
+    ver_mapa: modal.querySelector('.ver-mapa'),
     aceptar: modal.querySelector('.aceptar'),
     cancelar: modal.querySelector('.cancelar')
   };
@@ -27,15 +27,15 @@ export const configurarModalAmbiente = (modo, modal) => {
   if (modo === 'crear') {
     form.reset();
     setLecturaForm(form, false); // todos habilitados
-    botones.crear.classList.remove('hidden');    
+    botones.crear.classList.remove('hidden');
     botones.cancelar.classList.remove('hidden');
     modal.querySelector('.modal__title').textContent = 'Crear Ambiente';
   }
 
   if (modo === 'editar') {
     setLecturaForm(form, true); // lectura
-    botones.editar.classList.remove('hidden');    
-    botones.ver_mapa.classList.remove('hidden');    
+    botones.editar.classList.remove('hidden');
+    botones.ver_mapa.classList.remove('hidden');
     botones.aceptar.classList.remove('hidden');
     modal.querySelector('.modal__title').textContent = 'Detalles del Ambiente';
   }
@@ -58,12 +58,22 @@ export const initModalAmbiente = async (modal) => {
 
   const form = modal.querySelector('form');
 
+  const mapaInput = form.querySelector('#mapa');
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const boton = e.submitter; // Este es el botón que disparó el submit
     const claseBoton = boton.classList;
 
     if (!validaciones.validarFormulario(e)) return;
+    if (mapaInput.value.trim() !== "") {
+      try {
+        JSON.parse(mapaInput.value.trim());
+      } catch (err) {
+        validaciones.agregarError(mapaInput, "El mapa no contiene un JSON válido.");
+        return; // Cancelar envío
+      }
+    }
     const confirmado = await mostrarConfirmacion();
     if (!confirmado) return;
 
@@ -79,22 +89,13 @@ export const initModalAmbiente = async (modal) => {
 
   const campos = [...form];
   campos.forEach(campo => {
-    if (campo.hasAttribute('required')){
-        campo.addEventListener("input", validaciones.validarCampo);
-        campo.addEventListener("blur", validaciones.validarCampo);
+    if (campo.hasAttribute('required')) {
+      campo.addEventListener("input", validaciones.validarCampo);
+      campo.addEventListener("blur", validaciones.validarCampo);
     }
 
-    if (campo.name == "placa" || campo.name == "serial")
+    if (campo.name == "nombre")
       campo.addEventListener("keydown", event => validaciones.validarLimite(event, 50));
-
-    if (campo.name == "fecha_adquisicion")
-      campo.addEventListener('input', (e) => validaciones.validarFecha(e.target))
-
-    if (campo.name == "placa")
-      campo.addEventListener("keydown", validaciones.validarNumero);
-
-    if (campo.name == "observaciones")
-      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 250));
   });
 
 
@@ -128,23 +129,28 @@ export const initModalAmbiente = async (modal) => {
 
     // Reportar
     if (e.target.closest('.ver-mapa')) {
-        ocultarModalTemporal(modal);
-        await info("Próximamente: Vista de Mapa", "Estamos trabajando para integrar el manejo de mapas interactivos. ¡Podrás visualizar la ubicación de tus ambientes muy pronto!")
+      const temp = JSON.parse(localStorage.getItem('ambiente_temp'));
+      if (temp.mapa) {
+        window.location.hash = `#/super-admin/ambientes/mapa/ambiente_id=${temp.id}&nombre=${temp.nombre}`;
+      }
+      else{
+        ocultarModalTemporal(modal);        
+        await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
         setTimeout(() => mostrarUltimoModal(), 100);
-       
+      } 
     }
   });
 };
 
 const crearAmbiente = async (datos) => {
-    console.log(datos);
-    
-  const respuesta = await api.post('ambientes',datos)
+  console.log(datos);
+
+  const respuesta = await api.post('ambientes', datos)
 
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalAmbiente);
     await error(respuesta);
-    setTimeout(async() => mostrarUltimoModal(), 100);    
+    setTimeout(async () => mostrarUltimoModal(), 100);
     return;
   }
   cerrarModal();
@@ -157,24 +163,24 @@ const crearAmbiente = async (datos) => {
   localStorage.setItem('ambientes', JSON.stringify({ ambientes }));
 
   const tbody = document.querySelector('#dashboard-ambientes .table__body');
-  agregarFila(tbody, datosFormateados, ambienteClick);  
+  agregarFila(tbody, datosFormateados, ambienteClick);
 }
 
-const actualizarAmbiente = async (datos) => {  
+const actualizarAmbiente = async (datos) => {
   const ambienteTemp = JSON.parse(localStorage.getItem('ambiente_temp'));
   const respuesta = await api.put('ambientes/' + ambienteTemp.id, {
-    ...datos,    
+    ...datos,
   });
 
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalAmbiente);
     await error(respuesta);
-    setTimeout(async() => mostrarUltimoModal(), 100);    
+    setTimeout(async () => mostrarUltimoModal(), 100);
     return;
   }
   configurarModalAmbiente('editar', modales.modalAmbiente);
 
-  localStorage.setItem('ambiente_temp', JSON.stringify(respuesta.data));  
+  localStorage.setItem('ambiente_temp', JSON.stringify(respuesta.data));
 
   const datosFormateados = await formatearAmbiente(respuesta.data);
 

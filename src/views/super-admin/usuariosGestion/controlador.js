@@ -1,6 +1,6 @@
 import { initComponentes } from "../../../helpers/initComponentes";
 import { renderFilas } from "../../../helpers/renderFilas";
-import { configurarModalUsuario, initModalUsuario } from "../../../modals/modalUsuario";
+import { configurarModalUsuario, initModalUsuario } from "../../../modals/js/modalUsuario";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import { actualizarStorageUsuarios, usuarioClick, cargarUsuarios } from "./usuario";
 

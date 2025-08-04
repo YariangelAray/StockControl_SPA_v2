@@ -1,7 +1,7 @@
-import * as api from "../utils/api";
-import { llenarCamposFormulario } from "../utils/llenarCamposFormulario";
+import * as api from "../../utils/api";
+import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
 import { configurarModalElemento, initModalElemento } from "./modalElemento";
-import { abrirModal, cerrarModal, initModales, modales, ocultarModalTemporal } from "./modalsController"
+import { abrirModal, cerrarModal, initModales, modales, ocultarModalTemporal } from "../modalsController"
 
 export const initModalReporte = async (modal) => {
 

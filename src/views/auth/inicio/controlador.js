@@ -4,6 +4,7 @@ import * as api from "../../../utils/api";
 
 export default async () => {
 
+    localStorage.clear();
     const formulario = document.querySelector(".form--signin");
 
     const campos = [...formulario].filter((elemento) => elemento.hasAttribute("required"));
@@ -20,13 +21,12 @@ export default async () => {
     formulario.addEventListener("submit", async event => {
         event.preventDefault();
 
+        
         if (!validaciones.validarFormulario(event)) return;
+        console.log(validaciones.datos)
 
         try {
-            const respuesta = await api.post('usuarios/login', {                
-                documento: validaciones.datos.documento,
-                contrasena: validaciones.datos.contrasena
-            });
+            const respuesta = await api.post('usuarios/login', validaciones.datos);
 
             if (respuesta.success) {
                 await success("Inicio de sesión éxitoso");

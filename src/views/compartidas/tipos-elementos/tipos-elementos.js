@@ -1,16 +1,17 @@
 import { abrirModal, modales } from "../../../modals/modalsController"
-import { configurarModalTipo } from "../../../modals/modalTipoElemento"
+import { configurarModalTipo } from "../../../modals/js/modalTipoElemento"
 import { get } from "../../../utils/api"
-import { llenarCamposFormulario } from "../../../utils/llenarCamposFormulario"
+import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario"
 
 export const formatearTipo = (tipo) => {
     return [
         tipo.id,
         tipo.id,
+        tipo.consecutivo,
         tipo.nombre,
         tipo.marca,
         tipo.modelo,
-        tipo.detalles,
+        tipo.atributos,
         tipo.cantidadElementos,
     ]
 }

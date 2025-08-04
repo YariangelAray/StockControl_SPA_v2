@@ -1,7 +1,7 @@
-import { configurarModalAmbiente } from "../../../modals/modalAmbiente";
+import { configurarModalAmbiente } from "../../../modals/js/modalAmbiente";
 import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
-import { llenarCamposFormulario } from "../../../utils/llenarCamposFormulario";
+import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
 export const formatearAmbiente = async (ambiente) => {
     const centro = await get('centros/' + ambiente.centro_id);    
@@ -23,9 +23,7 @@ export const ambienteClick = async (id) => {
 
   llenarCamposFormulario(data, form);
   modales.modalAmbiente.dataset.id = data.id;
-  configurarModalAmbiente('editar', modales.modalAmbiente);
-  
-  if ( data.mapa ) modales.modalAmbiente.querySelector('.ver-mapa').classList.remove('hidden');
+  configurarModalAmbiente('editar', modales.modalAmbiente);  
   
   abrirModal(modales.modalAmbiente);
 }

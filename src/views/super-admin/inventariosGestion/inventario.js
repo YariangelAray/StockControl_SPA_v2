@@ -1,7 +1,7 @@
-import { configurarModalInventario } from "../../../modals/modalInventario";
+import { configurarModalInventario } from "../../../modals/js/modalInventario";
 import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
-import { llenarCamposFormulario } from "../../../utils/llenarCamposFormulario";
+import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
 export const formatearInventario = async (inventario) => {
     const usuario = await get('usuarios/' + inventario.usuario_admin_id);

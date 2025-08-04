@@ -3,7 +3,7 @@ import registro from '../views/auth/registro/controlador';
 
 import inventarios from '../views/inventarios/controlador';
 import ambientes from '../views/inventarios/ambientes/controlador';
-import { initMapaView } from '../views/inventarios/ambientes/mapaController.js';
+import mapa from '../views/compartidas/mapas/controlador.js';
 import detalles from '../views/inventarios/detalles/controlador';
 import elementos from '../views/inventarios/elementos/controlador';
 import reportes from '../views/inventarios/reportes/controlador';
@@ -40,8 +40,9 @@ export const routes = {
         meta: { rolesPermitidos: [2, 3] }
       },
       mapa: {
-        path: 'inventarios/ambientes/mapa.html',
-        controller: initMapaView
+        path: 'compartidas/mapas/index.html',
+        controller: mapa,
+        meta: { rolesPermitidos: [2, 3] }
       }
     },
     detalles: {
@@ -84,9 +85,16 @@ export const routes = {
       meta: { rolesPermitidos: [1] }
     },
     ambientes: {
-      path: 'super-admin/ambientesGestion/index.html',
-      controller: gestionAmbientes,
-      meta: { rolesPermitidos: [1] }
+      "/": {
+        path: 'super-admin/ambientesGestion/index.html',
+        controller: gestionAmbientes,
+        meta: { rolesPermitidos: [1] }
+      },
+      mapa: {
+        path: 'compartidas/mapas/index.html',
+        controller: mapa,
+        meta: { rolesPermitidos: [1] }
+      }
     },
     inventarios: {
       path: 'super-admin/inventariosGestion/index.html',

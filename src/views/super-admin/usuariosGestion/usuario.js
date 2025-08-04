@@ -1,7 +1,7 @@
-import { configurarModalUsuario } from "../../../modals/modalUsuario";
+import { configurarModalUsuario } from "../../../modals/js/modalUsuario";
 import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
-import { llenarCamposFormulario } from "../../../utils/llenarCamposFormulario";
+import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
 export const formatearUsuario = async (usuario) => {
     const rol = await get('roles/' + usuario.rol_id);

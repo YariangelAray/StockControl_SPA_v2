@@ -10,19 +10,19 @@
       <div class="form__control form__control--stacked">
         <label for="placa">Placa:</label>
         <input type="text" class="input input--small" placeholder="Placa" name="placa" id="placa" 
-          required>
+          required data-rol-permitido="2">
       </div>
 
       <div class="form__control form__control--stacked">
         <label for="serial">Serial:</label>
         <input type="text" class="input input--small" placeholder="Serial (opcional)" name="serial"
-           id="serial">
+           id="serial" data-rol-permitido="2">
       </div>
 
       <div class="form__control form__control--stacked form__control--span">
         <label for="tipo_elemento">Tipo de Elemento:</label>
         <div style="display: flex; width: 100%; align-items: center; gap: 20px;">
-          <select name="tipo_elemento_id" class="input input--small input--select" required id="tipos-elementos">                        
+          <select name="tipo_elemento_id" class="input input--small input--select" required id="tipos-elementos" data-rol-permitido="2">                        
           </select>
           <button class="button" id="agregarTipo">Agregar tipo</button>
         </div>
@@ -31,12 +31,12 @@
       <div class="form__control form__control--stacked">
         <label for="fecha_adquisicion">Fecha de Adquisición:</label>
         <input type="date" class="input input--small" name="fecha_adquisicion" id="fecha_adquisicion" 
-          required>
+          required data-rol-permitido="2">
       </div>
 
       <div class="form__control form__control--stacked">
         <label for="valor">Valor Monetario:</label>
-        <input type="text" class="input input--small" placeholder="$" name="valor_monetario" id="valor" required>
+        <input type="text" class="input input--small" placeholder="$" name="valor_monetario" id="valor" required data-rol-permitido="2">
       </div>
 
       <div class="form__control form__control--stacked">
@@ -48,8 +48,8 @@
 
       <div class="form__control form__control--stacked">
         <label for="ambiente">Ubicación:</label>
-        <select name="ambiente_id" class="input input--small input--select" id="ambientes" required>
-          <option value="" disabled selected>Seleccione el ambiente</option>
+        <select name="ambiente_id" class="input input--small input--select" id="ambientes">
+          <option value="" selected>Seleccione el ambiente</option>
         </select>
       </div>
 

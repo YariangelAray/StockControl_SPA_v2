@@ -1,7 +1,7 @@
 import { initComponentes } from "../../../helpers/initComponentes";
 import { renderFilas } from "../../../helpers/renderFilas";
 import { llenarSelect } from "../../../helpers/select";
-import { configurarModalElemento, initModalElemento } from "../../../modals/modalElemento";
+import { configurarModalElemento, initModalElemento } from "../../../modals/js/modalElemento";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTemporizadorAcceso";
 import { actualizarStorageElementos, cargarElementos, elementoClick } from "./elemento";

@@ -79,15 +79,15 @@
   width: 100%;
 }
 
-.dashboard--table-section .dashboard__header .dashboard__actions {
-  padding: 0;
-  justify-content: space-between;
-}
 
 
 /* ========================================================
 ───────── DASHBOARD CON ESTILOS PERSONALIZADOS ────────────
 ======================================================== */
+.dashboard--table-section .dashboard__header .dashboard__actions, .dashboard--mapa .dashboard__header .dashboard__actions {
+  padding: 0;
+  justify-content: space-between;
+}
 
 .dashboard--table-section .dashboard__header .dashboard__actions .dashboard__filters,
 .dashboard--table-section .dashboard__header .dashboard__actions .dashboard__buttons {

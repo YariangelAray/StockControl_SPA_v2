@@ -1,0 +1,23 @@
+.mapa-container{
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    position: relative;
+    background-color: var(--blanco);
+    border-radius: 12px;
+    border: 1px solid var(--verde-claro);
+}
+
+.tooltip {
+    display: none;
+    align-items: center;
+    position: absolute;
+    background-color: var(--gris-panel);
+    color: var(--gris-letras);
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 2px #00000047, 0 0 10px -2px #00000025;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 1000;    
+}

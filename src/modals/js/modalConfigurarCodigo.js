@@ -1,8 +1,8 @@
-import { post } from "../utils/api";
-import * as validaciones from "../utils/Validaciones";
-import { abrirModal, cerrarModal, cerrarTodo, initModales, modales, ocultarModalTemporal } from "./modalsController";
-import { error } from '../utils/alertas';
-import { initTemporizadorAcceso } from "../views/inventarios/detalles/initTemporizadorAcceso";
+import { post } from "../../utils/api";
+import * as validaciones from "../../utils/Validaciones";
+import { abrirModal, cerrarModal, cerrarTodo, initModales, modales, ocultarModalTemporal } from "../modalsController";
+import { error } from '../../utils/alertas';
+import { initTemporizadorAcceso } from "../../views/inventarios/detalles/initTemporizadorAcceso";
 
 export const initModalConfigurar = async (modal) => {
 

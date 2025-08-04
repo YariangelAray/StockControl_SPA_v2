@@ -87,7 +87,10 @@ const cargarAmbientes = async (ambientes) => {
             { valor: 'cantidad_elementos', clave: 'Cantidad de elementos:' }
         ],
         click: async (ambiente) => {
-            await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
+            if (ambiente.mapa) {
+                window.location.hash = `#/inventarios/ambientes/mapa/ambiente_id=${ambiente.id}&nombre=${ambiente.nombre}`;
+            }
+            else await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
         }
     });
 };

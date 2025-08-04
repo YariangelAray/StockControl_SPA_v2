@@ -1,6 +1,6 @@
 import { initComponentes } from "../../../helpers/initComponentes";
 import { renderFilas } from "../../../helpers/renderFilas";
-import { configurarModalAmbiente, initModalAmbiente } from "../../../modals/modalAmbiente";
+import { configurarModalAmbiente, initModalAmbiente } from "../../../modals/js/modalAmbiente";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import { actualizarStorageAmbientes, ambienteClick, cargarAmbientes } from "./ambiente";
 
