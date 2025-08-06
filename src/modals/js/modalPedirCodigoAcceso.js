@@ -7,7 +7,7 @@ export const initModalPedirCodigo = (modal) => {
 
     const form = modal.querySelector('form');
 
-    const input = modal.querySelector('.input');
+    const input = modal.querySelector('.input');    
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -21,37 +21,24 @@ export const initModalPedirCodigo = (modal) => {
         validaciones.quitarError(input.parentElement);
 
         const usuario = JSON.parse(localStorage.getItem('usuario'));
-        const consultarAcceso = await api.get('codigos-acceso/validar/' + codigo);
+        const respuesta =  await api.post('accesos-temporales/acceder/' + codigo, {
+            usuario_id: usuario.id,            
+        });   
 
-        if (!consultarAcceso.success) {
+        if (!respuesta.success) {
             cerrarModal();
             setTimeout(async () => {
-                error(consultarAcceso);
+                error(respuesta);
             }, 100)
+            form.reset();
             return;
         }
 
-        console.log(consultarAcceso);
-        
-        const registroAcceso = await api.post('accesos-temporales/acceder', {
-            usuario_id: usuario.id,
-            inventario_id: consultarAcceso.data.inventario_id
-        });
-        console.log(registroAcceso); // no imprime esto porque el error está en el post
-
-        if (!registroAcceso.success) {
-            cerrarModal();
-            setTimeout(async () => {
-                error(registroAcceso);
-            }, 100)
-            return;
-        }
-
-        localStorage.setItem('inventario', JSON.stringify({ id: consultarAcceso.data.inventario_id, nombre: consultarAcceso.data.inventario_nombre }));
+        localStorage.setItem('inventario', JSON.stringify({ id: respuesta.data.inventario_id, nombre: respuesta.data.nombre_inventario }));
         
         localStorage.setItem('codigoAccesoInfo', JSON.stringify({
-            codigo: consultarAcceso.data.codigo,
-            expiracion: consultarAcceso.data.fecha_expiracion
+            codigo: respuesta.data.codigo,
+            expiracion: respuesta.data.fecha_expiracion
         }));
 
         cerrarModal();

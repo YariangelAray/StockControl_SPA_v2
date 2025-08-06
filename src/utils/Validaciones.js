@@ -108,8 +108,7 @@ export const validarCorreo = (campo) => {
 
 // Validación especial para selects que no deben permitir "otro"
 const validarSelectEspecial = (campo) => {
-    if (campo.tagName === "SELECT" && campo.name === "tipo_elemento_id" && campo.value === "otro") {
-        console.log("hola")
+    if (campo.tagName === "SELECT" && campo.name === "tipo_elemento_id" && campo.value === "otro") {        
         agregarError(campo, "Debe agregar un tipo válido.");
         return false;
     }

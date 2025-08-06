@@ -30,13 +30,12 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
         if (restante <= 0) {
             clearInterval(intervalo); // Detiene el intervalo
             tiempoAcceso.textContent = "Expirado"; // Muestra el texto "Expirado"
-            await eliminarAccesos(inventarioId, limpiar); // Llama función para eliminar acceso            
-
+            
             if (usuario.rol_id === 3) {
                 const hash = location.hash;
-
+                
                 const dentroDeInventario = hash == '#/inventario' || hash == '#/perfil-usuario';
-
+                
                 if (!dentroDeInventario) {
                     await info("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
                     setTimeout(() => {
@@ -44,11 +43,12 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
                     }, 500);
                 }
             }
+            await eliminarAccesos(inventarioId, limpiar); // Llama función para eliminar acceso            
             return;
         }
 
         if (usuario.rol_id === 2) {            
-            const respuesta = await get('accesos-temporales/inventario/' + inventarioId); 
+            const respuesta = await get('accesos-temporales/inventario/' + inventarioId);  // aqui
             usuariosAcces.textContent = respuesta.success && respuesta.data ? respuesta.data.length : 0;
         }
 
@@ -77,14 +77,15 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
  * @param {function} limpiar - Función que limpia el frontend (UI y localStorage)
  */
 export const eliminarAccesos = async (inventarioId, limpiar) => {
-    // Realiza la petición DELETE al backend para eliminar accesos del inventario
+    
+    // Llama la función limpiar para actualizar la interfaz
     limpiar();
-    const respuesta = await del('accesos-temporales/inventario/' + inventarioId);
-
+    // Realiza la petición DELETE al backend para eliminar accesos del inventario
+    const respuesta = await del('codigos-acceso/inventario/' + inventarioId);
+    
     // Si hubo un error, lo muestra en consola
     if (!respuesta.success) {
         console.warn("No se pudo eliminar accesos temporales");
     }
-
-    // Llama la función limpiar para actualizar la interfaz
+    
 }

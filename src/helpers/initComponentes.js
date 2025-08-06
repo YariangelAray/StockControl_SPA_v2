@@ -13,11 +13,11 @@ export const initComponentes = (usuario) => {
     }
 
     if ((usuario.rol_id !== 1 && !document.querySelector('.menu__items')) || (usuario.rol_id === 1 && !document.querySelector('.sidebar__item'))) {
-        generarSidebar(usuario.rol_id);
+        generarSidebar(usuario.rol_id, inventario);
     }
 }
 
-const generarSidebar = (rol) => {
+const generarSidebar = (rol, inventario) => {
     const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
     if (rol === 1) {
         const opciones = [
@@ -78,9 +78,13 @@ const generarSidebar = (rol) => {
 
         const sidebarInfo = document.querySelector('.sidebar__menu .sidebar-info');
 
-        if (location.hash.includes('perfil-usuario') && sidebarInfo) return;
-
+        if (!inventario) {
+            requestAnimationFrame(() => marcarItem());
+            sidebarInfo?.remove();
+            return;
+        }
         sidebarInfo?.remove();
+
 
         const menuItems = document.createElement('div');
         menuItems.classList.add('menu__items');
@@ -218,8 +222,8 @@ const actualizarHeader = (usuario, inventario) => {
                 subSeccion.classList.add('header__seccion');
 
                 subSeccion.textContent = partes[1];
-                pageTitle.textContent = partes[1].charAt(0).toUpperCase() + partes[1].slice(1);                
-                
+                pageTitle.textContent = partes[1].charAt(0).toUpperCase() + partes[1].slice(1);
+
                 header.appendChild(subSeccion);
             }
         }

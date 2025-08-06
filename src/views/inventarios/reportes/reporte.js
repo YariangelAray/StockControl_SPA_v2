@@ -27,7 +27,8 @@ export const reporteClick = async (id) => {
         placa: elemento.data.placa,
         usuario: usuario.data.nombres.split(" ")[0] + " " + usuario.data.apellidos.split(" ")[0], 
         asunto: data.asunto, 
-        mensaje: data.mensaje
+        mensaje: data.mensaje,
+        fotos: data.fotos
     }, modales.modalReporte, elemento.data.id);
     abrirModal(modales.modalReporte);
 }

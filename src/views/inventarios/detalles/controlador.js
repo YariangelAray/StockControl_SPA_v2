@@ -15,7 +15,7 @@ export default async () => {
     if (!respuesta.success) {
         console.warn(respuesta)
         return;
-    }    
+    }
     const inventario = respuesta.data;
 
     // Asignar datos al resumen general
@@ -40,8 +40,8 @@ export default async () => {
     const codigoAccesoText = document.querySelector('.codigo-acceso');
 
     // Verificar si hay código activo en localStorage
-    const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));    
-    
+    const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
+
     const limpiar = () => {
         accessInfoRow.classList.add('hidden');
         usuariosAcces.classList.add('hidden');
@@ -49,7 +49,7 @@ export default async () => {
     }
 
     if (codigoInfo) {
-        const expiracion = new Date(codigoInfo.expiracion);        
+        const expiracion = new Date(codigoInfo.expiracion);
 
         const ahora = new Date();
 
@@ -61,18 +61,37 @@ export default async () => {
 
             await initTemporizadorAcceso(expiracion, inventarioInfo.id, limpiar);
         } else {
-            await eliminarAccesos(inventarioInfo.id, limpiar);            
+            await eliminarAccesos(inventarioInfo.id, limpiar);
         }
-    } else {
-        accessInfoRow.classList.add('hidden');
-        usuariosAcces.classList.add('hidden');
-    }
+    } else {        
+        const respuestaCodigo = await get('codigos-acceso/inventario/' + inventarioInfo.id);
 
+        if (respuestaCodigo.success && respuestaCodigo.data) {            
+            const codigo = respuestaCodigo.data;
+            const expiracion = new Date(codigo.fecha_expiracion);
+            
+            localStorage.setItem('codigoAccesoInfo', JSON.stringify({
+                codigo: codigo.codigo,
+                expiracion
+            }));
+
+            // Restaurar UI
+            accessInfoRow.classList.remove('hidden');
+            usuariosAcces.classList.remove('hidden');
+            codigoAccesoText.textContent = codigo.codigo;
+
+            await initTemporizadorAcceso(expiracion, inventarioInfo.id, limpiar);
+        } else {
+            // No hay código vigente en BD
+            accessInfoRow.classList.add('hidden');
+            usuariosAcces.classList.add('hidden');
+        }
+    }
 
     document.getElementById('dashboard-detalles').addEventListener('click', async (e) => {
         if (e.target.closest('.generar-codigo')) {
             if (codigoInfo) {
-                const expiracion = new Date(codigoInfo.expiracion);                                         
+                const expiracion = new Date(codigoInfo.expiracion);
                 await info("Código activo", `Ya existe un código de acceso generado. Por favor espera a que finalice antes de generar uno nuevo. Hora de expiración: ${expiracion.toLocaleTimeString('es-CO')}`);
                 return;
             }

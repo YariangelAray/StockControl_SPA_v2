@@ -17,12 +17,15 @@ export const formatearTipo = (tipo) => {
 }
 
 export const tipoClick = async (id) => {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
     const { data } = await get('tipos-elementos/' + id)
     localStorage.setItem('tipo_temp', JSON.stringify(data));
     const form = modales.modalTipoElemento.querySelector('form');
 
     configurarModalTipo('editar', modales.modalTipoElemento);
     llenarCamposFormulario(data, form);
+    const btn = modales.modalTipoElemento.querySelector('.eliminar');
+    if (usuario.rol_id == 1) btn.classList.remove('hidden');
     abrirModal(modales.modalTipoElemento);
 }
 

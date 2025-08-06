@@ -4,38 +4,39 @@ import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
 export const formatearAmbiente = async (ambiente) => {
-    const centro = await get('centros/' + ambiente.centro_id);    
+    const centro = await get('centros/' + ambiente.centro_id);
 
-    return[
+    return [
         ambiente.id,
         ambiente.id,
         ambiente.nombre,
-        centro.data.nombre,        
-        ambiente.mapa ? "Disponible": "No disponible"
+        centro.data.nombre,
+        ambiente.mapa ? "Disponible" : "No disponible"
     ];
 }
 
-export const ambienteClick = async (id) => {  
-  const { data } = await get('ambientes/' + id)
-  localStorage.setItem('ambiente_temp', JSON.stringify(data));
+export const ambienteClick = async (id) => {
+    const { data } = await get('ambientes/' + id)
+    localStorage.setItem('ambiente_temp', JSON.stringify(data));
 
-  const form = modales.modalAmbiente.querySelector('form');
+    const form = modales.modalAmbiente.querySelector('form');
 
-  llenarCamposFormulario(data, form);
-  modales.modalAmbiente.dataset.id = data.id;
-  configurarModalAmbiente('editar', modales.modalAmbiente);  
-  
-  abrirModal(modales.modalAmbiente);
+    llenarCamposFormulario(data, form);
+    modales.modalAmbiente.dataset.id = data.id;
+    configurarModalAmbiente('editar', modales.modalAmbiente);
+    const btn = modales.modalAmbiente.querySelector('.ver-mapa');
+    if (!data.mapa) btn.classList.add('hidden');
+    abrirModal(modales.modalAmbiente);
 }
 
 export const cargarAmbientes = async () => {
     const respuesta = await get('ambientes')
     const ambientes = [];
 
-    if (respuesta.success) {        
-        for (const ambiente of respuesta.data) {     
-            ambientes.push(await formatearAmbiente(ambiente))  
-        };        
+    if (respuesta.success) {
+        for (const ambiente of respuesta.data) {
+            ambientes.push(await formatearAmbiente(ambiente))
+        };
     }
 
     return ambientes;
@@ -43,5 +44,5 @@ export const cargarAmbientes = async () => {
 
 export const actualizarStorageAmbientes = async () => {
     const nuevosAmbientes = await cargarAmbientes();
-    localStorage.setItem('ambientes', JSON.stringify({ambientes: nuevosAmbientes}));
+    localStorage.setItem('ambientes', JSON.stringify({ ambientes: nuevosAmbientes }));
 }

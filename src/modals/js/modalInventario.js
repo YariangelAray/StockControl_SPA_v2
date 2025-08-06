@@ -165,8 +165,7 @@ const crearInventario = async (datos) => {
 }
 
 const actualizarInventario = async (datos) => {
-    const inventarioTemp = JSON.parse(localStorage.getItem('inventario_temp'));
-    console.log(inventarioTemp);
+    const inventarioTemp = JSON.parse(localStorage.getItem('inventario_temp'));    
     const respuesta = await api.put('inventarios/' + inventarioTemp.id, datos);
     
 
@@ -178,8 +177,7 @@ const actualizarInventario = async (datos) => {
     }
     configurarModalInventario('editar', modales.modalInventario);
 
-    localStorage.setItem('inventario_temp', JSON.stringify(respuesta.data));
-    console.log(respuesta.data);
+    localStorage.setItem('inventario_temp', JSON.stringify(respuesta.data));    
 
     const datosFormateados = await formatearInventario(respuesta.data);
 

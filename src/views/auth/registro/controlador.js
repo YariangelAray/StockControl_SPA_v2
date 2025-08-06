@@ -24,9 +24,7 @@ export default async () => {
         selector: '#programas-formacion',
         optionMapper: programa => ({ id: programa.id, text: programa.nombre })
     });
-    const programas = await api.get('programas-formacion');
-    if (!programas.success) console.log(programas.message || programas.errors);
-    console.log(programas);
+    const programas = await api.get('programas-formacion');    
     
     const selectProgramas = document.querySelector('#programas-formacion');
     const selectFichas = document.querySelector('#fichas');
@@ -39,8 +37,7 @@ export default async () => {
         if (e.target.selectedIndex == 0) selectFichas.setAttribute('disabled', 'disabled');
         else {
             selectFichas.removeAttribute('disabled')
-            const programa = programas.data.find(p => p.id == id);
-            console.log(programa);
+            const programa = programas.data.find(p => p.id == id);            
             
             programa.fichas.forEach((ficha) => {
                 const option = document.createElement('option');
@@ -87,8 +84,7 @@ export default async () => {
 
         if (!validaciones.validarFormulario(event)) return;        
         delete validaciones.datos.programas;        
-
-        console.log(validaciones.datos);
+        
         try {
 
             const respuesta = await api.post('usuarios', validaciones.datos);

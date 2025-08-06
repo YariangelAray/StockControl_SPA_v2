@@ -115,8 +115,7 @@ const encontrarRuta = (routes, segmentos) => {
     }
 
     // Recorremos los segmentos del hash para encontrar la ruta correspondiente
-    segmentos.forEach((segmento, index) => {
-        console.log(segmento);
+    segmentos.forEach((segmento, index) => {        
         
         // Si el segmento existe dentro del objeto de rutas actual, avanzamos al siguiente nivel
         if (rutaActual[segmento]) {
@@ -141,8 +140,7 @@ const encontrarRuta = (routes, segmentos) => {
         }
 
     });
-
-    console.log(rutaActual, parametros);
+    
     // Retornamos la ruta encontrada junto a sus parámetros, o null si no se halló una ruta válida
     return rutaEncontrada ? [rutaActual, parametros] : [null, null];
 
@@ -162,9 +160,12 @@ const esGrupoRutas = (obj) => {
 const extraerParametros = (parametros) => {
   const pares = parametros.split("&");
   const params = {};
+  
   pares.forEach(par => {
     const [clave, valor] = par.split("=");
-    params[clave] = valor.includes('%20') ? valor.replace(/%20/g, ' ') : valor;
+    // decodeURIComponent decodifica cualquier caracter especial
+    params[clave] = valor ? decodeURIComponent(valor) : "";
   });
+
   return params;
 };

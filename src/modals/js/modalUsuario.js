@@ -50,11 +50,11 @@ export const configurarModalUsuario = async (modo, modal) => {
         modal.querySelector('.modal__title').textContent = 'Editar Usuario';
     }
 
-    
+
     const programas = await api.get('programas-formacion');
     const selectProgramas = document.querySelector('#programas-formacion');
-    const selectFichas = document.querySelector('#fichas');    
-    
+    const selectFichas = document.querySelector('#fichas');
+
     selectProgramas.addEventListener('change', (e) => {
         const id = e.target.value;
 
@@ -65,7 +65,7 @@ export const configurarModalUsuario = async (modo, modal) => {
             agregarFichas(selectFichas, programa)
         }
     })
-    
+
     const usuario = JSON.parse(localStorage.getItem('usuario_temp'));
     if (!usuario) return;
     const programaUsuario = programas.data.find(programa =>
@@ -74,7 +74,7 @@ export const configurarModalUsuario = async (modo, modal) => {
     selectProgramas.value = programaUsuario.id;
 
     if (programaUsuario) {
-        agregarFichas(selectFichas, programaUsuario)        
+        agregarFichas(selectFichas, programaUsuario)
         selectFichas.value = usuario.ficha_id;
     }
 };
@@ -124,6 +124,9 @@ export const initModalUsuario = async (modal) => {
             // Acción para editar
             await actualizarUsuario(validaciones.datos);
             configurarModalUsuario('editar', modal);
+            const temp = JSON.parse(localStorage.getItem('usuario_temp'));
+            const btn = temp.activo ? modal.querySelector('.desactivar') : modal.querySelector('.reactivar');
+            btn.classList.remove('hidden');
         }
     });
 
@@ -158,8 +161,8 @@ export const initModalUsuario = async (modal) => {
             const confirmado = await mostrarConfirmacion("¿Está seguro de reactivar al usuario?");
             if (!confirmado) return;
             const { id } = JSON.parse(localStorage.getItem('usuario_temp'));
-            const respuesta = await api.put('usuarios/' + id + '/estado/' + true + "/permiso/" + usuario.rol_id);            
-            
+            const respuesta = await api.put('usuarios/' + id + '/estado/' + true + "/permiso/" + usuario.rol_id);
+
             if (respuesta.success) {
                 const fila = document.querySelector(`#dashboard-usuarios .table__row[data-id="${id}"]`);
                 if (fila) {
@@ -168,6 +171,9 @@ export const initModalUsuario = async (modal) => {
                     ultimaCelda.textContent = 'Activo';
                 }
                 cerrarModal();
+                setTimeout(async () => {
+                    await success('Usuario reactivado con éxito');
+                }, 100);
             }
             else {
                 ocultarModalTemporal(modal);
@@ -193,6 +199,9 @@ export const initModalUsuario = async (modal) => {
                     ultimaCelda.textContent = 'Inactivo';
                 }
                 cerrarModal();
+                setTimeout(async () => {
+                    await success('Usuario desactivado con éxito');
+                }, 100);
             }
             else {
                 ocultarModalTemporal(modal);
@@ -215,6 +224,8 @@ export const initModalUsuario = async (modal) => {
                 const temp = JSON.parse(localStorage.getItem('usuario_temp'));
                 llenarCamposFormulario(temp, form);
                 configurarModalUsuario('editar', modal);
+                const btn = temp.activo ? modal.querySelector('.desactivar') : modal.querySelector('.reactivar');
+                btn.classList.remove('hidden');
 
             } else cerrarModal();
 
@@ -261,9 +272,7 @@ const actualizarUsuario = async (datos) => {
     const usuarioTemp = JSON.parse(localStorage.getItem('usuario_temp'));
     delete datos.programas
     datos['contrasena'] = 'restringido';
-    console.log(datos);
     const respuesta = await api.put('usuarios/' + usuarioTemp.id, datos);
-    console.log(respuesta.data);
 
     if (!respuesta.success) {
         ocultarModalTemporal(modales.modalUsuario);

@@ -6,7 +6,7 @@ import * as validaciones from '../../utils/Validaciones';
 import * as api from '../../utils/api';
 import { cerrarModal, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal, modales } from "../modalsController";
 import { actualizarStorageAmbientes, ambienteClick, formatearAmbiente } from "../../views/super-admin/ambientesGestion/ambiente";
-import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
+import { agregarFila, reemplazarFila, removerFilar } from "../../helpers/renderFilas";
 
 export const configurarModalAmbiente = (modo, modal) => {
 
@@ -16,6 +16,7 @@ export const configurarModalAmbiente = (modo, modal) => {
     editar: modal.querySelector('.editar'),
     crear: modal.querySelector('.crear'),
     guardar: modal.querySelector('.guardar'),
+    eliminar: modal.querySelector('.eliminar'),
     ver_mapa: modal.querySelector('.ver-mapa'),
     aceptar: modal.querySelector('.aceptar'),
     cancelar: modal.querySelector('.cancelar')
@@ -36,6 +37,7 @@ export const configurarModalAmbiente = (modo, modal) => {
     setLecturaForm(form, true); // lectura
     botones.editar.classList.remove('hidden');
     botones.ver_mapa.classList.remove('hidden');
+    botones.eliminar.classList.remove('hidden');
     botones.aceptar.classList.remove('hidden');
     modal.querySelector('.modal__title').textContent = 'Detalles del Ambiente';
   }
@@ -87,6 +89,9 @@ export const initModalAmbiente = async (modal) => {
       // Acción para editar
       await actualizarAmbiente(validaciones.datos);
       configurarModalAmbiente('editar', modal);
+      const temp = JSON.parse(localStorage.getItem('ambiente_temp'));
+      const btn = modal.querySelector('.ver-mapa');
+      if (!temp.mapa) btn.classList.add('hidden');
     }
   });
 
@@ -116,6 +121,8 @@ export const initModalAmbiente = async (modal) => {
         const temp = JSON.parse(localStorage.getItem('ambiente_temp'));
         llenarCamposFormulario(temp, form); // Restaurar valores        
         configurarModalAmbiente('editar', modal);
+        const btn = modal.querySelector('.ver-mapa');
+        if (!temp.mapa) btn.classList.add('hidden');
 
       } else cerrarModal();
 
@@ -130,24 +137,42 @@ export const initModalAmbiente = async (modal) => {
       localStorage.removeItem('ambiente_temp');
     }
 
-    // Reportar
+
     if (e.target.closest('.ver-mapa')) {
       const temp = JSON.parse(localStorage.getItem('ambiente_temp'));
       if (temp.mapa) {
         window.location.hash = `#/super-admin/ambientes/mapa/ambiente_id=${temp.id}&nombre=${temp.nombre}`;
       }
-      else{
-        ocultarModalTemporal(modal);        
+      else {
+        ocultarModalTemporal(modal);
         await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
         setTimeout(() => mostrarUltimoModal(), 100);
-      } 
+      }
+    }
+
+    if (e.target.closest('.eliminar')) {
+      const confirmado = await mostrarConfirmacion("¿Está seguro de eliminar el ambiente?");
+      if (!confirmado) return;
+      const { id } = JSON.parse(localStorage.getItem('ambiente_temp'));
+      const respuesta = await api.del('ambientes/' + id);
+
+      if (respuesta.success) {
+        cerrarModal();
+        await success('Ambiente eliminado con éxito');
+        removerFilar(document.querySelector('#dashboard-ambientes .table__body'), id);
+      }
+      else {
+        ocultarModalTemporal(modal);
+        await error(respuesta);
+        setTimeout(async () => mostrarUltimoModal(), 100);
+      }
+      await actualizarStorageAmbientes();
+      return;
     }
   });
 };
 
 const crearAmbiente = async (datos) => {
-  console.log(datos);
-
   const respuesta = await api.post('ambientes', datos)
 
   if (!respuesta.success) {

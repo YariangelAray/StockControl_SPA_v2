@@ -43,7 +43,7 @@ export const initModalConfigurar = async (modal) => {
                 error(respuesta);
             }, 100);
             return;
-        }
+        }        
 
         const codigoGenerado = respuesta.data.codigo;
         const fechaExpiracion = new Date(respuesta.data.fecha_expiracion);
@@ -59,6 +59,7 @@ export const initModalConfigurar = async (modal) => {
             expiracion: fechaExpiracion
         }));
 
+        form.reset(); // Limpiamos el formulario
         // Cerramos el modal actual y abrimos el de resultado
         ocultarModalTemporal(modal);
         abrirModal(modalCodigoAcceso);

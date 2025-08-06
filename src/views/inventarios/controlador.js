@@ -48,7 +48,7 @@ export default async () => {
 
 const cargarInventarios = async (usuario) => {
     const respuesta = usuario.rol_id == 2 ? await api.get('inventarios/usuario/' + usuario.id)
-        : await api.get('accesos-temporales/' + usuario.id);
+        : await api.get('accesos-temporales/usuario/' + usuario.id);
 
     const contenedor = document.querySelector('.content-cards');
     if (respuesta.success) {

@@ -9,6 +9,7 @@ import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
 import { error, success } from '../../utils/alertas'
 import * as api from "../../utils/api";
 import { actualizarStorageElementos, elementoClick, formatearElemento } from '../../views/inventarios/elementos/elemento';
+import { actualizarStorageTipos } from "../../views/compartidas/tipos-elementos/tipos-elementos";
 
 export const configurarModalElemento = (modo, modal) => {
 
@@ -130,6 +131,9 @@ export const initModalElemento = async (modal) => {
       // Acción para editar
       await actualizarElemento(validaciones.datos, inventario);
       configurarModalElemento('editar', modal);
+      const temp = JSON.parse(localStorage.getItem('elemento_temp'));
+      const btn = temp.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
+      if (usuario.rol_id == 2) btn.classList.remove('hidden');
     }
   });
 
@@ -173,6 +177,9 @@ export const initModalElemento = async (modal) => {
         const fila = document.querySelector(`#dashboard-elementos .table__row[data-id="${id}"]`);
         if (fila) fila.classList.add('table__row--red');
         cerrarModal();
+        setTimeout(async () => {
+          await success('Elemento dado de baja con éxito');
+        }, 100);
       }
       else {
         ocultarModalTemporal(modal);
@@ -193,6 +200,9 @@ export const initModalElemento = async (modal) => {
         const fila = document.querySelector(`#dashboard-elementos .table__row[data-id="${id}"]`);
         if (fila) fila.classList.remove('table__row--red');
         cerrarModal();
+        setTimeout(async () => {
+          await success('Elemento reactivado con éxito');
+        }, 100);
       }
       else {
         ocultarModalTemporal(modal);
@@ -215,7 +225,8 @@ export const initModalElemento = async (modal) => {
         const temp = JSON.parse(localStorage.getItem('elemento_temp'));
         llenarCamposFormulario(temp, form); // Restaurar valores        
         configurarModalElemento('editar', modal);
-
+        const btn = temp.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
+        if (usuario.rol_id == 2) btn.classList.remove('hidden');
       } else cerrarModal();
 
       form.querySelectorAll('.form__control').forEach(input => {
@@ -286,6 +297,7 @@ const crearElemento = async (datos, inventario) => {
 
   const tbody = document.querySelector('#dashboard-elementos .table__body');
   agregarFila(tbody, datosFormateados, elementoClick);
+  await actualizarStorageTipos(inventario);
 }
 const actualizarElemento = async (datos, inventario) => {
   const elementoTemp = JSON.parse(localStorage.getItem('elemento_temp'));
@@ -303,7 +315,6 @@ const actualizarElemento = async (datos, inventario) => {
   configurarModalElemento('editar', modales.modalElemento);
 
   localStorage.setItem('elemento_temp', JSON.stringify(respuesta.data));
-  console.log(respuesta.data);
 
   const datosFormateados = await formatearElemento(respuesta.data);
 

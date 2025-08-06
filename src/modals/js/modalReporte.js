@@ -4,7 +4,7 @@ import { configurarModalElemento, initModalElemento } from "./modalElemento";
 import { abrirModal, cerrarModal, initModales, modales, ocultarModalTemporal } from "../modalsController"
 
 export const initModalReporte = async (modal) => {
-
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
     await initModales(['modalElemento']);
     const { modalElemento } = modales;
     await initModalElemento(modalElemento);
@@ -23,6 +23,8 @@ export const initModalReporte = async (modal) => {
 
             llenarCamposFormulario(data, form);
             configurarModalElemento('editar', modalElemento);
+            const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
+            if (usuario.rol_id == 2) btn.classList.remove('hidden');
             ocultarModalTemporal(modal);
             abrirModal(modalElemento);
         }
@@ -65,13 +67,10 @@ export const configurarModalReporte = async (reporte, modal, id_elemento) => {
 
     // 2. Mostrar imágenes
     const contenedor = modal.querySelector('.reporte__imagenes');
-    contenedor.innerHTML = ""; // Limpiar contenedor
+    contenedor.innerHTML = ""; // Limpiar contenedor        
 
-    const respuesta = await api.get('fotos/reporte/' + reporte.id);    
-    
-
-    if (respuesta.data && respuesta.data.length > 0) {
-        respuesta.data.forEach(({ url }) => {
+    if (reporte.fotos && reporte.fotos.length > 0) {
+        reporte.fotos.forEach(({ url }) => {
             const img = document.createElement('img');
             img.src = 'http://localhost:8080/StockControl_API/' + url;
             contenedor.appendChild(img);

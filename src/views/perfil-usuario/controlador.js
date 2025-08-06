@@ -44,8 +44,7 @@ export default async () => {
         optionMapper: programa => ({ id: programa.id, text: programa.nombre })
     });
 
-    const programas = await api.get('programas-formacion');
-    if (!programas.success) console.log(programas.message || programas.errors);
+    const programas = await api.get('programas-formacion');    
 
     const selectProgramas = document.querySelector('#programas-formacion');
     const selectFichas = document.querySelector('#fichas');

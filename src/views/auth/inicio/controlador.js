@@ -22,8 +22,7 @@ export default async () => {
         event.preventDefault();
 
         
-        if (!validaciones.validarFormulario(event)) return;
-        console.log(validaciones.datos)
+        if (!validaciones.validarFormulario(event)) return;        
 
         try {
             const respuesta = await api.post('usuarios/login', validaciones.datos);

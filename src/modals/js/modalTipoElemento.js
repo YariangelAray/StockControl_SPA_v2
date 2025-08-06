@@ -4,7 +4,7 @@ import * as validaciones from "../../utils/Validaciones";
 import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
 import * as api from "../../utils/api";
 import { actualizarStorageTipos, formatearTipo, tipoClick } from "../../views/compartidas/tipos-elementos/tipos-elementos";
-import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
+import { agregarFila, reemplazarFila, removerFilar } from "../../helpers/renderFilas";
 import { error, success } from "../../utils/alertas";
 
 
@@ -13,6 +13,7 @@ export const configurarModalTipo = (modo, modal) => {
   const botones = {
     editar: modal.querySelector('.editar'),
     guardar: modal.querySelector('.guardar'),
+    eliminar: modal.querySelector('.eliminar'),
     crear: modal.querySelector('.crear'),
     aceptar: modal.querySelector('.aceptar'),
     cancelar: modal.querySelector('.cancelar')
@@ -43,6 +44,7 @@ export const configurarModalTipo = (modo, modal) => {
 };
 
 export const initModalTipo = (modal) => {
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
   const form = modal.querySelector('form');
 
   const campos = [...form];
@@ -52,7 +54,7 @@ export const initModalTipo = (modal) => {
       campo.addEventListener("blur", validaciones.validarCampo);
     }
 
-    if (campo.name == "consecutivo"){
+    if (campo.name == "consecutivo") {
       campo.addEventListener("keydown", validaciones.validarNumero);
       campo.addEventListener("keydown", event => validaciones.validarLimite(event, 10));
     }
@@ -69,7 +71,7 @@ export const initModalTipo = (modal) => {
     const boton = e.submitter; // Este es el botón que disparó el submit
     const claseBoton = boton.classList;
     if (!validaciones.validarFormulario(e)) return;
-    validaciones.datos.consecutivo = parseInt(validaciones.datos.consecutivo);    
+    validaciones.datos.consecutivo = parseInt(validaciones.datos.consecutivo);
     const confirmado = await mostrarConfirmacion();
     if (!confirmado) return;
     if (claseBoton.contains('crear')) {
@@ -79,6 +81,8 @@ export const initModalTipo = (modal) => {
       // Acción para editar
       await actualizarTipo(validaciones.datos);
       configurarModalTipo('editar', modal);
+      const btn = modal.querySelector('.eliminar');
+      if (usuario.rol_id == 1) btn.classList.remove('hidden');
     }
   });
 
@@ -95,6 +99,9 @@ export const initModalTipo = (modal) => {
         const temp = JSON.parse(localStorage.getItem('tipo_temp'));
         llenarCamposFormulario(temp, form); // Restaurar valores
         configurarModalTipo('editar', modal); // volver a modo lectura
+
+        const btn = modal.querySelector('.eliminar');
+        if (usuario.rol_id == 1) btn.classList.remove('hidden');
       } else {
         cerrarModal(); // cerrar en modo crear                
       }
@@ -109,6 +116,25 @@ export const initModalTipo = (modal) => {
       localStorage.removeItem('tipo_temp');
     }
 
+    if (e.target.closest('.eliminar')) {
+      const confirmado = await mostrarConfirmacion("¿Está seguro de eliminar el tipo de elemento?");
+      if (!confirmado) return;
+      const { id } = JSON.parse(localStorage.getItem('tipo_temp'));
+      const respuesta = await api.del('tipos-elementos/' + id);
+
+      if (respuesta.success) {
+        cerrarModal();
+        await success('Tipo de elemento eliminado con éxito');
+        removerFilar(document.querySelector('#dashboard-tipos-elementos .table__body'), id);
+      }
+      else {
+        ocultarModalTemporal(modal);
+        await error(respuesta);
+        setTimeout(async () => mostrarUltimoModal(), 100);
+      }
+      await actualizarStorageTipos();
+      return;
+    }
   })
 }
 
@@ -118,7 +144,7 @@ const crearTipo = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalTipoElemento);
     await error(respuesta);
-    setTimeout(async() => mostrarUltimoModal(), 100);    
+    setTimeout(async () => mostrarUltimoModal(), 100);
     return;
   }
   cerrarModal();
@@ -144,7 +170,7 @@ const actualizarTipo = async (datos) => {
   if (!respuesta.success) {
     ocultarModalTemporal(modales.modalTipoElemento);
     await error(respuesta);
-    setTimeout(async() => mostrarUltimoModal(), 100);    
+    setTimeout(async () => mostrarUltimoModal(), 100);
     return;
   }
   configurarModalTipo('editar', modales.modalTipoElemento);
