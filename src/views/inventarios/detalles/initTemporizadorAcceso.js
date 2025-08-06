@@ -1,3 +1,4 @@
+import { initComponentes } from "../../../helpers/initComponentes";
 import { info } from "../../../utils/alertas";
 import { del, get } from "../../../utils/api";
 
@@ -10,63 +11,69 @@ import { del, get } from "../../../utils/api";
  * @param {function} limpiar - Función que limpia el estado del frontend
  */
 export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limpiar) => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    // Selecciona el elemento donde se mostrará el tiempo restante
-    let tiempoAcceso = usuario.rol_id == 2 ? document.querySelector('.dashboard .tiempo-acceso') : document.querySelector('.sidebar .tiempo-acceso');
-    const usuariosAcces = document.querySelector('.dashboard .access-info + .dashboard__row .usuarios-gestionando');
+  if (window.temporizadorAccesoIniciado) return;
+  window.temporizadorAccesoIniciado = true;
 
-    // Variable para guardar el intervalo que actualiza el tiempo
-    let intervalo;
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  // Selecciona el elemento donde se mostrará el tiempo restante
+  let tiempoAcceso = usuario.rol_id == 2 ? document.querySelector('.dashboard .tiempo-acceso') : document.querySelector('.sidebar .tiempo-acceso');
+  const usuariosAcces = document.querySelector('.dashboard .access-info + .dashboard__row .usuarios-gestionando');
 
-    // Función que calcula y actualiza el tiempo restante cada segundo
-    const actualizarTiempo = async () => {
-        // Obtiene la fecha y hora actual
-        const ahora = new Date();
+  // Variable para guardar el intervalo que actualiza el tiempo
+  let intervalo;
 
-        // Calcula el tiempo restante en milisegundos
-        const restante = new Date(fechaExpiracion) - ahora;
+  // Función que calcula y actualiza el tiempo restante cada segundo
+  const actualizarTiempo = async () => {
+    // Obtiene la fecha y hora actual
+    const ahora = new Date();
 
-        // Si ya expiró el tiempo
-        if (restante <= 0) {
-            clearInterval(intervalo); // Detiene el intervalo
-            tiempoAcceso.textContent = "Expirado"; // Muestra el texto "Expirado"
-            
-            if (usuario.rol_id === 3) {
-                const hash = location.hash;
-                
-                const dentroDeInventario = hash == '#/inventario' || hash == '#/perfil-usuario';
-                
-                if (!dentroDeInventario) {
-                    await info("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
-                    setTimeout(() => {
-                        window.location.hash = '#/inventarios';
-                    }, 500);
-                }
-            }
-            await eliminarAccesos(inventarioId, limpiar); // Llama función para eliminar acceso            
-            return;
-        }
+    // Calcula el tiempo restante en milisegundos
+    const restante = new Date(fechaExpiracion) - ahora;
 
-        if (usuario.rol_id === 2) {            
-            const respuesta = await get('accesos-temporales/inventario/' + inventarioId);  // aqui
-            usuariosAcces.textContent = respuesta.success && respuesta.data ? respuesta.data.length : 0;
-        }
+    // Si ya expiró el tiempo
+    if (restante <= 0) {
+      clearInterval(intervalo); // Detiene el intervalo
+      window.temporizadorAccesoIniciado = false;
+      tiempoAcceso.textContent = "Expirado"; // Muestra el texto "Expirado"
 
-        // Calcula las horas, minutos y segundos restantes
-        const horas = Math.floor((restante / (1000 * 60 * 60)) % 24);
-        const minutos = Math.floor((restante / (1000 * 60)) % 60);
-        const segundos = Math.floor((restante / 1000) % 60);
+      if (usuario.rol_id === 3) {
+        const hash = location.hash;
 
-        // Actualiza el contenido del elemento con el tiempo restante, en formato hh:mm:ss
-        tiempoAcceso.textContent =
-            `${horas.toString().padStart(2, '0')}h ${minutos.toString().padStart(2, '0')}m ${segundos.toString().padStart(2, '0')}s`;
+        const dentroDeInventario = hash == '#/inventario' || hash == '#/perfil-usuario';
+
+        if (!dentroDeInventario) {
+          await info("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
+          setTimeout(() => {
+            window.location.hash = '#/inventarios';
+          }, 500);
+          await eliminarAccesos(inventarioId, limpiar); // Llama función para eliminar acceso
+          return;
+        }        
+      }
+      await eliminarAccesos(inventarioId, limpiar); // Llama función para eliminar acceso
+      return;
     }
 
-    // Ejecuta una primera vez la actualización para no esperar un segundo
-    await actualizarTiempo();
+    if (usuario.rol_id === 2) {
+      const respuesta = await get('accesos-temporales/inventario/' + inventarioId);  // aqui
+      usuariosAcces.textContent = respuesta.success && respuesta.data ? respuesta.data.length : 0;
+    }
 
-    // Inicia el intervalo que actualiza el tiempo cada 1000 milisegundos (1 segundo)
-    intervalo = setInterval(actualizarTiempo, 1000);
+    // Calcula las horas, minutos y segundos restantes
+    const horas = Math.floor((restante / (1000 * 60 * 60)) % 24);
+    const minutos = Math.floor((restante / (1000 * 60)) % 60);
+    const segundos = Math.floor((restante / 1000) % 60);
+
+    // Actualiza el contenido del elemento con el tiempo restante, en formato hh:mm:ss
+    tiempoAcceso.textContent =
+      `${horas.toString().padStart(2, '0')}h ${minutos.toString().padStart(2, '0')}m ${segundos.toString().padStart(2, '0')}s`;
+  }
+
+  // Ejecuta una primera vez la actualización para no esperar un segundo
+  await actualizarTiempo();
+
+  // Inicia el intervalo que actualiza el tiempo cada 1000 milisegundos (1 segundo)
+  intervalo = setInterval(actualizarTiempo, 1000);
 }
 
 /**
@@ -77,15 +84,15 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
  * @param {function} limpiar - Función que limpia el frontend (UI y localStorage)
  */
 export const eliminarAccesos = async (inventarioId, limpiar) => {
-    
-    // Llama la función limpiar para actualizar la interfaz
-    limpiar();
-    // Realiza la petición DELETE al backend para eliminar accesos del inventario
-    const respuesta = await del('codigos-acceso/inventario/' + inventarioId);
-    
-    // Si hubo un error, lo muestra en consola
-    if (!respuesta.success) {
-        console.warn("No se pudo eliminar accesos temporales");
-    }
-    
+
+  // Llama la función limpiar para actualizar la interfaz
+  limpiar();
+  // Realiza la petición DELETE al backend para eliminar accesos del inventario
+  const respuesta = await del('codigos-acceso/inventario/' + inventarioId);
+
+  // Si hubo un error, lo muestra en consola
+  if (!respuesta.success) {
+    console.warn("No se pudo eliminar accesos temporales");
+  }
+
 }

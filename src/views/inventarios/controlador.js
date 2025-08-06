@@ -83,7 +83,10 @@ const cargarInventarios = async (usuario) => {
                         // Aún está vigente, restaurar UI
                         document.querySelector('.sidebar .access-info').classList.remove('hidden');
                         await initTemporizadorAcceso(codigoInfo.expiracion, inventario.id, () => {
-                            document.querySelector('.sidebar .access-info').classList.add('hidden');
+                          document.querySelector('.sidebar .access-info').classList.add('hidden');
+                          localStorage.removeItem('codigoAccesoInfo');
+                          localStorage.removeItem('inventario');
+                          initComponentes(usuario);
                         });
                     }
                 }

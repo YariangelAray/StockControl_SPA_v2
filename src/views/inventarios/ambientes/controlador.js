@@ -30,7 +30,8 @@ export default async () => {
         if (codigoInfo) {
             const limpiar = () => {
                 document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-                localStorage.removeItem('codigoAccesoInfo');
+              localStorage.removeItem('inventario');
+              localStorage.removeItem('codigoAccesoInfo');
             }
             const expiracion = new Date(codigoInfo.expiracion);
             const ahora = new Date();
