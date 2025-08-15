@@ -5,6 +5,7 @@ import * as api from "../../../utils/api";
 export default async () => {
 
     localStorage.clear();
+    window.temporizadorAccesoIniciado = false;
     const formulario = document.querySelector(".form--signin");
 
     const campos = [...formulario].filter((elemento) => elemento.hasAttribute("required"));
