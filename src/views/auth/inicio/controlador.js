@@ -26,7 +26,7 @@ export default async () => {
         if (!validaciones.validarFormulario(event)) return;        
 
         try {
-            const respuesta = await api.post('usuarios/login', validaciones.datos);
+            const respuesta = await api.post('auth/login', validaciones.datos);
 
             if (respuesta.success) {
                 await success("Inicio de sesión éxitoso");
