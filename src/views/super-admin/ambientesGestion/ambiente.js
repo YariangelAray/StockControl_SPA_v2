@@ -3,6 +3,12 @@ import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
+import crear from './crud/crear';
+import detalles from './crud/detalles';
+import editar from './crud/editar';
+
+export default { crear, detalles, editar };
+
 export const formatearAmbiente = async (ambiente) => {
     const centro = await get('centros/' + ambiente.centro_id);
 

@@ -3,50 +3,50 @@ import { configurarModalTipo } from "../../../modals/js/modalTipoElemento"
 import { get } from "../../../utils/api"
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario"
 import getCookie from "../../../utils/getCookie"
-import { hasPermisos } from "../../../utils/hasPermisos"
+import hasPermisos from "../../../utils/hasPermisos"
 
 export const formatearTipo = (tipo) => {
-    return [
-        tipo.id,
-        tipo.id,
-        tipo.consecutivo,
-        tipo.nombre,
-        tipo.marca,
-        tipo.modelo,
-        tipo.atributos,
-        tipo.cantidadElementos,
-    ]
+  return [
+    tipo.id,
+    tipo.id,
+    tipo.consecutivo,
+    tipo.nombre,
+    tipo.marca,
+    tipo.modelo,
+    tipo.atributos,
+    tipo.cantidadElementos,
+  ]
 }
 
-export const tipoClick = async (id) => {    
-    const permisos = getCookie('permisos', []);
-    const { data } = await get('tipos-elementos/' + id)
-    localStorage.setItem('tipo_temp', JSON.stringify(data));
-    const form = modales.modalTipoElemento.querySelector('form');
+export const tipoClick = async (id) => {
+  const permisos = getCookie('permisos', []);
+  const { data } = await get('tipos-elementos/' + id)
+  localStorage.setItem('tipo_temp', JSON.stringify(data));
+  const form = modales.modalTipoElemento.querySelector('form');
 
-    configurarModalTipo('editar', modales.modalTipoElemento);
-    llenarCamposFormulario(data, form);
-    const btn = modales.modalTipoElemento.querySelector('.eliminar');
-    if (hasPermisos('tipo-elemento.delete', permisos)) btn.classList.remove('hidden');
-    abrirModal(modales.modalTipoElemento);
+  configurarModalTipo('editar', modales.modalTipoElemento);
+  llenarCamposFormulario(data, form);
+  const btn = modales.modalTipoElemento.querySelector('.eliminar');
+  if (hasPermisos('tipo-elemento.delete', permisos)) btn.classList.remove('hidden');
+  abrirModal(modales.modalTipoElemento);
 }
 
 export const cargarTipos = async () => {
-    const permisos = getCookie('permisos', []);
-    const inventario = JSON.parse(localStorage.getItem('inventario'));
+  const permisos = getCookie('permisos', []);
+  const inventario = JSON.parse(localStorage.getItem('inventario'));
 
-    const respuesta = hasPermisos('tipo-elemento.view', permisos) ? await get('tipos-elementos/') : await get('tipos-elementos/inventario/me/' + inventario.id);
-    const tipos = [];
+  const respuesta = hasPermisos('tipo-elemento.view', permisos) ? await get('tipos-elementos/') : await get('tipos-elementos/inventario/me/' + inventario.id);
+  const tipos = [];
 
-    if (respuesta.success) {
-        for (const tipo of respuesta.data) {
-            tipos.push(formatearTipo(tipo));
-        }
+  if (respuesta.success) {
+    for (const tipo of respuesta.data) {
+      tipos.push(formatearTipo(tipo));
     }
-    return tipos;
+  }
+  return tipos;
 }
 
 export const actualizarStorageTipos = async () => {
-    const nuevosTipos = await cargarTipos();
-    localStorage.setItem('tipos', JSON.stringify({ tipos: nuevosTipos }));
+  const nuevosTipos = await cargarTipos();
+  localStorage.setItem('tipos', JSON.stringify({ tipos: nuevosTipos }));
 }

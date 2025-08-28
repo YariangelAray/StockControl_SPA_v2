@@ -18,7 +18,7 @@
   padding: 30px 20px;
   min-width: 700px;
   max-width: min-content;
-  height: 400px;  
+  height: auto;  
 }
 
 .error__container{
@@ -29,16 +29,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.error__info{
-  display: flex;
-  align-items: center;
-  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .error__codigo {
-  font-size: 10rem;
+  font-size: 14rem;
   color: var(--gris-letras-oscuras);
 }
 .error__mensaje {

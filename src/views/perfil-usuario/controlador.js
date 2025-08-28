@@ -9,194 +9,194 @@ import { error, success } from "../../utils/alertas.js";
 import { eliminarAccesos, initTemporizadorAcceso } from "../inventarios/detalles/initTemporizadorAcceso.js";
 import { setLecturaForm } from "../../helpers/setLecturaForm.js";
 import getCookie from "../../utils/getCookie.js";
-import { hasPermisos } from "../../utils/hasPermisos.js";
+import hasPermisos from "../../utils/hasPermisos.js";
 
 export default async () => {
 
-    const permisos = getCookie('permisos', []);
-    const rolesName = getCookie('roles', []).map(r => r.nombre);
-    const contentDesactivar = document.querySelector('.desactivar-cuenta');
-    if (hasPermisos("usuario.disable-own", permisos)) contentDesactivar.classList.remove('hidden');
+  const permisos = getCookie('permisos', []);
+  const rolesName = getCookie('roles', []).map(r => r.nombre);
+  const contentDesactivar = document.querySelector('.desactivar-cuenta');
+  if (hasPermisos("usuario.disable-own", permisos)) contentDesactivar.classList.remove('hidden');
 
-    const { data } = await api.get('usuarios/me');
-    const usuario = data;
-    
-    const campoRol = document.querySelector('.dashboard__title.rol');
-    campoRol.textContent = "Usuario " + rolesName.join(" - ");
+  const { data } = await api.get('usuarios/me');
+  const usuario = data;
+
+  const campoRol = document.querySelector('.dashboard__title.rol');
+  campoRol.textContent = "Usuario " + rolesName.join(" - ");
 
 
-    await llenarSelect({
-        endpoint: 'tipos-documentos',
-        selector: '#tipos-documentos',
-        optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre })
-    });
+  await llenarSelect({
+    endpoint: 'tipos-documentos',
+    selector: '#tipos-documentos',
+    optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre })
+  });
 
-    await llenarSelect({
-        endpoint: 'generos',
-        selector: '#generos',
-        optionMapper: genero => ({ id: genero.id, text: genero.nombre })
-    });
+  await llenarSelect({
+    endpoint: 'generos',
+    selector: '#generos',
+    optionMapper: genero => ({ id: genero.id, text: genero.nombre })
+  });
 
-    await llenarSelect({
-        endpoint: 'programas-formacion',
-        selector: '#programas-formacion',
-        optionMapper: programa => ({ id: programa.id, text: programa.nombre })
-    });
+  await llenarSelect({
+    endpoint: 'programas-formacion',
+    selector: '#programas-formacion',
+    optionMapper: programa => ({ id: programa.id, text: programa.nombre })
+  });
 
-    const programas = await api.get('programas-formacion');    
+  const programas = await api.get('programas-formacion');
 
-    const selectProgramas = document.querySelector('#programas-formacion');
-    const selectFichas = document.querySelector('#fichas');
+  const selectProgramas = document.querySelector('#programas-formacion');
+  const selectFichas = document.querySelector('#fichas');
 
-    const programaUsuario = programas.data.find(programa =>
-        programa.fichas.some(ficha => ficha.id == usuario.ficha_id)
-    );
+  const programaUsuario = programas.data.find(programa =>
+    programa.fichas.some(ficha => ficha.id == usuario.ficha_id)
+  );
 
-    selectProgramas.value = programaUsuario.id;
-    if (programaUsuario) {
-        agregarFichas(selectFichas, programaUsuario)
-        // Selecciona la ficha correspondiente al usuario
-        selectFichas.value = usuario.ficha_id;
+  selectProgramas.value = programaUsuario.id;
+  if (programaUsuario) {
+    agregarFichas(selectFichas, programaUsuario)
+    // Selecciona la ficha correspondiente al usuario
+    selectFichas.value = usuario.ficha_id;
+  }
+
+  selectProgramas.addEventListener('change', (e) => {
+    const id = e.target.value;
+
+    if (e.target.selectedIndex == 0) selectFichas.setAttribute('disabled', 'disabled');
+    else {
+      selectFichas.removeAttribute('disabled')
+      const programa = programas.data.find(p => p.id == id);
+      agregarFichas(selectFichas, programa)
     }
+  })
 
-    selectProgramas.addEventListener('change', (e) => {
-        const id = e.target.value;
+  const formUsuario = document.getElementById('dashboard-perfil').querySelector('#form-usuario');
+  llenarCamposFormulario(usuario, formUsuario);
+  setLecturaForm(formUsuario, false);
 
-        if (e.target.selectedIndex == 0) selectFichas.setAttribute('disabled', 'disabled');
-        else {
-            selectFichas.removeAttribute('disabled')
-            const programa = programas.data.find(p => p.id == id);
-            agregarFichas(selectFichas, programa)
-        }
-    })
+  const camposUser = [...formUsuario].filter((elemento) => elemento.hasAttribute("required"));
 
-    const formUsuario = document.getElementById('dashboard-perfil').querySelector('#form-usuario');
-    llenarCamposFormulario(usuario, formUsuario);
-    setLecturaForm(formUsuario, false);
+  camposUser.forEach((campo) => {
+    campo.addEventListener("blur", validaciones.validarCampo);
 
-    const camposUser = [...formUsuario].filter((elemento) => elemento.hasAttribute("required"));
+    if (campo.name == "documento" || campo.name == "telefono") {
+      campo.addEventListener("keydown", validaciones.validarNumero);
+      campo.addEventListener("input", validaciones.validarCampo);
+      const limite = campo.name == "documento" ? 11 : 15;
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, limite));
+    } else {
 
-    camposUser.forEach((campo) => {
-        campo.addEventListener("blur", validaciones.validarCampo);
+      if (campo.name == "nombres" || campo.name == "apellidos") {
+        campo.addEventListener("keydown", event => validaciones.validarLimite(event, 100));
+        campo.addEventListener("keydown", validaciones.validarTexto);
+      }
 
-        if (campo.name == "documento" || campo.name == "telefono") {
-            campo.addEventListener("keydown", validaciones.validarNumero);
-            campo.addEventListener("input", validaciones.validarCampo);
-            const limite = campo.name == "documento" ? 11 : 15;
-            campo.addEventListener("keydown", event => validaciones.validarLimite(event, limite));
-        } else {
-
-            if (campo.name == "nombres" || campo.name == "apellidos") {
-                campo.addEventListener("keydown", event => validaciones.validarLimite(event, 100));
-                campo.addEventListener("keydown", validaciones.validarTexto);
-            }
-
-            if (campo.name == "correo") {
-                campo.addEventListener("keydown", event => validaciones.validarLimite(event, 100));
-                campo.addEventListener("keydown", () => validaciones.validarCorreo(campo));
-            }
-        }
-    });
-
-    formUsuario.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!validaciones.validarFormulario(e)) return;
-        delete validaciones.datos.programas
-        validaciones.datos['contrasena'] = 'restringido';        
-
-        try {
-
-            const respuesta = await api.put(`usuarios/${usuario.id}`, validaciones.datos);
-
-            if (respuesta.success) {
-                await success("Usuario actualizado exitosamente");
-                localStorage.setItem('usuario', JSON.stringify({ id: respuesta.data.id, nombres: respuesta.data.nombres, apellidos: respuesta.data.apellidos, rol_id: respuesta.data.rol_id }));
-
-                const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
-                initComponentes(usuarioInfo);
-
-            } else {
-                error(respuesta);
-            }
-
-        } catch (e) {
-            console.error("Error inesperado:", e);
-            error({});
-        }
-    })
-
-    const formContrasena = document.getElementById('dashboard-perfil').querySelector('#form-contrasena');
-    const camposContrasena = [...formContrasena].filter((elemento) => elemento.hasAttribute("required"));
-    camposContrasena.forEach((campo) => {
-        campo.addEventListener("blur", validaciones.validarCampo);
-        campo.addEventListener("keydown", validaciones.validarCampo);
-        if (campo.name == "contrasena_nueva") {
-            campo.addEventListener("keydown", event => validaciones.validarLimite(event, 30));
-            campo.addEventListener("input", () => validaciones.validarContrasena(campo));
-        }
-    })
-
-    formContrasena.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!validaciones.validarFormulario(e)) return;
-        try {
-            const respuesta = await api.put(`usuarios/${usuario.id}/contrasena`, validaciones.datos);
-
-            if (respuesta.success) {
-                await success("Contraseña actualizada exitosamente");
-                formContrasena.reset()
-            } else {
-                error(respuesta);
-            }
-
-        } catch (e) {
-            console.error("Error inesperado:", e);
-            error({});
-        }
-    })
-
-
-    limpiarModales();
-    await initModales(['modalDesactivarCuenta']);
-
-    const { modalDesactivarCuenta } = modales;
-    initModalEliminar(modalDesactivarCuenta, usuario);
-
-    if (usuario.rol_id === 3) {
-        const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-        const inventario = JSON.parse(localStorage.getItem('inventario') || '{}');
-        if (codigoInfo && inventario.id) {
-            const limpiar = () => {
-              document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-              localStorage.removeItem('codigoAccesoInfo');
-              localStorage.removeItem('inventario');
-              initComponentes(usuario);
-            }
-            const expiracion = new Date(codigoInfo.expiracion);
-            const ahora = new Date();
-
-            if (expiracion > ahora) {
-                document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
-                await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
-            } else {
-                await eliminarAccesos(inventario.id, limpiar);                
-            }                    
-        }
+      if (campo.name == "correo") {
+        campo.addEventListener("keydown", event => validaciones.validarLimite(event, 100));
+        campo.addEventListener("keydown", () => validaciones.validarCorreo(campo));
+      }
     }
+  });
 
-    document.getElementById('dashboard-perfil').addEventListener('click', (e) => {
-        if (e.target.closest('#desactivarCuenta')) {
-            abrirModal(modalDesactivarCuenta);
-        }
-    })
+  formUsuario.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validaciones.validarFormulario(e)) return;
+    delete validaciones.datos.programas
+    validaciones.datos['contrasena'] = 'restringido';
+
+    try {
+
+      const respuesta = await api.put(`usuarios/${usuario.id}`, validaciones.datos);
+
+      if (respuesta.success) {
+        await success("Usuario actualizado exitosamente");
+        localStorage.setItem('usuario', JSON.stringify({ id: respuesta.data.id, nombres: respuesta.data.nombres, apellidos: respuesta.data.apellidos, rol_id: respuesta.data.rol_id }));
+
+        const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
+        initComponentes(usuarioInfo);
+
+      } else {
+        error(respuesta);
+      }
+
+    } catch (e) {
+      console.error("Error inesperado:", e);
+      error({});
+    }
+  })
+
+  const formContrasena = document.getElementById('dashboard-perfil').querySelector('#form-contrasena');
+  const camposContrasena = [...formContrasena].filter((elemento) => elemento.hasAttribute("required"));
+  camposContrasena.forEach((campo) => {
+    campo.addEventListener("blur", validaciones.validarCampo);
+    campo.addEventListener("keydown", validaciones.validarCampo);
+    if (campo.name == "contrasena_nueva") {
+      campo.addEventListener("keydown", event => validaciones.validarLimite(event, 30));
+      campo.addEventListener("input", () => validaciones.validarContrasena(campo));
+    }
+  })
+
+  formContrasena.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validaciones.validarFormulario(e)) return;
+    try {
+      const respuesta = await api.put(`usuarios/${usuario.id}/contrasena`, validaciones.datos);
+
+      if (respuesta.success) {
+        await success("Contraseña actualizada exitosamente");
+        formContrasena.reset()
+      } else {
+        error(respuesta);
+      }
+
+    } catch (e) {
+      console.error("Error inesperado:", e);
+      error({});
+    }
+  })
+
+
+  limpiarModales();
+  await initModales(['modalDesactivarCuenta']);
+
+  const { modalDesactivarCuenta } = modales;
+  initModalEliminar(modalDesactivarCuenta, usuario);
+
+  if (usuario.rol_id === 3) {
+    const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
+    const inventario = JSON.parse(localStorage.getItem('inventario') || '{}');
+    if (codigoInfo && inventario.id) {
+      const limpiar = () => {
+        document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+        localStorage.removeItem('codigoAccesoInfo');
+        localStorage.removeItem('inventario');
+        initComponentes(usuario);
+      }
+      const expiracion = new Date(codigoInfo.expiracion);
+      const ahora = new Date();
+
+      if (expiracion > ahora) {
+        document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
+        await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
+      } else {
+        await eliminarAccesos(inventario.id, limpiar);
+      }
+    }
+  }
+
+  document.getElementById('dashboard-perfil').addEventListener('click', (e) => {
+    if (e.target.closest('#desactivarCuenta')) {
+      abrirModal(modalDesactivarCuenta);
+    }
+  })
 }
 
 const agregarFichas = (selectFichas, programa) => {
-    while (selectFichas.options.length > 1) selectFichas.remove(1);
-    programa.fichas.forEach((ficha) => {
-        const option = document.createElement('option');
-        option.value = ficha.id
-        option.textContent = ficha.ficha
-        selectFichas.appendChild(option);
-    })
+  while (selectFichas.options.length > 1) selectFichas.remove(1);
+  programa.fichas.forEach((ficha) => {
+    const option = document.createElement('option');
+    option.value = ficha.id
+    option.textContent = ficha.ficha
+    selectFichas.appendChild(option);
+  })
 }

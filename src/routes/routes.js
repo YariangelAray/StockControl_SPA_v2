@@ -12,6 +12,7 @@ import tiposelementos from '../views/compartidas/tipos-elementos/controlador.js'
 import perfil from '../views/perfil-usuario/controlador.js';
 
 import superAdmin from '../views/super-admin/controlador.js';
+import ambiente from '../views/super-admin/ambientesGestion/ambiente.js';
 import gestionUsuarios from '../views/super-admin/usuariosGestion/controlador.js';
 import gestionInventarios from '../views/super-admin/inventariosGestion/controlador.js';
 import gestionAmbientes from '../views/super-admin/ambientesGestion/controlador.js';
@@ -152,19 +153,19 @@ export const routes = {
         meta: { can: 'ambiente.view' }
       },
       crear: {
-        path: 'super-admin/ambientesGestion/index.html',
-        controller: gestionAmbientes,
+        path: 'modalAmbiente',
+        controller: ambiente.crear,
         meta: { can: 'ambiente.create', modal: true }
       },
       detalles: {
-        path: 'super-admin/ambientesGestion/index.html',
-        controller: gestionAmbientes,
-        meta: { can: 'ambiente.view', modal: true }
+        // path: 'super-admin/ambientesGestion/index.html',
+        controller: ambiente.detalles,
+        meta: { can: 'ambiente.view', modal: true, sameModal: true }
       },
       editar: {
-        path: 'super-admin/ambientesGestion/index.html',
-        controller: gestionAmbientes,
-        meta: { can: 'ambiente.update', modal: true }
+        // path: 'super-admin/ambientesGestion/index.html',
+        controller: ambiente.editar,
+        meta: { can: 'ambiente.update', modal: true, sameModal: true }
       },
       mapa: {
         path: 'compartidas/mapas/index.html',

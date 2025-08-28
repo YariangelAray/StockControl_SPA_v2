@@ -1,4 +1,4 @@
-export const hasPermisos = (requerido, permisos) => {
+export default (requerido, permisos) => {
     return permisos.some(asignado => {
         if (asignado == requerido) return true;
         if (asignado.endsWith(".*")){

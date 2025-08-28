@@ -3,7 +3,7 @@ import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 import getCookie from "../../../utils/getCookie";
-import { hasPermisos } from "../../../utils/hasPermisos";
+import hasPermisos from "../../../utils/hasPermisos";
 
 export const formatearElemento = (elemento) => {
 
@@ -21,7 +21,7 @@ export const formatearElemento = (elemento) => {
 };
 
 export const elementoClick = async (id) => {
-  const permisos = getCookie('permisos',[]);
+  const permisos = getCookie('permisos', []);
   const { data } = await get('elementos/me/' + id)
 
   localStorage.setItem('elemento_temp', JSON.stringify(data));

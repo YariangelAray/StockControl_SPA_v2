@@ -7,7 +7,7 @@ export default async () => {
 
     localStorage.clear();
 
-    document.querySelector('#app-main').classList.add('home--signup');
+    document.querySelector('#app-main').className = 'home home--signup';
 
     await llenarSelect({
         endpoint: 'tipos-documentos',
