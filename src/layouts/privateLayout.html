@@ -1,3 +1,74 @@
-<header id="app-header"></header>
-<aside id="app-aside"></aside>
-<main id="app-main"></main>
+<aside class="sidebar">
+    <div class="sidebar__logos">
+        <img src="/img/SENA.png" alt="SENA">
+        <hr class="separacion">
+        <img src="/img/LogoTitulo.png" alt="logo">
+    </div>
+
+    <nav class="sidebar__menu">
+        <ul class="sidebar__list">
+
+        </ul>
+    </nav>
+
+    <p class="access-info hidden">Expira en: <span class="tiempo-acceso"></span></p>
+</aside>
+
+<header class="header">
+    <h1 class="header__title"></h1>
+
+    <label for="menu-activar" class="user-avatar">
+        <i class="ri-user-line icon"></i>
+    </label>
+
+    <input type="checkbox" class="menu-activar" id="menu-activar">
+
+    <div class="user-menu">
+        <div class="user-menu__header">
+            <div class="user-avatar">
+                <i class="ri-user-line icon"></i>
+            </div>
+
+            <div class="user-menu__info">
+                <h2 class="user-menu__nombre nombre-usuario"></h2>
+                <p class="user-menu__rol rol"></p>
+            </div>
+        </div>
+
+        <div class="user-menu__content">
+            <hr class="separacion">
+            <div class="user-menu__row">
+                <a href="#/perfil-usuario" class="user-menu__item">
+                    <i class="ri-arrow-right-fill icon"></i>
+                    Ver perfil
+                </a>
+            </div>
+
+            <hr class="separacion">
+            <!-- <div class="user-menu__row">
+                <span class="user-menu__item">
+                    <i class="ri-contrast-2-line icon"></i>
+                    Apariencia:
+                </span>
+                <div>
+                    <input type="checkbox" id="my-switch" class="toggle">
+                    <label for="my-switch" class="switch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div> -->
+
+            <div class="user-menu__row">
+                <button class="user-menu__item" id="logout">
+                    <i class="ri-logout-box-r-line icon"></i>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+</header>
+
+<main id="app-main" class="dashboard">
+
+</main>

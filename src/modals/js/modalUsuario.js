@@ -83,7 +83,7 @@ export const configurarModalUsuario = async (modo, modal) => {
 export const initModalUsuario = async (modal) => {
 
     await llenarSelect({
-        endpoint: 'tipos-documento',
+        endpoint: 'tipos-documentos',
         selector: '#tipos-documentos',
         optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre })
     });

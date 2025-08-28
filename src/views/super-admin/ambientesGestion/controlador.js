@@ -2,12 +2,12 @@ import { initComponentes } from "../../../helpers/initComponentes";
 import { renderFilas } from "../../../helpers/renderFilas";
 import { configurarModalAmbiente, initModalAmbiente } from "../../../modals/js/modalAmbiente";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
+import getCookie from "../../../utils/getCookie";
+import { hasPermisos } from "../../../utils/hasPermisos";
 import { actualizarStorageAmbientes, ambienteClick, cargarAmbientes } from "./ambiente";
 
 export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuario);
-
+    const permisos = getCookie('permisos', []);
     let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes  || [];
 
 
@@ -18,12 +18,12 @@ export default async () => {
     }
 
     renderFilas(ambientes, ambienteClick);
-
     limpiarModales();
     await initModales(['modalAmbiente']);
     const { modalAmbiente } = modales;
     await initModalAmbiente(modalAmbiente)
 
+    if (!hasPermisos('ambiente.create', permisos)) document.querySelector('#crearAmbiente').remove();
 
 
     // Actualización en segundo plano

@@ -1,15 +1,15 @@
-import inicio from '../views/auth/inicio/controlador';
-import registro from '../views/auth/registro/controlador';
+import inicio from '../views/auth/inicio/controlador.js';
+import registro from '../views/auth/registro/controlador.js';
 
-import inventarios from '../views/inventarios/controlador';
-import ambientes from '../views/inventarios/ambientes/controlador';
+import inventarios from '../views/inventarios/controlador.js';
+import ambientes from '../views/inventarios/ambientes/controlador.js';
 import mapa from '../views/compartidas/mapas/controlador.js';
-import detalles from '../views/inventarios/detalles/controlador';
-import elementos from '../views/inventarios/elementos/controlador';
-import reportes from '../views/inventarios/reportes/controlador';
+import detalles from '../views/inventarios/detalles/controlador.js';
+import elementos from '../views/inventarios/elementos/controlador.js';
+import reportes from '../views/inventarios/reportes/controlador.js';
 
 import tiposelementos from '../views/compartidas/tipos-elementos/controlador.js';
-import perfil from '../views/perfil-usuario/controlador';
+import perfil from '../views/perfil-usuario/controlador.js';
 
 import superAdmin from '../views/super-admin/controlador.js';
 import gestionUsuarios from '../views/super-admin/usuariosGestion/controlador.js';
@@ -20,91 +20,201 @@ export const routes = {
   inicio: {
     path: 'auth/inicio/index.html',
     controller: inicio,
-    meta: { public: true, nolayout: true }
+    meta: { public: true, noLayout: true }
   },
   registro: {
     path: 'auth/registro/index.html',
     controller: registro,
-    meta: { public: true, nolayout: true }
+    meta: { public: true, noLayout: true }
   },
   inventarios: {
     "/": {
       path: 'inventarios/index.html',
       controller: inventarios,
-      meta: { rolesPermitidos: [2, 3] }
+      meta: { can: ['inventario.view-own', 'inventarios.index'] }
     },
     ambientes: {
       "/": {
         path: 'inventarios/ambientes/index.html',
         controller: ambientes,
-        meta: { rolesPermitidos: [2, 3] }
+        meta: { can: 'ambiente.view-card', requiresInventory: true }
       },
       mapa: {
         path: 'compartidas/mapas/index.html',
         controller: mapa,
-        meta: { rolesPermitidos: [2, 3] }
+        meta: { can: 'ambiente.view', requiresInventory: true }
       }
     },
     detalles: {
       path: 'inventarios/detalles/index.html',
       controller: detalles,
-      meta: { rolesPermitidos: [2] }
+      meta: { can: 'inventario.view-own', requiresInventory: true }
     },
     elementos: {
       "/": {
         path: 'inventarios/elementos/index.html',
         controller: elementos,
-        meta: { rolesPermitidos: [2, 3] }        
+        meta: { can: 'elemento.view-inventory-own', requiresInventory: true }
+      },
+      crear: {
+        path: 'inventarios/elementos/index.html',
+        controller: elementos,
+        meta: { can: 'elemento.create-inventory-own', requiresInventory: true, modal: true}
+      },
+      detalles: {
+        path: 'inventarios/elementos/index.html',
+        controller: elementos,
+        meta: { can: 'elemento.view-inventory-own', requiresInventory: true, modal: true }
+      },
+      editar: {
+        path: 'inventarios/elementos/index.html',
+        controller: elementos,
+        meta: { can: 'elemento.update-inventory-own', requiresInventory: true, modal: true }
+      },
+      reportar: {
+        path: 'inventarios/elementos/index.html',
+        controller: elementos,
+        meta: { can: 'reporte.create', requiresInventory: true, modal: true }
       },
       "tipos-elementos": {
-        path: 'compartidas/tipos-elementos/index.html',
-        controller: tiposelementos,
-        meta: { rolesPermitidos: [2] }
+        "/": {
+          path: 'compartidas/tipos-elementos/index.html',
+          controller: tiposelementos,
+          meta: { can: 'tipo-elemento.view-inventory-own', requiresInventory: true }
+        },
+        crear: {
+          path: 'compartidas/tipos-elementos/index.html',
+          controller: tiposelementos,
+          meta: { can: 'tipo-elemento.create', requiresInventory: true, modal: true }
+        },
+        detalles: {
+          path: 'compartidas/tipos-elementos/index.html',
+          controller: tiposelementos,
+          meta: { can: 'tipo-elemento.view-inventory-own', requiresInventory: true, modal: true }
+        },
+        editar: {
+          path: 'compartidas/tipos-elementos/index.html',
+          controller: tiposelementos,
+          meta: { can: 'tipo-elemento.update', requiresInventory: true, modal: true }
+        },
       }
     },
     reportes: {
-      path: 'inventarios/reportes/index.html',
-      controller: reportes,
-      meta: { rolesPermitidos: [2] }
+      "/": {
+        path: 'inventarios/reportes/index.html',
+        controller: reportes,
+        meta: { can: 'reporte.view-inventory-own', requiresInventory: true}
+      },
+      detalles: {
+        path: 'inventarios/reportes/index.html',
+        controller: reportes,
+        meta: { can: 'reporte.view-inventory-own', requiresInventory: true, modal: true}
+      },
     }
   },
   "perfil-usuario": {
     path: 'perfil-usuario/index.html',
     controller: perfil,
-    meta: { rolesPermitidos: [1, 2, 3] }
+    meta: { can: 'usuario.view-own' }
   },
   "super-admin": {
     "/": {
       path: 'super-admin/index.html',
       controller: superAdmin,
-      meta: { rolesPermitidos: [1] }
+      meta: { can: 'superadmin.access-home' }
     },
     usuarios: {
-      path: 'super-admin/usuariosGestion/index.html',
-      controller: gestionUsuarios,
-      meta: { rolesPermitidos: [1] }
+      "/": {
+        path: 'super-admin/usuariosGestion/index.html',
+        controller: gestionUsuarios,
+        meta: { can: 'usuario.view' }
+      },
+      crear: {
+        path: 'super-admin/usuariosGestion/index.html',
+        controller: gestionUsuarios,
+        meta: { can: 'usuario.create', modal: true }
+      },
+      detalles: {
+        path: 'super-admin/usuariosGestion/index.html',
+        controller: gestionUsuarios,
+        meta: { can: 'usuario.view', modal: true }
+      },
+      editar: {
+        path: 'super-admin/usuariosGestion/index.html',
+        controller: gestionUsuarios,
+        meta: { can: 'usuario.update', modal: true }
+      },
     },
     ambientes: {
       "/": {
         path: 'super-admin/ambientesGestion/index.html',
         controller: gestionAmbientes,
-        meta: { rolesPermitidos: [1] }
+        meta: { can: 'ambiente.view' }
+      },
+      crear: {
+        path: 'super-admin/ambientesGestion/index.html',
+        controller: gestionAmbientes,
+        meta: { can: 'ambiente.create', modal: true }
+      },
+      detalles: {
+        path: 'super-admin/ambientesGestion/index.html',
+        controller: gestionAmbientes,
+        meta: { can: 'ambiente.view', modal: true }
+      },
+      editar: {
+        path: 'super-admin/ambientesGestion/index.html',
+        controller: gestionAmbientes,
+        meta: { can: 'ambiente.update', modal: true }
       },
       mapa: {
         path: 'compartidas/mapas/index.html',
         controller: mapa,
-        meta: { rolesPermitidos: [1] }
+        meta: { can: 'ambiente.view' }
       }
     },
     inventarios: {
-      path: 'super-admin/inventariosGestion/index.html',
-      controller: gestionInventarios,
-      meta: { rolesPermitidos: [1] },
+      "/": {
+        path: 'super-admin/inventariosGestion/index.html',
+        controller: gestionInventarios,
+        meta: { can: 'inventario.view' },
+      },
+      crear: {
+        path: 'super-admin/inventariosGestion/index.html',
+        controller: gestionInventarios,
+        meta: { can: 'inventario.create', modal: true },
+      },
+      detalles: {
+        path: 'super-admin/inventariosGestion/index.html',
+        controller: gestionInventarios,
+        meta: { can: 'inventario.view', modal: true },
+      },
+      editar: {
+        path: 'super-admin/inventariosGestion/index.html',
+        controller: gestionInventarios,
+        meta: { can: 'inventario.update', modal: true },
+      },
     },
     "tipos-elementos": {
-      path: 'compartidas/tipos-elementos/index.html',
-      controller: tiposelementos,
-      meta: { rolesPermitidos: [1] }
+      "/": {
+        path: 'compartidas/tipos-elementos/index.html',
+        controller: tiposelementos,
+        meta: { can: 'tipo-elemento.view' }
+      },
+      crear: {
+        path: 'compartidas/tipos-elementos/index.html',
+        controller: tiposelementos,
+        meta: { can: 'tipo-elemento.create', modal: true }
+      },
+      detalles: {
+        path: 'compartidas/tipos-elementos/index.html',
+        controller: tiposelementos,
+        meta: { can: 'tipo-elemento.view', modal: true }
+      },
+      detalles: {
+        path: 'compartidas/tipos-elementos/index.html',
+        controller: tiposelementos,
+        meta: { can: 'tipo-elemento.update', modal: true }
+      },
     }
   }
 };

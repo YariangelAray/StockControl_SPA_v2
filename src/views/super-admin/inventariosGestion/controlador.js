@@ -2,12 +2,12 @@ import { initComponentes } from "../../../helpers/initComponentes";
 import { renderFilas } from "../../../helpers/renderFilas";
 import { configurarModalInventario, initModalInventario } from "../../../modals/js/modalInventario";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
+import getCookie from "../../../utils/getCookie";
+import { hasPermisos } from "../../../utils/hasPermisos";
 import { actualizarStorageInventarios, inventarioClick, cargarInventarios } from "./inventario";
 
 export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuario);
-
+    const permisos = getCookie('permisos', []);
     let inventarios = JSON.parse(localStorage.getItem('inventarios') || '{}').inventarios || [];
 
 
@@ -24,7 +24,7 @@ export default async () => {
     const { modalInventario } = modales;
     await initModalInventario(modalInventario)
 
-
+    if (!hasPermisos('inventario.create', permisos)) document.querySelector('#crearInventario').remove();
 
     // Actualización en segundo plano
     await actualizarStorageInventarios();

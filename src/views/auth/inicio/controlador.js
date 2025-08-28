@@ -1,10 +1,15 @@
 import * as validaciones from "../../../utils/Validaciones";
 import { error, success } from "../../../utils/alertas";
 import * as api from "../../../utils/api";
+import getCookie from "../../../utils/getCookie";
+import { hasPermisos } from "../../../utils/hasPermisos";
 
 export default async () => {
 
     localStorage.clear();
+
+    document.querySelector('#app-main').classList.remove('home--signup');
+
     window.temporizadorAccesoIniciado = false;
     const formulario = document.querySelector(".form--signin");
 
@@ -30,17 +35,20 @@ export default async () => {
 
             if (respuesta.success) {
                 await success("Inicio de sesión éxitoso");
-                localStorage.setItem('usuario', JSON.stringify({id:respuesta.data.id, nombres:respuesta.data.nombres, apellidos:respuesta.data.apellidos, rol_id: respuesta.data.rol_id}));
-                setTimeout(() => {                    
-                    location.hash = respuesta.data.rol_id == 1 ? '#/super-admin' : '#/inventarios';
-                },500);
+                const permisos = getCookie("permisos", {});
+                requestAnimationFrame(() => {
+                    location.hash = hasPermisos('superadmin.access-home', permisos) ? "#/super-admin" : "#/inventarios";
+                })
+                // localStorage.setItem('usuario', JSON.stringify({id:respuesta.data.id, nombres:respuesta.data.nombres, apellidos:respuesta.data.apellidos, rol_id: respuesta.data.rol_id}));
+                // setTimeout(() => {                    
+                //     location.hash = respuesta.data.rol_id == 1 ? '#/super-admin' : '#/inventarios';
+                // },500);
             } else {
                 error(respuesta);
             }
 
         } catch (e) {
-            console.error("Error inesperado:", e);
-            error({});
+            console.error("Error inesperado:", e);            
         }
     })
 }

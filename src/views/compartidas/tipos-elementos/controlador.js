@@ -3,18 +3,19 @@ import { agregarFila, renderFilas } from "../../../helpers/renderFilas";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import { configurarModalTipo, initModalTipo } from "../../../modals/js/modalTipoElemento";
 import { actualizarStorageTipos, cargarTipos, formatearTipo, tipoClick } from "./tipos-elementos";
+import getCookie from "../../../utils/getCookie";
+import { hasPermisos } from "../../../utils/hasPermisos";
 
 export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));    
+    const permisos = getCookie('permisos', []);
 
     const btnVolver = document.querySelector("#btn-volver");
 
-    if(usuario.rol_id==1) btnVolver.classList.add('hidden')
-
-    const historial = sessionStorage.getItem("rutaAnterior");
-    btnVolver.setAttribute("href", historial);
-
-    initComponentes(usuario);    
+    if(!hasPermisos('tipo-elemento.view-inventory-own', permisos)){
+        btnVolver.classList.add('hidden')
+        const historial = sessionStorage.getItem("rutaAnterior");
+        btnVolver.setAttribute("href", historial);        
+    }     
 
     let tipos = JSON.parse(localStorage.getItem('tipos') || '{}').tipos || [];
 
@@ -25,6 +26,7 @@ export default async () => {
     }
     renderFilas(tipos, tipoClick);
 
+    if (!hasPermisos('tipo-elemento.create', permisos)) document.querySelector('#crearTipo').remove();
 
     limpiarModales();
     await initModales(['modalTipoElemento']);
@@ -35,8 +37,7 @@ export default async () => {
     // Actualización en segundo plano
     await actualizarStorageTipos();
 
-    document.getElementById('dashboard-tipos-elementos').addEventListener('click', (e) => {
-        // Botón Agregar → AGREGAR
+    document.getElementById('dashboard-tipos-elementos').addEventListener('click', (e) => {        
         if (e.target.closest('#crearTipo')) {
             configurarModalTipo('crear', modalTipoElemento);
             abrirModal(modalTipoElemento);

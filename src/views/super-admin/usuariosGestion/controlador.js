@@ -2,11 +2,12 @@ import { initComponentes } from "../../../helpers/initComponentes";
 import { renderFilas } from "../../../helpers/renderFilas";
 import { configurarModalUsuario, initModalUsuario } from "../../../modals/js/modalUsuario";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
+import getCookie from "../../../utils/getCookie";
+import { hasPermisos } from "../../../utils/hasPermisos";
 import { actualizarStorageUsuarios, usuarioClick, cargarUsuarios } from "./usuario";
 
 export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuario);
+    const permisos = getCookie('permisos', []);
 
     let usuarios = JSON.parse(localStorage.getItem('usuarios') || '{}').usuarios || [];
 
@@ -24,7 +25,7 @@ export default async () => {
     const { modalUsuario } = modales;
     await initModalUsuario(modalUsuario)
 
-
+    if (!hasPermisos('usuario.create', permisos)) document.querySelector('#crearUsuario').remove();
 
     // Actualización en segundo plano
     await actualizarStorageUsuarios();

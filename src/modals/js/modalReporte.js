@@ -72,7 +72,7 @@ export const configurarModalReporte = async (reporte, modal, id_elemento) => {
     if (reporte.fotos && reporte.fotos.length > 0) {
         reporte.fotos.forEach(({ url }) => {
             const img = document.createElement('img');
-            img.src = 'http://localhost:8080/StockControl_API/' + url;
+            img.src = 'http://localhost:8080/stockcontrol_api/' + url;
             contenedor.appendChild(img);
         });
     } else {

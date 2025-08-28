@@ -3,32 +3,18 @@ import { initComponentes } from "../../helpers/initComponentes.js";
 import { initModalPedirCodigo } from "../../modals/js/modalPedirCodigoAcceso.js";
 import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController.js";
 import * as api from "../../utils/api.js";
+import getCookie from "../../utils/getCookie.js";
 import { initTemporizadorAcceso } from "./detalles/initTemporizadorAcceso.js";
 
 export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const roles = getCookie('roles', []).map(r => r.id);
     localStorage.clear();
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-
-
-    initComponentes(usuario);
 
     const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
     sidebarList.querySelector('.menu__items')?.remove();
 
-    // Verificamos si el ítem ya fue insertado
-
-    const sidebarInfo = document.createElement('div');
-    sidebarInfo.classList.add('sidebar-info');
-    const sidebarInfoText = document.createElement('p');
-    sidebarInfoText.textContent = 'Ingrese a un inventario para continuar con su gestión';
-    sidebarInfo.append(sidebarInfoText);
-
-    sidebarList.append(sidebarInfo);
-
-
     limpiarModales();
-    if (usuario.rol_id === 3) {
+    if (roles.includes(3)) {
         await initModales(['modalPedirCodigoAcceso']);
         const { modalPedirCodigoAcceso } = modales;
         initModalPedirCodigo(modalPedirCodigoAcceso);
@@ -43,14 +29,15 @@ export default async () => {
             accessInfo.classList.add('hidden');
         }
     }
-    await cargarInventarios(usuario);
+    await cargarInventarios(roles);
 };
 
-const cargarInventarios = async (usuario) => {
-    const respuesta = usuario.rol_id == 2 ? await api.get('inventarios/usuario/' + usuario.id)
-        : await api.get('accesos-temporales/usuario/' + usuario.id);
+const cargarInventarios = async (roles) => {
+    const url = roles.includes(2) ? 'inventarios/me' : 'inventarios/me';
+    const respuesta = await api.get(url);
 
     const contenedor = document.querySelector('.content-cards');
+
     if (respuesta.success) {
 
         cargarCards(contenedor, respuesta.data, {
@@ -76,17 +63,18 @@ const cargarInventarios = async (usuario) => {
                 }
 
                 const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-                if (usuario.rol_id === 3 && codigoInfo) {
+                
+                if (roles.includes(3) && codigoInfo) {
                     const expiracion = new Date(codigoInfo.expiracion);
                     const ahora = new Date();
                     if (expiracion > ahora) {
                         // Aún está vigente, restaurar UI
                         document.querySelector('.sidebar .access-info').classList.remove('hidden');
                         await initTemporizadorAcceso(codigoInfo.expiracion, inventario.id, () => {
-                          document.querySelector('.sidebar .access-info').classList.add('hidden');
-                          localStorage.removeItem('codigoAccesoInfo');
-                          localStorage.removeItem('inventario');
-                          initComponentes(usuario);
+                            document.querySelector('.sidebar .access-info').classList.add('hidden');
+                            localStorage.removeItem('codigoAccesoInfo');
+                            localStorage.removeItem('inventario');
+                            initComponentes(usuario);
                         });
                     }
                 }
@@ -94,7 +82,7 @@ const cargarInventarios = async (usuario) => {
             }
         });
     }
-    if (usuario.rol_id === 2 && !respuesta.data) {
+    if (roles.includes(2) && !respuesta.data) {
         const cardEmpty = document.createElement('div');
         cardEmpty.classList.add('card-empty');
 

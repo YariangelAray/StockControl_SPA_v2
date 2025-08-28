@@ -12,7 +12,7 @@ export const isAuth = async () => {
       const refresh = await refreshToken();
       if (!refresh) return false;
       
-      response = await get("protected");
+      response = await get("auth/protected");
       return response.success;
     }
 

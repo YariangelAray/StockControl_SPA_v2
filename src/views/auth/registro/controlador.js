@@ -7,8 +7,10 @@ export default async () => {
 
     localStorage.clear();
 
+    document.querySelector('#app-main').classList.add('home--signup');
+
     await llenarSelect({
-        endpoint: 'tipos-documento',
+        endpoint: 'tipos-documentos',
         selector: '#tipos-documentos',
         optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre })
     });
@@ -87,8 +89,8 @@ export default async () => {
         
         try {
 
-            const respuesta = await api.post('usuarios', validaciones.datos);
-
+            const respuesta = await api.post('auth/register', validaciones.datos);
+            console.log(respuesta);
             if (respuesta.success) {
                 await success("Registro éxitoso");
                 localStorage.setItem('usuario', JSON.stringify(respuesta.data));

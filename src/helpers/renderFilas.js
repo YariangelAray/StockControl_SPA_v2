@@ -3,8 +3,7 @@ export const crearFila = (registro, callbackClick) => {
   
   const fila = document.createElement('tr');
   fila.classList.add('table__row');
-  fila.dataset.id = registro[0];
-
+  fila.dataset.id = registro[0];  
   registro.forEach((dato, index) => {
     if (typeof dato === "boolean" || index === 0) return;
     const td = document.createElement('td');

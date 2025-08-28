@@ -5,17 +5,16 @@ import { limpiarModales } from "../../../modals/modalsController";
 import * as api from "../../../utils/api";
 import { info } from "../../../utils/alertas";
 import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTemporizadorAcceso";
+import getCookie from "../../../utils/getCookie";
 
 export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
     const inventario = JSON.parse(localStorage.getItem('inventario'));
-    initComponentes(usuario);
-
+    const roles = getCookie('roles', []).map(r => r.id)
     limpiarModales();
 
     let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes || [];
     if (!ambientes || ambientes.length === 0) {
-        const respuesta = await api.get(`inventarios/${inventario.id}/ambientes`);
+        const respuesta = await api.get(`inventarios/me/${inventario.id}/ambientes`);
         if (respuesta.success) {
             localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data ?? []}));
             ambientes = respuesta.data;
@@ -24,7 +23,7 @@ export default async () => {
 
     await cargarAmbientes(ambientes, inventario)
 
-    if (usuario.rol_id === 3) {
+    if (roles.includes(3)) {
         const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
         
         if (codigoInfo) {
@@ -98,6 +97,6 @@ const cargarAmbientes = async (ambientes) => {
 
 
 const actualizarStorageAmbientes = async (inventario) => {
-    const respuesta = await api.get(`inventarios/${inventario.id}/ambientes`);
+    const respuesta = await api.get(`inventarios/me/${inventario.id}/ambientes`);
     if (respuesta.success) localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data ?? [] }));
 }

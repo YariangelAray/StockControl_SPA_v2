@@ -1,10 +1,7 @@
 import { initComponentes } from "../../helpers/initComponentes";
 import { get } from "../../utils/api";
 
-export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuario);
-    
+export default async () => {    
     const respuestaU = await get('usuarios');
     const respuestaA = await get('ambientes');
     const respuestaI = await get('inventarios');

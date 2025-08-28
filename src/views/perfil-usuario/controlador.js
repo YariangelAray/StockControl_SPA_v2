@@ -8,26 +8,25 @@ import * as validaciones from "../../utils/Validaciones";
 import { error, success } from "../../utils/alertas.js";
 import { eliminarAccesos, initTemporizadorAcceso } from "../inventarios/detalles/initTemporizadorAcceso.js";
 import { setLecturaForm } from "../../helpers/setLecturaForm.js";
+import getCookie from "../../utils/getCookie.js";
+import { hasPermisos } from "../../utils/hasPermisos.js";
 
 export default async () => {
 
-    const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuarioInfo);
-    
+    const permisos = getCookie('permisos', []);
+    const rolesName = getCookie('roles', []).map(r => r.nombre);
     const contentDesactivar = document.querySelector('.desactivar-cuenta');
-    if (usuarioInfo.rol_id != 1) contentDesactivar.classList.remove('hidden');
+    if (hasPermisos("usuario.disable-own", permisos)) contentDesactivar.classList.remove('hidden');
 
-    const { data } = await api.get('usuarios/' + usuarioInfo.id);
+    const { data } = await api.get('usuarios/me');
     const usuario = data;
-
-    const roles = await api.get('roles/' + usuarioInfo.rol_id);
+    
     const campoRol = document.querySelector('.dashboard__title.rol');
-
-    campoRol.textContent = "Usuario " + roles.data.nombre;
+    campoRol.textContent = "Usuario " + rolesName.join(" - ");
 
 
     await llenarSelect({
-        endpoint: 'tipos-documento',
+        endpoint: 'tipos-documentos',
         selector: '#tipos-documentos',
         optionMapper: tipo => ({ id: tipo.id, text: tipo.nombre })
     });

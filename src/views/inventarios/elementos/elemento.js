@@ -2,28 +2,27 @@ import { configurarModalElemento } from "../../../modals/js/modalElemento";
 import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
+import getCookie from "../../../utils/getCookie";
+import { hasPermisos } from "../../../utils/hasPermisos";
 
-export const formatearElemento = async (elemento) => {
-  const tipo = await get('tipos-elementos/' + elemento.tipo_elemento_id);
-  const ambiente = await get('ambientes/' + elemento.ambiente_id);
-  const estado = await get('estados/' + elemento.estado_id);
+export const formatearElemento = (elemento) => {
 
   return [
     elemento.id,
     elemento.placa,
     elemento.serial,
-    tipo.data.nombre,
-    tipo.data.modelo,
+    elemento.tipo_elemento,
+    elemento.tipo_modelo,
     elemento.fecha_adquisicion,
-    ambiente.data ? ambiente.data.nombre : 'No asignado',
-    estado.data.nombre,
+    elemento.ambiente ? elemento.ambiente : 'No asignado',
+    elemento.estado,
     elemento.estado_activo
   ];
 };
 
 export const elementoClick = async (id) => {
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
-  const { data } = await get('elementos/' + id)
+  const permisos = getCookie('permisos',[]);
+  const { data } = await get('elementos/me/' + id)
 
   localStorage.setItem('elemento_temp', JSON.stringify(data));
   const form = modales.modalElemento.querySelector('form');
@@ -32,18 +31,18 @@ export const elementoClick = async (id) => {
   modales.modalElemento.dataset.id = data.id;
   configurarModalElemento('editar', modales.modalElemento);
   const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
-  if (usuario.rol_id == 2) btn.classList.remove('hidden');
+  if (!hasPermisos('elemento.change-status-inventory-own', permisos)) btn.classList.remove('hidden');
   abrirModal(modales.modalElemento);
 }
 
-export const cargarElementos = async (inventario) => {
-  const respuesta = await get('elementos/inventario/' + inventario.id)
+export const cargarElementos = async () => {
+  const respuesta = await get('elementos/me')
   const elementos = [];
 
   if (respuesta.success) {
 
     for (const elemento of respuesta.data) {
-      elementos.push(await formatearElemento(elemento));
+      elementos.push(formatearElemento(elemento));
     }
   }
 
@@ -51,6 +50,6 @@ export const cargarElementos = async (inventario) => {
 }
 
 export const actualizarStorageElementos = async (inventario) => {
-  const nuevosElementos = await cargarElementos(inventario);
+  const nuevosElementos = await cargarElementos();
   localStorage.setItem('elementos', JSON.stringify({ elementos: nuevosElementos }));
 }

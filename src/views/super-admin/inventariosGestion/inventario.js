@@ -3,9 +3,7 @@ import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
-export const formatearInventario = async (inventario) => {
-    const usuario = await get('usuarios/' + inventario.usuario_admin_id);
-
+export const formatearInventario = (inventario) => {    
     return [
         inventario.id,
         inventario.id,
@@ -13,7 +11,7 @@ export const formatearInventario = async (inventario) => {
         inventario.fecha_creacion,
         inventario.ultima_actualizacion,
         inventario.cantidad_elementos,
-        usuario.data.nombres.split(" ")[0] + " " + usuario.data.apellidos.split(" ")[0]
+        inventario.gestor
     ];
 }
 
@@ -35,7 +33,7 @@ export const cargarInventarios = async () => {
 
     if (respuesta.success) {
         for (const inventario of respuesta.data) {
-            inventarios.push(await formatearInventario(inventario))
+            inventarios.push(formatearInventario(inventario))
         };
     }
 

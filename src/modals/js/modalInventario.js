@@ -54,7 +54,7 @@ export const initModalInventario = async (modal) => {
     await llenarSelect({
         endpoint: 'usuarios/administrativos',
         selector: '#usuarios',
-        optionMapper: usuario => ({ id: usuario.id, text: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0] })
+        optionMapper: usuario => ({ id: usuario.id, text: `${usuario.documento} - ${usuario.nombre}`})
     });
 
     const form = modal.querySelector('form');

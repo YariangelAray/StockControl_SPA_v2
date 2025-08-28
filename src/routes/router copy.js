@@ -1,46 +1,40 @@
 import controladorErrores from "../views/errors/controlador";
 import { routes } from "./routes";
+import * as api from "../utils/api";
 import getCookie from "../utils/getCookie";
 import { isAuth } from "../utils/auth";
 import { cargarLayout } from "../layouts/layoutManager";
-import { initComponentes } from "../helpers/initComponentes";
 import { hasPermisos } from "../utils/hasPermisos";
 
 let hayLayout = false;
 
 export const router = async () => {
     const hash = location.hash.slice(2);
-    const segmentos = hash.split("/").filter(Boolean);    
+    const segmentos = hash.split("/").filter(Boolean);
+    // const usuario = JSON.parse(localStorage.getItem('usuario')); // Control de sesión 
+    const roles = getCookie('roles', []);
+    const autenticado = await isAuth();
     
+
     document.title = "Stock Control";
-    
+
     // Redirección por defecto
-    if (segmentos.length == 0) {
-        location.hash = '#/inicio'; 
-        return;
+    if (segmentos.length == 0) {        
+        location.hash = autenticado ? (roles.includes(1) ? '#/super-admin' : '#/inventarios') : '#/inicio';
     }
-    
+
     const [ruta, parametros] = encontrarRuta(routes, segmentos);
     // Ruta no encontrada
-    
-    const roles = getCookie('roles', []);
+    if (!ruta) return render404(autenticado);
+    // const body = document.querySelector('body');
 
-    if (!ruta) return render404(roles.length != 0);    
-    
     const meta = ruta.meta || {};
-    
-    if (!meta.public && !(await isAuth())) {        
+
+    if (!meta.public && !autenticado) {        
         location.hash = '#/inicio';
         return;
     }
-    // Render sin layout
-    if (meta.public && meta.noLayout) {
-        hayLayout = false;
-        await cargarLayout("public", ruta.path, hayLayout)
-        ruta.controller(parametros || undefined);
-        return;
-    }
-    
+
     if (meta.requiresInventory) {
         const inventario = JSON.parse(localStorage.getItem('inventario') || 'null');
         if (!inventario) {
@@ -48,12 +42,53 @@ export const router = async () => {
             return;
         }
     }
-
-    if (meta.can) {        
-        const permisos = getCookie('permisos', []);       
-        const requeridos = Array.isArray(meta.can) ? meta.can : [meta.can];
-        if (!requeridos.some(r => hasPermisos(r, permisos))) return render404(roles.length != 0);
+    if (meta.can) {
+        const permisos = getCookie('permisos', []);                
+        if (!hasPermisos(meta.can, permisos)) return render404(autenticado);
     }
+    // Render sin layout
+    if (meta.public && meta.noLayout) {
+        hayLayout = false;
+        await cargarLayout("public", ruta.path, hayLayout)
+        // const html = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
+        // body.innerHTML = html;
+        // body.classList.remove('content--ui');
+        // body.classList.add('content--auth');
+        ruta.controller(parametros || undefined);
+        return;
+    }
+
+    // // Render con layout
+    // if (!hayLayout) {
+    //     await cargarLayout("public", ruta.path, hayLayout)
+    //     // const layoutHtml = await fetch(`./src/layouts/mainLayout.html`).then(r => r.text());
+    //     // body.innerHTML = layoutHtml;
+    //     // body.classList.remove('content--auth');
+    //     // body.classList.add('content--ui');
+    //     // const respuesta = await api.get('roles/' + usuario.rol_id);
+    //     // const campoRol = document.querySelector('.rol');
+
+    //     // campoRol.textContent = "Usuario " + respuesta.data.nombre;
+
+    //     // document.addEventListener('click', (e) => {
+    //     //     if (e.target.closest('#logout')) {
+    //     //         localStorage.clear();
+    //     //         location.hash = '#/inicio'
+    //     //     }
+    //     // })
+    //     hayLayout = true;
+    // }
+
+    // const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
+    // const dashboard = document.querySelector('.dashboard');
+    // if (!dashboard) {
+    //     // si algo raro pasó, recargar layout para recuperar la dashboard
+    //     await cargarLayout(desiredLayout);
+    // }
+    // document.querySelector('.dashboard').innerHTML = vista;
+
+
+
 
     // Si se necesita layout público (auth pages) o privado
     const desiredLayout = meta.public ? "public" : "private";
@@ -66,9 +101,8 @@ export const router = async () => {
         // Layout privado ya cargado: solo inyectamos la vista
         const main = document.querySelector('#app-main') || document.querySelector('main');
         if (main) {
-            // const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
-            // main.innerHTML = vista;        
-            await cargarLayout(desiredLayout, ruta.path, hayLayout);
+            const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
+            main.innerHTML = vista;
         } else {
             // si por alguna razón main faltó, recargar layout completo
             await cargarLayout(desiredLayout, ruta.path, false);
@@ -76,9 +110,10 @@ export const router = async () => {
         }
     }
 
+
+
     // Llamar controlador (si requiere parámetros, se los pasamos)
     parametros ? ruta.controller(parametros) : ruta.controller();
-    initComponentes();
 };
 
 const encontrarRuta = (routes, segmentos) => {
@@ -129,7 +164,7 @@ const encontrarRuta = (routes, segmentos) => {
 const render404 = async (autenticado) => {
     if (!autenticado) {
         await cargarLayout("public", "errors/noEncontrado.html", false);
-    } else {        
+    } else {
         const html = await fetch(`./src/views/errors/noEncontrado.html`).then(r => r.text());    
         const divError = document.createElement('div');
         divError.innerHTML = html;
@@ -142,7 +177,6 @@ const render404 = async (autenticado) => {
         }
         main.innerHTML = '';
         main.appendChild(vista);
-        initComponentes();
         controladorErrores();
     }
     document.querySelector('title').textContent = "No Encontrada";

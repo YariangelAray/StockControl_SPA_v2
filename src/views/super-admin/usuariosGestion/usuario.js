@@ -4,14 +4,13 @@ import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
 export const formatearUsuario = async (usuario) => {
-    const rol = await get('roles/' + usuario.rol_id);
 
     return [
         usuario.id,
         usuario.id,
         usuario.documento,
         usuario.nombres + " " + usuario.apellidos,
-        "Usuario " + rol.data.nombre,
+        "Usuario " + usuario.roles.map(r => r.nombre).join(" - "),
         usuario.activo ? "Activo" : "Inactivo",
         usuario.activo
     ];

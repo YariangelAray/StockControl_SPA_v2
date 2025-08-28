@@ -13,7 +13,7 @@ export const get = async (endpoint) => {
     );   
     return await respuesta.json();
   } catch (error) {
-    console.log(error);
+    console.warn(error);
   }
 }
 
@@ -29,7 +29,7 @@ export const post = async (endpoint, objeto) => {
     });
     return await respuesta.json();  
   } catch (error) {
-    console.log(error);
+    console.warn(error);
   }
 }
 
@@ -45,7 +45,7 @@ export const put = async (endpoint, objeto) => {
     });
     return await respuesta.json();
   } catch (error) {
-    console.log(error);
+    console.warn(error);
   }
 }
 
@@ -60,6 +60,6 @@ export const del = async (endpoint) => {
     });
     return await respuesta.json();
   } catch (error) {
-    console.log(error);
+    console.warn(error);
   }
 }

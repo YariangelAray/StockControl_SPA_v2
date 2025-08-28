@@ -6,20 +6,17 @@ import { abrirModal, initModales, limpiarModales, modales } from "../../../modal
 import * as api from '../../../utils/api';
 import { actualizarStorageReportes, cargarReportes, formatearReporte, reporteClick } from "./reporte";
 
-export default async () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    const inventario = JSON.parse(localStorage.getItem('inventario'));
-    initComponentes(usuario);
+export default async () => {            
     
     let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes || [];
 
     
     if (!reportes || reportes.length === 0) {
-        const reportesFormateados = await cargarReportes(inventario);
+        const reportesFormateados = await cargarReportes();
         localStorage.setItem('reportes', JSON.stringify({reportes: reportesFormateados}));
         reportes = reportesFormateados;
     }
-
+    
     renderFilas(reportes, reporteClick);
     
     limpiarModales();
@@ -30,7 +27,7 @@ export default async () => {
 
 
     // Actualización en segundo plano
-    await actualizarStorageReportes(inventario);
+    await actualizarStorageReportes();
     const search = document.querySelector('[type="search"]');
     search.addEventListener('input', (e) => {
         let reportes = JSON.parse(localStorage.getItem('reportes') || '{}').reportes || [];
