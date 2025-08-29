@@ -22,8 +22,8 @@ export const formatearAmbiente = async (ambiente) => {
 }
 
 export const ambienteClick = async (id) => {
-    const { data } = await get('ambientes/' + id)
-    localStorage.setItem('ambiente_temp', JSON.stringify(data));
+    // const { data } = await get('ambientes/' + id)
+    // localStorage.setItem('ambiente_temp', JSON.stringify(data));
     location.hash = '#/super-admin/ambientes/detalles/id='+id;
 
 

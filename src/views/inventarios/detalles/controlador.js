@@ -1,8 +1,8 @@
-import { initModalConfigurar } from "../../../modals/js/modalConfigurarCodigo";
+import { abrirModalConfigurar } from "../../../modals/js/modalConfigurarCodigo";
 import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import { eliminarAccesos, initTemporizadorAcceso } from "./initTemporizadorAcceso";
-import { info } from "../../../utils/alertas";
+import { infoAlert } from "../../../utils/alertas";
 import getCookie from "../../../utils/getCookie";
 
 export default async () => {  
@@ -23,11 +23,11 @@ export default async () => {
   document.querySelector('.valor-monetario').textContent = `$ ${inventario.valor_monetario.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
   document.querySelector('.ambientes-cubiertos').textContent = inventario.ambientes_cubiertos;
 
-  limpiarModales();
-  await initModales(['modalConfigurarCodigo']);
-  const { modalConfigurarCodigo } = modales;
+  // limpiarModales();
+  // await initModales(['modalConfigurarCodigo']);
+  // const { modalConfigurarCodigo } = modales;
 
-  await initModalConfigurar(modalConfigurarCodigo); //Aqui se inicializan los eventos del modal
+  // await abrirModalConfigurar(modalConfigurarCodigo); //Aqui se inicializan los eventos del modal
 
   const accessInfoRow = document.querySelector('.dashboard .access-info');
   const usuariosAcces = document.querySelector('.dashboard .access-info + .dashboard__row');
@@ -94,12 +94,13 @@ export default async () => {
         const restante = new Date(expiracion) - ahora;
 
         if (restante > 0) { 
-          await info("Código activo", `Ya existe un código de acceso generado. Por favor espera a que finalice antes de generar uno nuevo. Hora de expiración: ${expiracion.toLocaleTimeString('es-CO')}`);
+          await infoAlert("Código activo", `Ya existe un código de acceso generado. Por favor espera a que finalice antes de generar uno nuevo. Hora de expiración: ${expiracion.toLocaleTimeString('es-CO')}`);
           return;
         }
         localStorage.removeItem('codigoAccesoInfo');
       }
-      abrirModal(modalConfigurarCodigo); // Aqui se abre el modal para configurar el código
+      abrirModalConfigurar();
+      // abrirModal(modalConfigurarCodigo); // Aqui se abre el modal para configurar el código
     }
   });
 }

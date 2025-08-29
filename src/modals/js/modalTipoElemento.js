@@ -5,7 +5,7 @@ import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
 import * as api from "../../utils/api";
 import { actualizarStorageTipos, formatearTipo, tipoClick } from "../../views/compartidas/tipos-elementos/tipos-elementos";
 import { agregarFila, reemplazarFila, removerFilar } from "../../helpers/renderFilas";
-import { error, success } from "../../utils/alertas";
+// import { error, success } from "../../utils/alertas";
 
 
 export const configurarModalTipo = (modo, modal) => {

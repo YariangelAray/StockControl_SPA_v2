@@ -4,7 +4,7 @@ import { removerFilar } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
-import { error, info, success } from "../../../../utils/alertas";
+import { errorToast, infoToast, successToast } from "../../../../utils/alertas";
 import { del, get } from "../../../../utils/api";
 import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
@@ -70,11 +70,11 @@ export default async (modal, parametros) => {
         const respuesta = await del('ambientes/' + parametros.id);
         if (respuesta.success) {
             cerrarModal(modal);
-            success('Ambiente eliminado con éxito');
+            successToast('Ambiente eliminado con éxito');
             removerFilar(document.querySelector('#dashboard-ambientes .table__body'), parametros.id);
         } else {
             // ocultarModal(modal);
-            error(respuesta);
+            errorToast(respuesta);
             // setTimeout(() => mostrarModal(modal), 100);
         }
 
@@ -90,7 +90,7 @@ export default async (modal, parametros) => {
     //     }
     //     else {
     //         ocultarModal(modal);
-    //         await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
+    //         await infoToast("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
     //         setTimeout(() => mostrarModal(modal), 100);
     //     }
     // })
@@ -107,9 +107,9 @@ export default async (modal, parametros) => {
                 window.location.hash = `#/super-admin/ambientes/mapa/ambiente_id=${parametros.id}&nombre=${data.nombre}`;
             }
             else {
-                ocultarModal(modal);
-                await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
-                setTimeout(() => mostrarModal(modal), 100);
+                // ocultarModal(modal);
+              infoToast("Este ambiente aún no tiene un mapa disponible");
+                // setTimeout(() => mostrarModal(modal), 100);
             }
             return;
         }
@@ -118,14 +118,14 @@ export default async (modal, parametros) => {
         //     if (!confirmado) return;
         //     const respuesta = await del('ambientes/' + parametros.id);
     
-        //     if (respuesta.success) {
+        //     if (respuesta.successToast) {
         //         cerrarModal(modal);
-        //         await success('Ambiente eliminado con éxito');
+        //         await successToast('Ambiente eliminado con éxito');
         //         removerFilar(document.querySelector('#dashboard-ambientes .table__body'), parametros.id);
         //     }
         //     else {
         //         ocultarModal(modal);
-        //         await error(respuesta);
+        //         await errorToast(respuesta);
         //         setTimeout(async () => mostrarModal(modal), 100);
         //     }
         //     await actualizarStorageAmbientes();

@@ -1,5 +1,5 @@
 import { initComponentes } from "../../../helpers/initComponentes";
-import { info } from "../../../utils/alertas";
+import { infoAlert } from "../../../utils/alertas";
 import { del, get } from "../../../utils/api";
 
 /**
@@ -42,7 +42,7 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
         const dentroDeInventario = hash == '#/inventario' || hash == '#/perfil-usuario';
 
         if (!dentroDeInventario) {
-          await info("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
+          await infoAlert("Acceso expirado", "Tu acceso temporal al inventario ha finalizado.");
           setTimeout(() => {
             window.location.hash = '#/inventarios';
           }, 500);

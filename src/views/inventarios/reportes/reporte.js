@@ -13,19 +13,20 @@ export const formatearReporte = (reporte) => {
 }
 
 export const reporteClick = async (id) => {
-    const { data } = await get('reportes/me/' + id)
+  location.hash = '#/inventarios/reportes/detalles/id=' + id;
+    // const { data } = await get('reportes/me/' + id)
 
-    localStorage.setItem('reporte_temp', JSON.stringify(data));
-    configurarModalReporte({
-        id: data.id,
-        fecha: data.fecha,
-        placa: data.elemento.placa,
-        usuario: data.usuario,
-        asunto: data.asunto, 
-        mensaje: data.mensaje,
-        fotos: data.fotos
-    }, modales.modalReporte, data.elemento.id);
-    abrirModal(modales.modalReporte);
+    // localStorage.setItem('reporte_temp', JSON.stringify(data));
+    // configurarModalReporte({
+    //     id: data.id,
+    //     fecha: data.fecha,
+    //     placa: data.elemento.placa,
+    //     usuario: data.usuario,
+    //     asunto: data.asunto, 
+    //     mensaje: data.mensaje,
+    //     fotos: data.fotos
+    // }, modales.modalReporte, data.elemento.id);
+    // abrirModal(modales.modalReporte);
 }
 
 export const cargarReportes = async () => {
@@ -44,4 +45,8 @@ export const cargarReportes = async () => {
 export const actualizarStorageReportes = async () => {
     const nuevosReportes = await cargarReportes();
     localStorage.setItem('reportes', JSON.stringify({reportes: nuevosReportes}));
+}
+
+export default (modal, parametros) => async {
+  const { data } = await get('reportes/me/' + id)
 }

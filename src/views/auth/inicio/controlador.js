@@ -1,5 +1,5 @@
 import * as validaciones from "../../../utils/Validaciones";
-import { error, success } from "../../../utils/alertas";
+import {errorToast, successAlert } from "../../../utils/alertas";
 import * as api from "../../../utils/api";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
@@ -34,7 +34,7 @@ export default async () => {
       const respuesta = await api.post('auth/login', validaciones.datos);
 
       if (respuesta.success) {
-        await success("Inicio de sesión éxitoso");
+        await successAlert("Inicio de sesión éxitoso");
         const permisos = getCookie("permisos", {});
         requestAnimationFrame(() => {
           location.hash = hasPermisos('superadmin.access-home', permisos) ? "#/super-admin" : "#/inventarios";
@@ -44,7 +44,7 @@ export default async () => {
         //     location.hash = respuesta.data.rol_id == 1 ? '#/super-admin' : '#/inventarios';
         // },500);
       } else {
-        error(respuesta);
+        errorToast(respuesta);
       }
 
     } catch (e) {

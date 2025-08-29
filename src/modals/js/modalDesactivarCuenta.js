@@ -1,9 +1,9 @@
-import { error, success } from "../../utils/alertas";
+// import { error, success } from "../../utils/alertas";
 import * as api from "../../utils/api";
 import * as validaciones from "../../utils/Validaciones";
 import { cerrarModal } from "../modalsController";
 
-export const initModalEliminar = (modal, usuario) => {
+export const initModalEliminar = (modal) => {
 
     const campo = modal.querySelector('input');
     campo.addEventListener('blur', validaciones.validarCampo);
@@ -15,7 +15,7 @@ export const initModalEliminar = (modal, usuario) => {
         if (!validaciones.validarFormulario(e) || campo.value.trim() == "") return;
 
         try {
-            const respuesta = await api.put(`usuarios/${usuario.id}/desactivar`, { contrasena_actual: campo.value });
+            const respuesta = await api.put(`usuarios/me/desactivar`, { contrasena_actual: campo.value });
 
             if (respuesta.success) {
                 cerrarModal();

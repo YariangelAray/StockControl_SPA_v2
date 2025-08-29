@@ -1,7 +1,7 @@
 import { agregarFila } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
-import { error, success } from "../../../../utils/alertas";
+import { errorToast, successToast } from "../../../../utils/alertas";
 import { post } from "../../../../utils/api";
 import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
@@ -73,7 +73,7 @@ export default async (modal) => {
       try {
         JSON.parse(mapaInput.value.trim());
       } catch {
-        validaciones.agregarError(mapaInput, "El mapa no contiene un JSON válido.");
+        validaciones.agregarerrorToast(mapaInput, "El mapa no contiene un JSON válido.");
         return;
       }
     }
@@ -84,13 +84,13 @@ export default async (modal) => {
     const respuesta = await post('ambientes', validaciones.datos);
     if (!respuesta.success) {
       // ocultarModal(modal);
-      error(respuesta);
+      errorToast(respuesta);
       // setTimeout(() => mostrarModal(modal), 100);
       return;
     }
 
     cerrarModal(modal);
-    setTimeout(async () => await success('Ambiente creado con éxito'), 100);
+    setTimeout(async () => successToast('Ambiente creado con éxito'), 100);
     location.hash = obtenerHashBase();
 
     const datosFormateados = await formatearAmbiente(respuesta.data);

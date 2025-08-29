@@ -1,9 +1,8 @@
-import Swal from "sweetalert2";
 import { cargarCards } from "../../../helpers/cargarCards";
 import { initComponentes } from "../../../helpers/initComponentes";
 import { limpiarModales } from "../../../modals/modalsController";
 import * as api from "../../../utils/api";
-import { info } from "../../../utils/alertas";
+import { infoToast } from "../../../utils/alertas";
 import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTemporizadorAcceso";
 import getCookie from "../../../utils/getCookie";
 
@@ -23,29 +22,29 @@ export default async () => {
 
     await cargarAmbientes(ambientes, inventario)
 
-    if (roles.includes(3)) {
-        const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
+    // if (roles.includes(3)) {
+    //     const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
         
-        if (codigoInfo) {
-            const limpiar = () => {
-                document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-              localStorage.removeItem('inventario');
-              localStorage.removeItem('codigoAccesoInfo');
-            }
-            const expiracion = new Date(codigoInfo.expiracion);
-            const ahora = new Date();
+    //     if (codigoInfo) {
+    //         const limpiar = () => {
+    //             document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+    //           localStorage.removeItem('inventario');
+    //           localStorage.removeItem('codigoAccesoInfo');
+    //         }
+    //         const expiracion = new Date(codigoInfo.expiracion);
+    //         const ahora = new Date();
 
-            if (expiracion > ahora) {
-                document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
-                await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
-            } else {
-                await eliminarAccesos(inventario.id, limpiar);
-                window.location.hash = '#/inventarios';
-            }
-        } else {
-            window.location.hash = '#/inventarios';
-        }
-    }
+    //         if (expiracion > ahora) {
+    //             document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
+    //             await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
+    //         } else {
+    //             await eliminarAccesos(inventario.id, limpiar);
+    //             window.location.hash = '#/inventarios';
+    //         }
+    //     } else {
+    //         window.location.hash = '#/inventarios';
+    //     }
+    // }
 
     await actualizarStorageAmbientes(inventario);
     const search = document.querySelector('[type="search"]');
@@ -90,13 +89,14 @@ const cargarAmbientes = async (ambientes) => {
             if (ambiente.mapa) {
                 window.location.hash = `#/inventarios/ambientes/mapa/ambiente_id=${ambiente.id}&nombre=${ambiente.nombre}`;
             }
-            else await info("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
+            else infoToast( "Este ambiente aún no tiene un mapa disponible");
         }
     });
 };
 
 
 const actualizarStorageAmbientes = async (inventario) => {
-    const respuesta = await api.get(`inventarios/me/${inventario.id}/ambientes`);
+  const respuesta = await api.get(`inventarios/me/${inventario.id}/ambientes`);
+  console.log(respuesta)
     if (respuesta.success) localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data ?? [] }));
 }

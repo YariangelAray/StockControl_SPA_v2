@@ -1,6 +1,6 @@
 import getCookie from "../utils/getCookie";
 import { get } from "../utils/api";
-import { error } from "../utils/alertas";
+import { errorToast } from "../utils/alertas";
 
 /**
  * Carga el layout (public/private) e inyecta la vista indicada en el main.
@@ -46,7 +46,7 @@ export const cargarLayout = async (tipo = "public", vistaPath = '', hayLayout = 
           }
         } catch (err) {
           console.error(err);
-          error('Error al cerrar sesión.');
+          errorToast('Error al cerrar sesión.');
         }
       }
     });

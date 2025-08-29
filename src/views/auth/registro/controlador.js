@@ -1,6 +1,6 @@
 import { llenarSelect } from "../../../helpers/select";
 import * as validaciones from "../../../utils/Validaciones";
-import { error, success } from "../../../utils/alertas";
+import { errorToast, successAlert } from "../../../utils/alertas";
 import * as api from "../../../utils/api";
 
 export default async () => {
@@ -92,18 +92,17 @@ export default async () => {
             const respuesta = await api.post('auth/register', validaciones.datos);
             console.log(respuesta);
             if (respuesta.success) {
-                await success("Registro éxitoso");
+              await successAlert("Registro éxitoso");
                 localStorage.setItem('usuario', JSON.stringify(respuesta.data));
                 setTimeout(() => {
                     location.hash = '#/inventarios';
                 },500);
             } else {
-                error(respuesta);
+              errorToast(respuesta);
             }
 
         } catch (e) {
-            console.error("Error inesperado:", e);
-            error({});
+            console.error("Error inesperado:", e);            
         }
     });
 }

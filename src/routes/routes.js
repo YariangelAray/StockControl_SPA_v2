@@ -7,6 +7,7 @@ import mapa from '../views/compartidas/mapas/controlador.js';
 import detalles from '../views/inventarios/detalles/controlador.js';
 import elementos from '../views/inventarios/elementos/controlador.js';
 import reportes from '../views/inventarios/reportes/controlador.js';
+import reporteDetalles from '../views/inventarios/reportes/reporte.js';
 
 import tiposelementos from '../views/compartidas/tipos-elementos/controlador.js';
 import perfil from '../views/perfil-usuario/controlador.js';
@@ -107,8 +108,8 @@ export const routes = {
         meta: { can: 'reporte.view-inventory-own', requiresInventory: true}
       },
       detalles: {
-        path: 'inventarios/reportes/index.html',
-        controller: reportes,
+        path: 'modalReporte',
+        controller: reporteDetalles,
         meta: { can: 'reporte.view-inventory-own', requiresInventory: true, modal: true}
       },
     }

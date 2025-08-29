@@ -1,6 +1,5 @@
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import 'sweetalert2/src/sweetalert2.scss'
-import '../styles/components/alertas.css'
 import Toastify from 'toastify-js';
 import "toastify-js/src/toastify.css";
 
@@ -18,7 +17,7 @@ const toastCommonOptions = {
   }
 };
 
-export function success(message = 'Operación realizada con éxito') {
+export function successToast(message = 'Operación realizada con éxito') {
   Toastify({
     text: message,    
     backgroundColor: "#39A900",
@@ -26,7 +25,7 @@ export function success(message = 'Operación realizada con éxito') {
   }).showToast();
 }
 
-export function error(response) {
+export function errorToast(response) {
   const messages = [];
   if (Array.isArray(response?.errors)) {
     response.errors.forEach(err => messages.unshift(err));
@@ -49,14 +48,14 @@ export function error(response) {
 
 
 
-// // Configuración base
-// const configuracionBase = {
-//   background: '#F6F6F6',
-//   customClass: {
-//     confirmButton: 'button',
-//   },
-//   buttonsStyling: false,
-// };
+// Configuración base
+const configuracionBase = {
+  background: '#F6F6F6',
+  customClass: {
+    confirmButton: 'button',
+  },
+  buttonsStyling: false,
+};
 
 // const activeToasts = [];
 
@@ -111,17 +110,24 @@ export function error(response) {
 //   });
 // };
 
-// // export const success = (mensaje = 'Operación realizada con éxito') => {
-// //   return Swal.fire({
-// //     ...configuracionBase,
-// //     icon: 'success',
-// //     title: mensaje,
-// //     confirmButtonText: 'Aceptar',
-// //     allowOutsideClick: false
-// //   });
-// // };
+export const successAlert = (mensaje = 'Operación realizada con éxito') => {
+  return Swal.fire({
+    ...configuracionBase,
+    icon: 'success',
+    title: mensaje,
+    confirmButtonText: 'Aceptar',
+    allowOutsideClick: false
+  });
+};
 
-export const info = (titulo, mensaje) => {
+export const infoToast = (message) => {
+  Toastify({
+    text: message,
+    backgroundColor: "#1e73be",
+    ...toastCommonOptions,
+  }).showToast();
+}
+export const infoAlert = (titulo, mensaje) => {
   return Swal.fire({
     ...configuracionBase,
     icon: 'info',

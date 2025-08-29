@@ -6,7 +6,7 @@ import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
 import { initModalGenerarReporte } from "./modalGenerarReporte";
 import * as validaciones from "../../utils/Validaciones";
 import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario";
-import { error, success } from '../../utils/alertas'
+// import { error, success } from '../../utils/alertas'
 import * as api from "../../utils/api";
 import { actualizarStorageElementos, elementoClick, formatearElemento } from '../../views/inventarios/elementos/elemento';
 import { actualizarStorageTipos } from "../../views/compartidas/tipos-elementos/tipos-elementos";

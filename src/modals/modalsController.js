@@ -36,18 +36,20 @@ export const ocultarModalTemporal = (modal) => {
   setTimeout(() => modal.close(), 300);
 };
 
-export const ocultarModal = (modal) => {
+export const ocultarModal = (modal) => { // este
   modal.classList.remove('visible');
   setTimeout(() => modal.close(), 300);
 };
-export const mostrarModal = (modal) => {
+export const mostrarModal = (modal) => { // este
   modal.showModal();
   requestAnimationFrame(() => modal.classList.add('visible'));
 }
 
-export const cerrarModal = (modal) => {
-  modal.dataset.inicializado = "";
-  modal.dataset.modo = "";
+export const cerrarModal = (modal) => { // este
+  if (modal.id == 'app-modal') {
+    modal.dataset.inicializado = "";
+    modal.dataset.modo = "";
+  }
   modal.classList.remove('visible');
   modal.addEventListener('transitionend', () => {
     modal.close();
@@ -56,7 +58,7 @@ export const cerrarModal = (modal) => {
 };
 
 
-export const cargarModal = async (modalNombre) => {
+export const cargarModal = async (modalNombre) => { // este
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = await (await fetch(`./src/modals/html/${modalNombre}.html`)).text();
   const modal = tempDiv.querySelector('dialog');
@@ -84,7 +86,7 @@ export const cargarModal = async (modalNombre) => {
 // }
 
 
-export const mostrarConfirmacion = async (mensaje = '¿Está seguro de continuar?') => {
+export const mostrarConfirmacion = async (mensaje = '¿Está seguro de continuar?') => { // este
 
   const modalConfirmacion = await cargarModal('modalConfirmacion');
   

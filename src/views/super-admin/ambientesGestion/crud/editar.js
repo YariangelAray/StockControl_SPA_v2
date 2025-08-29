@@ -4,7 +4,7 @@ import { reemplazarFila } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { mostrarConfirmacion } from "../../../../modals/modalsController";
-import { error, success } from "../../../../utils/alertas";
+import { errorToast, successToast } from "../../../../utils/alertas";
 import { get, put } from "../../../../utils/api";
 import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
@@ -81,7 +81,7 @@ export default async (modal, parametros) => {
       try {
         JSON.parse(mapaInput.value.trim());
       } catch {
-        validaciones.agregarError(mapaInput, "El mapa no contiene un JSON válido.");
+        validaciones.agregarerrorToast(mapaInput, "El mapa no contiene un JSON válido.");
         return;
       }
     }
@@ -92,12 +92,12 @@ export default async (modal, parametros) => {
     const respuesta = await put('ambientes/' + parametros.id, validaciones.datos);
     if (!respuesta.success) {
       // ocultarModal(modal);
-      error(respuesta);
+      errorToast(respuesta);
       // setTimeout(() => mostrarModal(modal), 100);
       return;
     }
 
-    success('Ambiente actualizado con éxito');
+    successToast('Ambiente actualizado con éxito');
     // cerrarModal(modal);
     // modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
     // await detalles(modal, parametros); // reutiliza la lógica
@@ -115,7 +115,7 @@ export default async (modal, parametros) => {
 
   asignarEvento(cancelarBtn, 'click', async () => {
       form.querySelectorAll('.form__control').forEach(input => {
-          input.classList.remove('error');
+          input.classList.remove('errorToast');
       });
       // await detalles(modal, parametros); // reutiliza la lógica
       location.hash = '#/super-admin/ambientes/detalles/id=' + parametros.id;
@@ -126,7 +126,7 @@ export default async (modal, parametros) => {
   // modal.addEventListener('click', async (e) => {
   //   if (e.target.closest('.cancelar')) {
   //     form.querySelectorAll('.form__control').forEach(input => {
-  //       input.classList.remove('error');
+  //       input.classList.remove('errorToast');
   //     });
   //     modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
   //     await detalles(modal, parametros); // reutiliza la lógica

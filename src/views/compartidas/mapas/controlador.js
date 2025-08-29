@@ -6,7 +6,7 @@ import { abrirModal, initModales, limpiarModales, modales } from "../../../modal
 import { configurarModalElemento, initModalElemento } from "../../../modals/js/modalElemento";
 import { initComponentes } from "../../../helpers/initComponentes";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
-import {error} from '../../../utils/alertas';
+// import {error} from '../../../utils/alertas';
 
 // // Simulamos una respuesta del backend
 // const ambiente = [

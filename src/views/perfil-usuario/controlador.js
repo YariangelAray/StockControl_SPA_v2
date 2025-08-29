@@ -5,7 +5,7 @@ import * as api from "../../utils/api.js";
 import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario.js";
 import { llenarSelect } from "../../helpers/select";
 import * as validaciones from "../../utils/Validaciones";
-import { error, success } from "../../utils/alertas.js";
+import { errorToast, successToast } from "../../utils/alertas.js";
 import { eliminarAccesos, initTemporizadorAcceso } from "../inventarios/detalles/initTemporizadorAcceso.js";
 import { setLecturaForm } from "../../helpers/setLecturaForm.js";
 import getCookie from "../../utils/getCookie.js";
@@ -16,7 +16,23 @@ export default async () => {
   const permisos = getCookie('permisos', []);
   const rolesName = getCookie('roles', []).map(r => r.nombre);
   const contentDesactivar = document.querySelector('.desactivar-cuenta');
-  if (hasPermisos("usuario.disable-own", permisos)) contentDesactivar.classList.remove('hidden');
+
+
+
+  limpiarModales();
+  await initModales(['modalDesactivarCuenta']);
+
+  const { modalDesactivarCuenta } = modales;
+  initModalEliminar(modalDesactivarCuenta);
+
+  if (hasPermisos("usuario.disable-own", permisos)) {
+    contentDesactivar.classList.remove('hidden')
+    document.getElementById('dashboard-perfil').addEventListener('click', (e) => {
+      if (e.target.closest('#desactivarCuenta')) {
+        abrirModal(modalDesactivarCuenta);
+      }
+    })
+  };
 
   const { data } = await api.get('usuarios/me');
   const usuario = data;
@@ -102,26 +118,25 @@ export default async () => {
     e.preventDefault();
     if (!validaciones.validarFormulario(e)) return;
     delete validaciones.datos.programas
-    validaciones.datos['contrasena'] = 'restringido';
+    // validaciones.datos['contrasena'] = 'restringido';
 
     try {
 
-      const respuesta = await api.put(`usuarios/${usuario.id}`, validaciones.datos);
+      const respuesta = await api.put(`usuarios/me`, validaciones.datos);
 
       if (respuesta.success) {
-        await success("Usuario actualizado exitosamente");
+        successToast("Usuario actualizado exitosamente");
         localStorage.setItem('usuario', JSON.stringify({ id: respuesta.data.id, nombres: respuesta.data.nombres, apellidos: respuesta.data.apellidos, rol_id: respuesta.data.rol_id }));
 
         const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
         initComponentes(usuarioInfo);
 
       } else {
-        error(respuesta);
+        errorToast(respuesta);
       }
 
     } catch (e) {
-      console.error("Error inesperado:", e);
-      error({});
+      console.error("Error inesperado:", e);      
     }
   })
 
@@ -140,55 +155,44 @@ export default async () => {
     e.preventDefault();
     if (!validaciones.validarFormulario(e)) return;
     try {
-      const respuesta = await api.put(`usuarios/${usuario.id}/contrasena`, validaciones.datos);
+      const respuesta = await api.put(`usuarios/me/contrasena`, validaciones.datos);
 
       if (respuesta.success) {
-        await success("Contraseña actualizada exitosamente");
+        successToast("Contraseña actualizada exitosamente");
         formContrasena.reset()
       } else {
-        error(respuesta);
+        errorToast(respuesta);
       }
 
     } catch (e) {
-      console.error("Error inesperado:", e);
-      error({});
+      console.error("Error inesperado:", e);      
     }
   })
 
 
-  limpiarModales();
-  await initModales(['modalDesactivarCuenta']);
 
-  const { modalDesactivarCuenta } = modales;
-  initModalEliminar(modalDesactivarCuenta, usuario);
 
-  if (usuario.rol_id === 3) {
-    const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-    const inventario = JSON.parse(localStorage.getItem('inventario') || '{}');
-    if (codigoInfo && inventario.id) {
-      const limpiar = () => {
-        document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-        localStorage.removeItem('codigoAccesoInfo');
-        localStorage.removeItem('inventario');
-        initComponentes(usuario);
-      }
-      const expiracion = new Date(codigoInfo.expiracion);
-      const ahora = new Date();
+  // if (usuario.rol_id === 3) {
+  //   const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
+  //   const inventario = JSON.parse(localStorage.getItem('inventario') || '{}');
+  //   if (codigoInfo && inventario.id) {
+  //     const limpiar = () => {
+  //       document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+  //       localStorage.removeItem('codigoAccesoInfo');
+  //       localStorage.removeItem('inventario');
+  //       initComponentes(usuario);
+  //     }
+  //     const expiracion = new Date(codigoInfo.expiracion);
+  //     const ahora = new Date();
 
-      if (expiracion > ahora) {
-        document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
-        await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
-      } else {
-        await eliminarAccesos(inventario.id, limpiar);
-      }
-    }
-  }
-
-  document.getElementById('dashboard-perfil').addEventListener('click', (e) => {
-    if (e.target.closest('#desactivarCuenta')) {
-      abrirModal(modalDesactivarCuenta);
-    }
-  })
+  //     if (expiracion > ahora) {
+  //       document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
+  //       await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
+  //     } else {
+  //       await eliminarAccesos(inventario.id, limpiar);
+  //     }
+  //   }
+  // }
 }
 
 const agregarFichas = (selectFichas, programa) => {
