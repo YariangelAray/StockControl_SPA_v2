@@ -47,6 +47,6 @@ export const actualizarStorageReportes = async () => {
     localStorage.setItem('reportes', JSON.stringify({reportes: nuevosReportes}));
 }
 
-export default (modal, parametros) => async {
+export default async (modal, parametros) => {
   const { data } = await get('reportes/me/' + id)
 }
