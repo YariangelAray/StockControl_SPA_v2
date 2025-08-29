@@ -29,11 +29,11 @@
   </div>
 
   <div class="modal__actions">
-    <button class="button editar">Editar<i class="ri-edit-fill icon"></i></button>
+    <button class="button editar" data-permiso="ambiente.update">Editar<i class="ri-edit-fill icon"></i></button>
     <button type="submit" class="button crear" form="form-ambiente" data-permiso="ambiente.create">Crear</button>
-    <button type="submit" class="button guardar" form="form-ambiente">Guardar</button>
+    <button type="submit" class="button guardar" form="form-ambiente" data-permiso="ambiente.update">Guardar</button>
     <button class="button ver-mapa">Ver mapa<i class="ri-map-2-line icon"></i></button>
-    <button class="button button--red eliminar">Eliminar</button> 
+    <button class="button button--red eliminar" data-permiso="ambiente.delete">Eliminar</button> 
     <button class="button button--white aceptar button--final">Aceptar</button>
     <button class="button button--red cancelar button--final">Cancelar</button>
   </div>

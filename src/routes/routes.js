@@ -158,12 +158,12 @@ export const routes = {
         meta: { can: 'ambiente.create', modal: true }
       },
       detalles: {
-        // path: 'super-admin/ambientesGestion/index.html',
+        path: 'modalAmbiente',
         controller: ambiente.detalles,
         meta: { can: 'ambiente.view', modal: true, sameModal: true }
       },
       editar: {
-        // path: 'super-admin/ambientesGestion/index.html',
+        path: 'modalAmbiente',
         controller: ambiente.editar,
         meta: { can: 'ambiente.update', modal: true, sameModal: true }
       },

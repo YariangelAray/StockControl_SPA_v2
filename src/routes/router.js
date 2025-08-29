@@ -6,6 +6,8 @@ import { cargarLayout } from "../layouts/layoutManager";
 import { initComponentes } from "../helpers/initComponentes";
 import hasPermisos from "../utils/hasPermisos";
 import modalManager from "../modals/modalManager";
+import { cerrarModal } from "../modals/modalsController";
+import obtenerHashBase from "../utils/obtenerHashBase";
 
 let hayLayout = false;
 
@@ -13,10 +15,9 @@ export const router = async () => {
   const hash = location.hash.slice(2);
   const segmentos = hash.split("/").filter(Boolean);
 
-  document.title = "Stock Control";
-
   // Redirección por defecto
   if (segmentos.length == 0) {
+    document.title = "Stock Control";
     location.hash = '#/inicio';
     return;
   }
@@ -30,6 +31,8 @@ export const router = async () => {
   if (!ruta) return render404(roles.length != 0);
 
   const meta = ruta.meta || {};
+
+  // Solo poner título predeterminado si no es modal
 
   if (!meta.public && !(await isAuth())) {
     location.hash = '#/inicio';
@@ -59,16 +62,91 @@ export const router = async () => {
 
   const desiredLayout = meta.public ? "public" : "private";
 
+  if (!meta.modal) {
+    // 🔑 cerrar modal si existe
+    const modalAbierto = document.getElementById('app-modal');
+    if (modalAbierto) cerrarModal(modalAbierto);
+  }
+
+  // if (meta.modal) {
+  //   const hashBase = obtenerHashBase();
+  //   const enBase = location.hash.startsWith(hashBase);
+  //   const modalAbierto = document.getElementById('app-modal');
+
+  //   const [rutaBase, paramsBase] = encontrarRuta(routes, hashBase.slice(2).split('/'));
+
+  //   if (!enBase || !document.querySelector('.dashboard__layout')) {
+  //     await cargarLayout(desiredLayout, rutaBase.path, false);
+  //     rutaBase.controller(paramsBase);
+  //     initComponentes();
+  //     hayLayout = true;
+  //   }
+
+  //   // Si el modal ya está abierto y es el mismo, solo refrescar el controlador
+  //   if (modalAbierto && meta.sameModal) {
+  //     ruta.controller(modalAbierto, parametros);
+  //     return;
+  //   }
+
+  //   // Si no está abierto o es diferente, abrir normalmente
+  //   await modalManager({
+  //     nombre: ruta.path,
+  //     parametros,
+  //     controlador: ruta.controller,
+  //     mismoModal: meta.sameModal
+  //   });
+  //   return;
+  // }
+
+
   if (meta.modal) {
-    // if (!hayLayout) {
-    //   const [ruta, parametros] = encontrarRuta(routes, segmentos.pop());
-    //   await cargarLayout(desiredLayout, ruta.path, hayLayout);
-    //   ruta.controller();
-    //   hayLayout = true;
-    // }
-    await modalManager({ nombre: ruta.path, parametros, controlador: ruta.controller, mismoModal: meta.sameModal });
+    const hashBase = obtenerHashBase();
+    const enBase = location.hash.startsWith(hashBase);
+
+    const [rutaBase, paramsBase] = encontrarRuta(routes, hashBase.slice(2).split('/'));
+
+    if (!enBase || !document.querySelector('.dashboard__layout')) {
+      await cargarLayout(desiredLayout, rutaBase.path, false);
+      rutaBase.controller(paramsBase);
+      initComponentes();
+      hayLayout = true;
+    }
+
+    await modalManager({
+      nombre: ruta.path,
+      parametros,
+      controlador: ruta.controller,
+      mismoModal: meta.sameModal
+    });
     return;
   }
+
+
+
+  // if (meta.modal) {
+  //   // Extraer la ruta base (ej: "ambientes" de "ambientes/crear")
+  //   const segmentosBase = [...segmentos];
+  //   segmentosBase.pop(); // quitar el último (crear, editar, etc.)
+
+  //   // Si no hay layout o si el main está vacío → cargar la vista base
+  //   if (!hayLayout || !document.querySelector('.dashboard__layout')) {
+  //     const [rutaBase, paramsBase] = encontrarRuta(routes, segmentosBase);
+  //     await cargarLayout(desiredLayout, rutaBase.path, hayLayout);
+  //     rutaBase.controller(paramsBase);
+  //     initComponentes();
+  //     hayLayout = true;
+  //   }
+
+  //   // Ahora sí abrir modal
+  //   await modalManager({
+  //     nombre: ruta.path,
+  //     parametros,
+  //     controlador: ruta.controller,
+  //     mismoModal: meta.sameModal
+  //   });
+  //   return;
+  // }
+
 
   // Si se necesita layout público (auth pages) o privado
 

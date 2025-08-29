@@ -24,15 +24,18 @@ export const formatearAmbiente = async (ambiente) => {
 export const ambienteClick = async (id) => {
     const { data } = await get('ambientes/' + id)
     localStorage.setItem('ambiente_temp', JSON.stringify(data));
+    location.hash = '#/super-admin/ambientes/detalles/id='+id;
 
-    const form = modales.modalAmbiente.querySelector('form');
 
-    llenarCamposFormulario(data, form);
-    modales.modalAmbiente.dataset.id = data.id;
-    configurarModalAmbiente('editar', modales.modalAmbiente);
-    const btn = modales.modalAmbiente.querySelector('.ver-mapa');
-    if (!data.mapa) btn.classList.add('hidden');
-    abrirModal(modales.modalAmbiente);
+
+    // const form = modales.modalAmbiente.querySelector('form');
+
+    // llenarCamposFormulario(data, form);
+    // modales.modalAmbiente.dataset.id = data.id;
+    // configurarModalAmbiente('editar', modales.modalAmbiente);
+    // const btn = modales.modalAmbiente.querySelector('.ver-mapa');
+    // if (!data.mapa) btn.classList.add('hidden');
+    // abrirModal(modales.modalAmbiente);
 }
 
 export const cargarAmbientes = async () => {

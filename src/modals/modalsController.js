@@ -45,6 +45,34 @@ export const mostrarModal = (modal) => {
   requestAnimationFrame(() => modal.classList.add('visible'));
 }
 
+export const cerrarModal = (modal) => {
+  modal.dataset.inicializado = "";
+  modal.dataset.modo = "";
+  modal.classList.remove('visible');
+  modal.addEventListener('transitionend', () => {
+    modal.close();
+    modal.remove();
+  }, { once: true });
+};
+
+
+export const cargarModal = async (modalNombre) => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = await (await fetch(`./src/modals/html/${modalNombre}.html`)).text();
+  const modal = tempDiv.querySelector('dialog');
+  document.body.appendChild(modal);
+  return modal;
+};
+
+
+
+// export const cerrarModal = (modal) => {
+//   modal.classList.remove('visible');
+//   // setTimeout(() => modal.close(), 300);
+//   requestAnimationFrame(() => modal.remove());
+//   // modal.remove()
+// }
+
 // export const cerrarModal = () => {
 //     const modal = modalStack.pop();
 //     if (!modal) return;
@@ -55,19 +83,11 @@ export const mostrarModal = (modal) => {
 //     if (anterior) abrirModal(anterior);
 // }
 
-export const cerrarModal = (modal) => {
-  modal.classList.remove('visible');
-  setTimeout(() => modal.close(), 300);
-  modal.remove()
-}
-
 
 export const mostrarConfirmacion = async (mensaje = '¿Está seguro de continuar?') => {
 
-  await initModales(['modalConfirmacion']);
-
-  const { modalConfirmacion } = modales;
-
+  const modalConfirmacion = await cargarModal('modalConfirmacion');
+  
   const mensajeSpan = modalConfirmacion.querySelector('.modal__mensaje');
   mensajeSpan.textContent = mensaje;
 
