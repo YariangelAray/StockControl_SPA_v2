@@ -83,9 +83,9 @@ export default async (modal) => {
 
     const respuesta = await post('ambientes', validaciones.datos);
     if (!respuesta.success) {
-      ocultarModal(modal);
-      await error(respuesta);
-      setTimeout(() => mostrarModal(modal), 100);
+      // ocultarModal(modal);
+      error(respuesta);
+      // setTimeout(() => mostrarModal(modal), 100);
       return;
     }
 

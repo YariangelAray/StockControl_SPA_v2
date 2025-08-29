@@ -68,40 +68,10 @@ export const router = async () => {
     if (modalAbierto) cerrarModal(modalAbierto);
   }
 
-  // if (meta.modal) {
-  //   const hashBase = obtenerHashBase();
-  //   const enBase = location.hash.startsWith(hashBase);
-  //   const modalAbierto = document.getElementById('app-modal');
-
-  //   const [rutaBase, paramsBase] = encontrarRuta(routes, hashBase.slice(2).split('/'));
-
-  //   if (!enBase || !document.querySelector('.dashboard__layout')) {
-  //     await cargarLayout(desiredLayout, rutaBase.path, false);
-  //     rutaBase.controller(paramsBase);
-  //     initComponentes();
-  //     hayLayout = true;
-  //   }
-
-  //   // Si el modal ya está abierto y es el mismo, solo refrescar el controlador
-  //   if (modalAbierto && meta.sameModal) {
-  //     ruta.controller(modalAbierto, parametros);
-  //     return;
-  //   }
-
-  //   // Si no está abierto o es diferente, abrir normalmente
-  //   await modalManager({
-  //     nombre: ruta.path,
-  //     parametros,
-  //     controlador: ruta.controller,
-  //     mismoModal: meta.sameModal
-  //   });
-  //   return;
-  // }
-
-
   if (meta.modal) {
     const hashBase = obtenerHashBase();
     const enBase = location.hash.startsWith(hashBase);
+    const modalAbierto = document.getElementById('app-modal');
 
     const [rutaBase, paramsBase] = encontrarRuta(routes, hashBase.slice(2).split('/'));
 
@@ -112,6 +82,13 @@ export const router = async () => {
       hayLayout = true;
     }
 
+    // Si el modal ya está abierto y es el mismo, solo refrescar el controlador
+    if (modalAbierto && meta.sameModal) {
+      ruta.controller(modalAbierto, parametros);
+      return;
+    }
+
+    // Si no está abierto o es diferente, abrir normalmente
     await modalManager({
       nombre: ruta.path,
       parametros,
@@ -120,6 +97,29 @@ export const router = async () => {
     });
     return;
   }
+
+
+  // if (meta.modal) {
+  //   const hashBase = obtenerHashBase();
+  //   const enBase = location.hash.startsWith(hashBase);
+
+  //   const [rutaBase, paramsBase] = encontrarRuta(routes, hashBase.slice(2).split('/'));
+
+  //   if (!enBase || !document.querySelector('.dashboard__layout')) {
+  //     await cargarLayout(desiredLayout, rutaBase.path, false);
+  //     rutaBase.controller(paramsBase);
+  //     initComponentes();
+  //     hayLayout = true;
+  //   }
+
+  //   await modalManager({
+  //     nombre: ruta.path,
+  //     parametros,
+  //     controlador: ruta.controller,
+  //     mismoModal: meta.sameModal
+  //   });
+  //   return;
+  // }
 
 
 

@@ -70,12 +70,12 @@ export default async (modal, parametros) => {
         const respuesta = await del('ambientes/' + parametros.id);
         if (respuesta.success) {
             cerrarModal(modal);
-            await success('Ambiente eliminado con éxito');
+            success('Ambiente eliminado con éxito');
             removerFilar(document.querySelector('#dashboard-ambientes .table__body'), parametros.id);
         } else {
-            ocultarModal(modal);
-            await error(respuesta);
-            setTimeout(() => mostrarModal(modal), 100);
+            // ocultarModal(modal);
+            error(respuesta);
+            // setTimeout(() => mostrarModal(modal), 100);
         }
 
         await actualizarStorageAmbientes();
