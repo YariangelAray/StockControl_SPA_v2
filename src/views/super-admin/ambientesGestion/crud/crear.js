@@ -73,7 +73,7 @@ export default async (modal) => {
       try {
         JSON.parse(mapaInput.value.trim());
       } catch {
-        validaciones.agregarerrorToast(mapaInput, "El mapa no contiene un JSON válido.");
+        validaciones.agregarError(mapaInput, "El mapa no contiene un JSON válido.");
         return;
       }
     }
@@ -93,7 +93,7 @@ export default async (modal) => {
     setTimeout(async () => successToast('Ambiente creado con éxito'), 100);
     location.hash = obtenerHashBase();
 
-    const datosFormateados = await formatearAmbiente(respuesta.data);
+    const datosFormateados = formatearAmbiente(respuesta.data);
 
     // actualizar cache y tabla
     let ambientes = JSON.parse(localStorage.getItem('ambientes'))?.ambientes || [];

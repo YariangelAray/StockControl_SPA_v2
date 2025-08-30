@@ -13,8 +13,7 @@ export const abrirModalConfigurar = async () => {
   // await initModales(['modalCodigoAcceso']);
   // const { modalCodigoAcceso } = modales;
 
-  const form = modal.querySelector('form');
-  form.reset();
+  const form = modal.querySelector('form');  
 
   const inputHoras = modal.querySelector('input[name="horas"]');
   const inputMinutos = modal.querySelector('input[name="minutos"]');

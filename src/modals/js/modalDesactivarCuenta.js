@@ -1,9 +1,13 @@
 // import { error, success } from "../../utils/alertas";
+import { errorToast, successAlert } from "../../utils/alertas";
 import * as api from "../../utils/api";
 import * as validaciones from "../../utils/Validaciones";
-import { cerrarModal } from "../modalsController";
+import { abrirModal, cargarModal, cerrarModal } from "../modalsController";
 
-export const initModalEliminar = (modal) => {
+export const abrirModalEliminar = async () => {
+
+    const modal = await cargarModal('modalDesactivarCuenta');
+    abrirModal(modal)
 
     const campo = modal.querySelector('input');
     campo.addEventListener('blur', validaciones.validarCampo);
@@ -18,30 +22,25 @@ export const initModalEliminar = (modal) => {
             const respuesta = await api.put(`usuarios/me/desactivar`, { contrasena_actual: campo.value });
 
             if (respuesta.success) {
-                cerrarModal();
-                await success("Cuenta desactivada exitosamente");
-                setTimeout(() => {
+                cerrarModal(modal);
+                setTimeout( async() => {
+                    await successAlert("Cuenta desactivada exitosamente");
                     location.hash = '#/inicio';
-                }, 100);
+                }, 500);
 
             } else {
-                cerrarModal();
-                error(respuesta);
+                cerrarModal(modal);
+                errorToast(respuesta);
             }
 
         } catch (e) {
-            console.error("Error inesperado:", e);
-            error({});
-        }
-        form.reset()
+            console.error("Error inesperado:", e);            
+        }        
     })
 
     modal.addEventListener('click', (e) => {
         if (e.target.closest('.cancelar')) {
-            cerrarModal();
-            form.querySelectorAll('.form__control').forEach(input => {
-                input.classList.remove('error');
-            });
+            cerrarModal(modal);
         }
     })
 }

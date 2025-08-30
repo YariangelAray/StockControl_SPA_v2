@@ -5,6 +5,12 @@ import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario"
 import getCookie from "../../../utils/getCookie"
 import hasPermisos from "../../../utils/hasPermisos"
 
+import crear from './crud/crear';
+import detalles from './crud/detalles';
+import editar from './crud/editar';
+
+export default { crear, detalles, editar };
+
 export const formatearTipo = (tipo) => {
   return [
     tipo.id,
@@ -19,16 +25,20 @@ export const formatearTipo = (tipo) => {
 }
 
 export const tipoClick = async (id) => {
-  const permisos = getCookie('permisos', []);
-  const { data } = await get('tipos-elementos/' + id)
-  localStorage.setItem('tipo_temp', JSON.stringify(data));
-  const form = modales.modalTipoElemento.querySelector('form');
 
-  configurarModalTipo('editar', modales.modalTipoElemento);
-  llenarCamposFormulario(data, form);
-  const btn = modales.modalTipoElemento.querySelector('.eliminar');
-  if (hasPermisos('tipo-elemento.delete', permisos)) btn.classList.remove('hidden');
-  abrirModal(modales.modalTipoElemento);
+  if(location.hash.startsWith('#/inventarios')) location.hash = '#/inventarios/elementos/tipos-elementos/detalles/id='+id;
+  else if(location.hash.startsWith('#/super-admin')) location.hash = '#/super-admin/tipos-elementos/detalles/id='+id;
+
+  // const permisos = getCookie('permisos', []);
+  // const { data } = await get('tipos-elementos/' + id)
+  // localStorage.setItem('tipo_temp', JSON.stringify(data));
+  // const form = modales.modalTipoElemento.querySelector('form');
+
+  // configurarModalTipo('editar', modales.modalTipoElemento);
+  // llenarCamposFormulario(data, form);
+  // const btn = modales.modalTipoElemento.querySelector('.eliminar');
+  // if (hasPermisos('tipo-elemento.delete', permisos)) btn.classList.remove('hidden');
+  // abrirModal(modales.modalTipoElemento);
 }
 
 export const cargarTipos = async () => {

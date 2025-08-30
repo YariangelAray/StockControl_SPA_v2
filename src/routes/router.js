@@ -14,10 +14,9 @@ let hayLayout = false;
 export const router = async () => {
   const hash = location.hash.slice(2);
   const segmentos = hash.split("/").filter(Boolean);
-
+  
   // Redirección por defecto
   if (segmentos.length == 0) {
-    document.title = "Stock Control";
     location.hash = '#/inicio';
     return;
   }
@@ -40,12 +39,19 @@ export const router = async () => {
   }
   // Render sin layout
   if (meta.public && meta.noLayout) {
+    document.title = "Stock Control";
     hayLayout = false;
     await cargarLayout("public", ruta.path, hayLayout)
     ruta.controller();
     return;
   }
 
+  if (meta.can) {
+    const permisos = getCookie('permisos', []);
+    const requeridos = Array.isArray(meta.can) ? meta.can : [meta.can];
+    if (!requeridos.some(r => hasPermisos(r, permisos))) return render404(roles.length != 0);
+  }
+  
   if (meta.requiresInventory) {
     const inventario = JSON.parse(localStorage.getItem('inventario') || 'null');
     if (!inventario) {
@@ -54,11 +60,6 @@ export const router = async () => {
     }
   }
 
-  if (meta.can) {
-    const permisos = getCookie('permisos', []);
-    const requeridos = Array.isArray(meta.can) ? meta.can : [meta.can];
-    if (!requeridos.some(r => hasPermisos(r, permisos))) return render404(roles.length != 0);
-  }
 
   const desiredLayout = meta.public ? "public" : "private";
 

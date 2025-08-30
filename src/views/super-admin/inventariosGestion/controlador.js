@@ -19,22 +19,22 @@ export default async () => {
 
   renderFilas(inventarios, inventarioClick);
 
-  limpiarModales();
-  await initModales(['modalInventario']);
-  const { modalInventario } = modales;
-  await initModalInventario(modalInventario)
+  // limpiarModales();
+  // await initModales(['modalInventario']);
+  // const { modalInventario } = modales;
+  // await initModalInventario(modalInventario)
 
   if (!hasPermisos('inventario.create', permisos)) document.querySelector('#crearInventario').remove();
 
   // Actualización en segundo plano
   await actualizarStorageInventarios();
-  document.getElementById('dashboard-inventarios').addEventListener('click', async (e) => {
-    // Botón Agregar → AGREGAR
-    if (e.target.closest('#crearInventario')) {
-      await configurarModalInventario('crear', modalInventario);
-      abrirModal(modalInventario);
-    }
-  });
+  // document.getElementById('dashboard-inventarios').addEventListener('click', async (e) => {
+  //   // Botón Agregar → AGREGAR
+  //   if (e.target.closest('#crearInventario')) {
+  //     await configurarModalInventario('crear', modalInventario);
+  //     abrirModal(modalInventario);
+  //   }
+  // });
   const search = document.querySelector('[type="search"]');
   search.addEventListener('input', (e) => {
     let inventarios = JSON.parse(localStorage.getItem('inventarios') || '{}').inventarios || [];

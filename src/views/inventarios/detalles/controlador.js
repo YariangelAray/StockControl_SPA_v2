@@ -99,7 +99,7 @@ export default async () => {
         }
         localStorage.removeItem('codigoAccesoInfo');
       }
-      abrirModalConfigurar();
+      await abrirModalConfigurar();
       // abrirModal(modalConfigurarCodigo); // Aqui se abre el modal para configurar el código
     }
   });

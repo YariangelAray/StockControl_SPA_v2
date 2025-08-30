@@ -220,7 +220,8 @@ const actualizarHeader = (inventario) => {
             document.title = 'Ambientes';
 
             // Si hay más segmentos (por ejemplo: super-admin/ambientes/mapa)
-            if (partes[1]) {
+            
+            if (partes[1] == "mapa") {
                 const flecha = document.createElement('i');
                 flecha.classList.add('ri-arrow-right-s-line', 'header__flecha');
                 header.appendChild(flecha);

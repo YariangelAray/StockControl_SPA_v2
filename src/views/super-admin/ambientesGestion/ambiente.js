@@ -9,14 +9,12 @@ import editar from './crud/editar';
 
 export default { crear, detalles, editar };
 
-export const formatearAmbiente = async (ambiente) => {
-    const centro = await get('centros/' + ambiente.centro_id);
-
+export const formatearAmbiente = (ambiente) => {    
     return [
         ambiente.id,
         ambiente.id,
         ambiente.nombre,
-        centro.data.nombre,
+        ambiente.centro,
         ambiente.mapa ? "Disponible" : "No disponible"
     ];
 }
@@ -41,10 +39,10 @@ export const ambienteClick = async (id) => {
 export const cargarAmbientes = async () => {
     const respuesta = await get('ambientes')
     const ambientes = [];
-
+    console.log(respuesta)
     if (respuesta.success) {
         for (const ambiente of respuesta.data) {
-            ambientes.push(await formatearAmbiente(ambiente))
+            ambientes.push(formatearAmbiente(ambiente))
         };
     }
 

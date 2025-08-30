@@ -3,7 +3,13 @@ import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
-export const formatearUsuario = async (usuario) => {
+import crear from './crud/crear';
+import detalles from './crud/detalles';
+import editar from './crud/editar';
+
+export default { crear, detalles, editar };
+
+export const formatearUsuario = (usuario) => {
 
     return [
         usuario.id,
@@ -16,18 +22,19 @@ export const formatearUsuario = async (usuario) => {
     ];
 }
 
-export const usuarioClick = async (id) => {
-    const { data } = await get('usuarios/' + id)
-    localStorage.setItem('usuario_temp', JSON.stringify(data));
+export const usuarioClick = (id) => {
+    location.hash = "#/super-admin/usuarios/detalles/id="+id;
+    // const { data } = await get('usuarios/' + id)
+    // localStorage.setItem('usuario_temp', JSON.stringify(data));
 
-    const form = modales.modalUsuario.querySelector('form');
+    // const form = modales.modalUsuario.querySelector('form');
 
-    llenarCamposFormulario(data, form);
-    modales.modalUsuario.dataset.id = data.id;
-    configurarModalUsuario('editar', modales.modalUsuario);
-    const btn = data.activo ? modales.modalUsuario.querySelector('.desactivar') : modales.modalUsuario.querySelector('.reactivar');
-    btn.classList.remove('hidden');
-    abrirModal(modales.modalUsuario);
+    // llenarCamposFormulario(data, form);
+    // modales.modalUsuario.dataset.id = data.id;
+    // configurarModalUsuario('editar', modales.modalUsuario);
+    // const btn = data.activo ? modales.modalUsuario.querySelector('.desactivar') : modales.modalUsuario.querySelector('.reactivar');
+    // btn.classList.remove('hidden');
+    // abrirModal(modales.modalUsuario);
 }
 
 export const cargarUsuarios = async () => {
@@ -36,7 +43,7 @@ export const cargarUsuarios = async () => {
 
     if (respuesta.success) {
         for (const usuario of respuesta.data) {
-            usuarios.push(await formatearUsuario(usuario))
+            usuarios.push(formatearUsuario(usuario))
         };
     }
 

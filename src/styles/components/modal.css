@@ -28,9 +28,14 @@
 }
 
 .modal::backdrop {
+  /* z-index: 1000; */
   transition: background-color 300ms ease;
   background-color: transparent;
 }
+
+/* .toastify {
+  z-index: 2000 !important;
+} */
 
 .modal:not(.visible)::backdrop {
   background-color: rgba(0, 0, 0, 0);
@@ -102,7 +107,6 @@
 ======================================================== */
 
 .modal--elemento,
-.modal--usuario,
 .modal--tipo-elemento,
 .modal--reporte,
 .modal--ambiente,

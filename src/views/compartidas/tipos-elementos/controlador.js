@@ -10,6 +10,7 @@ export default async () => {
   const permisos = getCookie('permisos', []);
 
   const btnVolver = document.querySelector("#btn-volver");
+  const btnCrear = document.querySelector('#crearTipo');
 
   if (!hasPermisos('tipo-elemento.view-inventory-own', permisos)) {
     btnVolver.classList.add('hidden')
@@ -26,23 +27,26 @@ export default async () => {
   }
   renderFilas(tipos, tipoClick);
 
-  if (!hasPermisos('tipo-elemento.create', permisos)) document.querySelector('#crearTipo').remove();
+  if(location.hash.startsWith('#/inventarios')) btnCrear.href = '#/inventarios/elementos/tipos-elementos/crear';
+  else if(location.hash.startsWith('#/super-admin')) btnCrear.href = '#/super-admin/tipos-elementos/crear';
 
-  limpiarModales();
-  await initModales(['modalTipoElemento']);
-  const { modalTipoElemento } = modales;
+  if (!hasPermisos('tipo-elemento.create', permisos)) btnCrear.remove();
 
-  initModalTipo(modalTipoElemento);
+  // limpiarModales();
+  // await initModales(['modalTipoElemento']);
+  // const { modalTipoElemento } = modales;
+
+  // initModalTipo(modalTipoElemento);
 
   // Actualización en segundo plano
   await actualizarStorageTipos();
 
-  document.getElementById('dashboard-tipos-elementos').addEventListener('click', (e) => {
-    if (e.target.closest('#crearTipo')) {
-      configurarModalTipo('crear', modalTipoElemento);
-      abrirModal(modalTipoElemento);
-    }
-  });
+  // document.getElementById('dashboard-tipos-elementos').addEventListener('click', (e) => {
+  //   if (e.target.closest('#crearTipo')) {
+  //     configurarModalTipo('crear', modalTipoElemento);
+  //     abrirModal(modalTipoElemento);
+  //   }
+  // });
 
   const search = document.querySelector('[type="search"]');
   search.addEventListener('input', (e) => {

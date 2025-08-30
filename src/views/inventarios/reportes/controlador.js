@@ -1,10 +1,5 @@
-
-import { initComponentes } from "../../../helpers/initComponentes";
-import { agregarFila, renderFilas } from "../../../helpers/renderFilas";
-import { configurarModalReporte, initModalReporte } from "../../../modals/js/modalReporte";
-import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
-import * as api from '../../../utils/api';
-import { actualizarStorageReportes, cargarReportes, formatearReporte, reporteClick } from "./reporte";
+import {renderFilas } from "../../../helpers/renderFilas";
+import { actualizarStorageReportes, cargarReportes, reporteClick } from "./reporte";
 
 export default async () => {            
     
@@ -18,13 +13,6 @@ export default async () => {
     }
     
     renderFilas(reportes, reporteClick);
-    
-    limpiarModales();
-    await initModales(['modalReporte']);
-    const { modalReporte } = modales;
-    await initModalReporte(modalReporte)
-
-
 
     // Actualización en segundo plano
     await actualizarStorageReportes();

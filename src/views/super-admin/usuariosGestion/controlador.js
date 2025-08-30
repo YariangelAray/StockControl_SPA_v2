@@ -20,22 +20,22 @@ export default async () => {
 
   renderFilas(usuarios, usuarioClick);
 
-  limpiarModales();
-  await initModales(['modalUsuario']);
-  const { modalUsuario } = modales;
-  await initModalUsuario(modalUsuario)
+  // limpiarModales();
+  // await initModales(['modalUsuario']);
+  // const { modalUsuario } = modales;
+  // await initModalUsuario(modalUsuario)
 
   if (!hasPermisos('usuario.create', permisos)) document.querySelector('#crearUsuario').remove();
 
   // Actualización en segundo plano
   await actualizarStorageUsuarios();
-  document.getElementById('dashboard-usuarios').addEventListener('click', async (e) => {
-    // Botón Agregar → AGREGAR
-    if (e.target.closest('#crearUsuario')) {
-      await configurarModalUsuario('crear', modalUsuario);
-      abrirModal(modalUsuario);
-    }
-  });
+  // document.getElementById('dashboard-usuarios').addEventListener('click', async (e) => {
+  //   // Botón Agregar → AGREGAR
+  //   if (e.target.closest('#crearUsuario')) {
+  //     await configurarModalUsuario('crear', modalUsuario);
+  //     abrirModal(modalUsuario);
+  //   }
+  // });
   const search = document.querySelector('[type="search"]');
   search.addEventListener('input', (e) => {
     let usuarios = JSON.parse(localStorage.getItem('usuarios') || '{}').usuarios || [];

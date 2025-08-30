@@ -1,4 +1,4 @@
-<dialog class="modal modal--usuario" backdrop-close="false">
+<dialog class="modal modal--usuario" backdrop-close="false" id="app-modal">
 
     <div class="modal__header">
         <h2 class="modal__title">Detalles del Elemento</h2>
@@ -19,15 +19,14 @@
 
             <div class="form__control form__control--stacked">
                 <label for="tipo_documento">Tipo de Documento:</label>
-                <select name="tipo_documento_id" class="input input--select" required id="tipos-documentos" disabled>
+                <select name="tipo_documento_id" class="input input--select" required id="tipos-documentos">
                     <option value="" disabled selected>Tipo de Documento</option>>
                 </select>
             </div>
 
             <div class="form__control form__control--stacked">
                 <label for="documento">N° Documento:</label>
-                <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento" required
-                    disabled>
+                <input type="text" class="input" placeholder="N° de Documento" name="documento" id="documento" required>
             </div>
             <div class="form__control form__control--stacked">
                 <label for="correo">Correo Electrónico:</label>
@@ -67,22 +66,21 @@
                     <option value="" disabled selected>Seleccione el rol</option>
                 </select>
             </div>
-            <div class="form__control form__control--stacked form__control--span" id="form__control-contrasena">                
+            <!-- <div class="form__control form__control--stacked form__control--span" id="form__control-contrasena">                
                 <input type="password" class="input contrasena" placeholder="Contraseña" name="contrasena" required
                     data-tipo="nueva">
                 <i class="icon ri-eye-line"></i>
-            </div>
+            </div> -->
         </form>
     </div>
 
     <div class="modal__actions">
-        <button class="button editar">Editar
-            <i class="ri-edit-fill icon"></i>
-        </button>
-        <button type="submit" class="button crear" form="form-usuario">Crear</button>
-        <button type="submit" class="button guardar" form="form-usuario">Guardar</button>
-        <button class="button reactivar">Reactivar</button>
-        <button class="button button--red desactivar">Desactivar</button>
+        <button class="button editar" data-permiso="usuario.update">Editar<i class="ri-edit-fill icon"></i></button>
+        <button type="submit" class="button crear" form="form-usuario" data-permiso="usuario.create">Crear</button>
+        <button type="submit" class="button guardar" form="form-usuario" data-permiso="usuario.update">Guardar</button>
+        <button class="button reactivar" data-permiso="usuario.update">Reactivar</button>
+        <button class="button button--red desactivar" data-permiso="usuario.delete">Desactivar</button>
+        <button class="button restaurar button--red" data-permiso="usuario.update">Restaurar Contraseña</button>
         <button class="button button--white aceptar button--final">Aceptar</button>
         <button class="button button--red cancelar button--final">Cancelar</button>
     </div>

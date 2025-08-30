@@ -1,4 +1,4 @@
-<dialog class="modal modal--tipo-elemento" backdrop-close="false">
+<dialog class="modal modal--tipo-elemento" backdrop-close="false" id="app-modal">
 
   <div class="modal__header">
     <h2 class="modal__title">Detalles del Tipo</h2>
@@ -37,12 +37,10 @@
   </div>
 
   <div class="modal__actions">
-    <button class="button editar">Editar
-      <i class="ri-edit-fill icon"></i>
-    </button>
-    <button type="submit" form="form-tipo" class="button crear">Crear</button>
-    <button type="submit" form="form-tipo" class="button guardar">Guardar</button>
-    <button class="button button--red eliminar">Eliminar</button> 
+    <button class="button editar" data-permiso="tipo-elemento.update">Editar<i class="ri-edit-fill icon"></i></button>
+    <button type="submit" class="button crear" form="form-tipo" data-permiso="tipo-elemento.create">Crear</button>
+    <button type="submit" class="button guardar" form="form-tipo" data-permiso="tipo-elemento.update">Guardar</button>        
+    <button class="button button--red eliminar" data-permiso="tipo-elemento.delete">Eliminar</button> 
     <button class="button button--white aceptar button--final">Aceptar</button>
     <button class="button button--red cancelar button--final">Cancelar</button>
   </div>

@@ -11,8 +11,6 @@ import hasPermisos from "../../../../utils/hasPermisos";
 import * as validaciones from '../../../../utils/Validaciones';
 import { actualizarStorageAmbientes, ambienteClick, formatearAmbiente } from "../ambiente";
 
-import detalles from "./detalles";
-
 
 export default async (modal, parametros) => {
   document.title = "Ambientes - Editar: " + parametros.id;
@@ -103,7 +101,7 @@ export default async (modal, parametros) => {
     // await detalles(modal, parametros); // reutiliza la lógica
     location.hash = "#/super-admin/ambientes/detalles/id=" + parametros.id;
 
-    const datosFormateados = await formatearAmbiente(respuesta.data);
+    const datosFormateados = formatearAmbiente(respuesta.data);
 
     const tbody = document.querySelector('#dashboard-ambientes .table__body');
     reemplazarFila(tbody, datosFormateados, ambienteClick);
@@ -115,7 +113,7 @@ export default async (modal, parametros) => {
 
   asignarEvento(cancelarBtn, 'click', async () => {
       form.querySelectorAll('.form__control').forEach(input => {
-          input.classList.remove('errorToast');
+          input.classList.remove('error');
       });
       // await detalles(modal, parametros); // reutiliza la lógica
       location.hash = '#/super-admin/ambientes/detalles/id=' + parametros.id;

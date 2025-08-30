@@ -9,14 +9,17 @@ import elementos from '../views/inventarios/elementos/controlador.js';
 import reportes from '../views/inventarios/reportes/controlador.js';
 import reporteDetalles from '../views/inventarios/reportes/reporte.js';
 
-import tiposelementos from '../views/compartidas/tipos-elementos/controlador.js';
+import tiposElementos from '../views/compartidas/tipos-elementos/controlador.js';
+import tipoElemento from '../views/compartidas/tipos-elementos/tipos-elementos.js';
 import perfil from '../views/perfil-usuario/controlador.js';
 
 import superAdmin from '../views/super-admin/controlador.js';
-import ambiente from '../views/super-admin/ambientesGestion/ambiente.js';
 import gestionUsuarios from '../views/super-admin/usuariosGestion/controlador.js';
+import usuario from '../views/super-admin/usuariosGestion/usuario.js';
 import gestionInventarios from '../views/super-admin/inventariosGestion/controlador.js';
+import inventario from '../views/super-admin/inventariosGestion/inventario.js';
 import gestionAmbientes from '../views/super-admin/ambientesGestion/controlador.js';
+import ambiente from '../views/super-admin/ambientesGestion/ambiente.js';
 
 export const routes = {
   inicio: {
@@ -61,7 +64,7 @@ export const routes = {
       crear: {
         path: 'inventarios/elementos/index.html',
         controller: elementos,
-        meta: { can: 'elemento.create-inventory-own', requiresInventory: true, modal: true}
+        meta: { can: 'elemento.create-inventory-own', requiresInventory: true, modal: true }
       },
       detalles: {
         path: 'inventarios/elementos/index.html',
@@ -81,23 +84,23 @@ export const routes = {
       "tipos-elementos": {
         "/": {
           path: 'compartidas/tipos-elementos/index.html',
-          controller: tiposelementos,
+          controller: tiposElementos,
           meta: { can: 'tipo-elemento.view-inventory-own', requiresInventory: true }
         },
         crear: {
-          path: 'compartidas/tipos-elementos/index.html',
-          controller: tiposelementos,
+          path: 'modalTipoElemento',
+          controller: tipoElemento.crear,
           meta: { can: 'tipo-elemento.create', requiresInventory: true, modal: true }
         },
         detalles: {
-          path: 'compartidas/tipos-elementos/index.html',
-          controller: tiposelementos,
-          meta: { can: 'tipo-elemento.view-inventory-own', requiresInventory: true, modal: true }
+          path: 'modalTipoElemento',
+          controller: tipoElemento.detalles,
+          meta: { can: 'tipo-elemento.view-inventory-own', requiresInventory: true, modal: true, sameModal: true }
         },
         editar: {
-          path: 'compartidas/tipos-elementos/index.html',
-          controller: tiposelementos,
-          meta: { can: 'tipo-elemento.update', requiresInventory: true, modal: true }
+          path: 'modalTipoElemento',
+          controller: tipoElemento.editar,
+          meta: { can: 'tipo-elemento.update', requiresInventory: true, modal: true, sameModal: true }
         },
       }
     },
@@ -105,12 +108,12 @@ export const routes = {
       "/": {
         path: 'inventarios/reportes/index.html',
         controller: reportes,
-        meta: { can: 'reporte.view-inventory-own', requiresInventory: true}
+        meta: { can: 'reporte.view-inventory-own', requiresInventory: true }
       },
       detalles: {
         path: 'modalReporte',
         controller: reporteDetalles,
-        meta: { can: 'reporte.view-inventory-own', requiresInventory: true, modal: true}
+        meta: { can: 'reporte.view-inventory-own', requiresInventory: true, modal: true }
       },
     }
   },
@@ -132,19 +135,19 @@ export const routes = {
         meta: { can: 'usuario.view' }
       },
       crear: {
-        path: 'super-admin/usuariosGestion/index.html',
-        controller: gestionUsuarios,
+        path: 'modalUsuario',
+        controller: usuario.crear,
         meta: { can: 'usuario.create', modal: true }
       },
       detalles: {
-        path: 'super-admin/usuariosGestion/index.html',
-        controller: gestionUsuarios,
-        meta: { can: 'usuario.view', modal: true }
+        path: 'modalUsuario',
+        controller: usuario.detalles,
+        meta: { can: 'usuario.view', modal: true, sameModal: true }
       },
       editar: {
-        path: 'super-admin/usuariosGestion/index.html',
-        controller: gestionUsuarios,
-        meta: { can: 'usuario.update', modal: true }
+        path: 'modalUsuario',
+        controller: usuario.editar,
+        meta: { can: 'usuario.update', modal: true, sameModal: true }
       },
     },
     ambientes: {
@@ -181,41 +184,41 @@ export const routes = {
         meta: { can: 'inventario.view' },
       },
       crear: {
-        path: 'super-admin/inventariosGestion/index.html',
-        controller: gestionInventarios,
+        path: 'modalInventario',
+        controller: inventario.crear,
         meta: { can: 'inventario.create', modal: true },
       },
       detalles: {
-        path: 'super-admin/inventariosGestion/index.html',
-        controller: gestionInventarios,
-        meta: { can: 'inventario.view', modal: true },
+        path: 'modalInventario',
+        controller: inventario.detalles,
+        meta: { can: 'inventario.view', modal: true, sameModal: true },
       },
       editar: {
-        path: 'super-admin/inventariosGestion/index.html',
-        controller: gestionInventarios,
-        meta: { can: 'inventario.update', modal: true },
+        path: 'modalInventario',
+        controller: inventario.editar,
+        meta: { can: 'inventario.update', modal: true, sameModal: true },
       },
     },
     "tipos-elementos": {
       "/": {
         path: 'compartidas/tipos-elementos/index.html',
-        controller: tiposelementos,
+        controller: tiposElementos,
         meta: { can: 'tipo-elemento.view' }
       },
       crear: {
-        path: 'compartidas/tipos-elementos/index.html',
-        controller: tiposelementos,
+        path: 'modalTipoElemento',
+        controller: tipoElemento.crear,
         meta: { can: 'tipo-elemento.create', modal: true }
       },
       detalles: {
-        path: 'compartidas/tipos-elementos/index.html',
-        controller: tiposelementos,
-        meta: { can: 'tipo-elemento.view', modal: true }
+        path: 'modalTipoElemento',
+        controller: tipoElemento.detalles,
+        meta: { can: 'tipo-elemento.view', modal: true, sameModal: true }
       },
-      detalles: {
-        path: 'compartidas/tipos-elementos/index.html',
-        controller: tiposelementos,
-        meta: { can: 'tipo-elemento.update', modal: true }
+      editar: {
+        path: 'modalTipoElemento',
+        controller: tipoElemento.editar,
+        meta: { can: 'tipo-elemento.update', modal: true, sameModal: true }
       },
     }
   }

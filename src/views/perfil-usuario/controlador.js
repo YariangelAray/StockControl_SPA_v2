@@ -1,5 +1,5 @@
 import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController";
-import { initModalEliminar } from "../../modals/js/modalDesactivarCuenta";
+import { abrirModalEliminar } from "../../modals/js/modalDesactivarCuenta";
 import { initComponentes } from "../../helpers/initComponentes";
 import * as api from "../../utils/api.js";
 import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario.js";
@@ -19,17 +19,17 @@ export default async () => {
 
 
 
-  limpiarModales();
-  await initModales(['modalDesactivarCuenta']);
+  // limpiarModales();
+  // await initModales(['modalDesactivarCuenta']);
 
-  const { modalDesactivarCuenta } = modales;
-  initModalEliminar(modalDesactivarCuenta);
+  // const { modalDesactivarCuenta } = modales;
+  // initModalEliminar(modalDesactivarCuenta);
 
   if (hasPermisos("usuario.disable-own", permisos)) {
     contentDesactivar.classList.remove('hidden')
-    document.getElementById('dashboard-perfil').addEventListener('click', (e) => {
+    document.getElementById('dashboard-perfil').addEventListener('click', async (e) => {
       if (e.target.closest('#desactivarCuenta')) {
-        abrirModal(modalDesactivarCuenta);
+        await abrirModalEliminar();
       }
     })
   };
@@ -125,11 +125,8 @@ export default async () => {
       const respuesta = await api.put(`usuarios/me`, validaciones.datos);
 
       if (respuesta.success) {
-        successToast("Usuario actualizado exitosamente");
-        localStorage.setItem('usuario', JSON.stringify({ id: respuesta.data.id, nombres: respuesta.data.nombres, apellidos: respuesta.data.apellidos, rol_id: respuesta.data.rol_id }));
-
-        const usuarioInfo = JSON.parse(localStorage.getItem('usuario'));
-        initComponentes(usuarioInfo);
+        successToast("Usuario actualizado exitosamente");        
+        initComponentes();
 
       } else {
         errorToast(respuesta);

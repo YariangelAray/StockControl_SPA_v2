@@ -49,6 +49,22 @@ export const put = async (endpoint, objeto) => {
   }
 }
 
+export const patch = async (endpoint, objeto) => {
+  try {
+    const respuesta = await fetch(url + endpoint, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(objeto)
+    });
+    return await respuesta.json();
+  } catch (error) {
+    console.warn(error);
+  }
+}
+
 export const del = async (endpoint) => {
   try {
     const respuesta = await fetch(url + endpoint, {
