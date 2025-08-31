@@ -1,17 +1,16 @@
-import { post } from "../../utils/api";
+
 import * as validaciones from "../../utils/Validaciones";
 import { cargarModal, cerrarModal ,mostrarModal  } from "../modalsController";
 // import { error } from '../../utils/alertas';
-import { initTemporizadorAcceso } from "../../views/inventarios/detalles/initTemporizadorAcceso";
+
 import { errorToast } from "../../utils/alertas";
+import { post } from "../../utils/api";
+import { initTemporizadorAcceso } from "../../helpers/temporizadorAcceso";
 
 export const abrirModalConfigurar = async () => {
 
   const modal = await cargarModal("modalConfigurarCodigo");  
   mostrarModal(modal)
-
-  // await initModales(['modalCodigoAcceso']);
-  // const { modalCodigoAcceso } = modales;
 
   const form = modal.querySelector('form');  
 
@@ -35,33 +34,32 @@ export const abrirModalConfigurar = async () => {
     validaciones.quitarError(inputHoras.parentElement);
     validaciones.quitarError(inputMinutos.parentElement);
 
-    // const inventario = JSON.parse(localStorage.getItem('inventario'));
+    const inventario = JSON.parse(localStorage.getItem('inventario'));
 
-    // // Hacemos la petición al backend
-    // const respuesta = await post('codigos-acceso/generar/' + inventario.id, { horas, minutos });
+    // Hacemos la petición al backend
+    const respuesta = await post('accesos/inventarios/me/generar/' + inventario.id, { horas, minutos });
 
-    // if (!respuesta.success) {      
-    //   errorToast(respuesta);      
-    //   return;
-    // }
+    if (!respuesta.success) {      
+      errorToast(respuesta);      
+      return;
+    }
 
-    // const codigoGenerado = respuesta.data.codigo;
-    // const fechaExpiracion = new Date(respuesta.data.fecha_expiracion);
+    const codigoGenerado = respuesta.data.codigo;
+    const fechaExpiracion = new Date(respuesta.data.fecha_expiracion);
 
-    // document.querySelectorAll('.codigo-acceso').forEach(el => {
-    //   el.textContent = codigoGenerado;
-    // });
-
-
-    // // Guardamos la fecha de expiración en localStorage por si recarga
-    // localStorage.setItem('codigoAccesoInfo', JSON.stringify({
-    //   codigo: codigoGenerado,
-    //   expiracion: fechaExpiracion
-    // }));
-
+    
+    
+    // Guardamos la fecha de expiración en localStorage por si recarga
+    localStorage.setItem('codigoAccesoInfo', JSON.stringify({
+      codigo: codigoGenerado,
+      expiracion: fechaExpiracion
+    }));
+    
     cerrarModal(modal);
     const modalCodigoAcceso = await cargarModal("modalCodigoAcceso");
-    mostrarModal(modalCodigoAcceso)
+    modalCodigoAcceso.querySelector('.codigo-acceso').textContent = codigoGenerado;
+    mostrarModal(modalCodigoAcceso);
+    await initTemporizadorAcceso();
 
     // form.reset(); // Limpiamos el formulario
     // Cerramos el modal actual y abrimos el de resultado

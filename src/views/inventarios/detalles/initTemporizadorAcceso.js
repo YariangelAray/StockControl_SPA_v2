@@ -55,7 +55,7 @@ export const initTemporizadorAcceso = async (fechaExpiracion, inventarioId, limp
     }
 
     if (usuario.rol_id === 2) {
-      const respuesta = await get('accesos-temporales/inventario/' + inventarioId);  // aqui
+      const respuesta = await get('accesos/usuarios/inventarios/' + inventarioId);  // aqui
       usuariosAcces.textContent = respuesta.success && respuesta.data ? respuesta.data.length : 0;
     }
 
@@ -88,7 +88,7 @@ export const eliminarAccesos = async (inventarioId, limpiar) => {
   // Llama la función limpiar para actualizar la interfaz
   limpiar();
   // Realiza la petición DELETE al backend para eliminar accesos del inventario
-  const respuesta = await del('codigos-acceso/inventario/' + inventarioId);
+  const respuesta = await del('accesos/inventario/' + inventarioId);
 
   // Si hubo un error, lo muestra en consola
   if (!respuesta.success) {

@@ -7,7 +7,7 @@ import { errorToast, infoToast, successToast } from "../../../../utils/alertas";
 import { del, get, patch, put } from "../../../../utils/api";
 import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
-import obtenerHashBase from "../../../../utils/obtenerHashBase";
+import obtenerHashBase from "../../../../helpers/obtenerHashBase";
 import { actualizarStorageUsuarios } from "../usuario";
 
 export default async (modal, parametros) => {
@@ -102,9 +102,12 @@ export default async (modal, parametros) => {
 
     // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
     });

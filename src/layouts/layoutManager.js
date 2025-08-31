@@ -71,3 +71,4 @@ export const cargarLayout = async (tipo = "public", vistaPath = '', hayLayout = 
     main.innerHTML = vistaHTML;
   }
 };
+

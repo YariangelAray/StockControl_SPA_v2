@@ -1,3 +1,4 @@
+import { esRutaModal } from "../routes/router";
 import getCookie from "../utils/getCookie";
 
 export const initComponentes = () => {
@@ -47,47 +48,6 @@ const generarSidebar = (roles, inventario) => {
 
     // Menú para administrativo (rol_id === 2) y usuario común (rol_id === 3)
     else {
-
-        // const generado = sidebarList.querySelector('.sidebar__menu .sidebar__list > .sidebar__item')
-
-        // if (!generado) {
-        //     const li = document.createElement('li');
-        //     li.classList.add('sidebar__item');
-
-        //     const a = document.createElement('a');
-        //     a.href = '#/inventarios';
-        //     a.textContent = 'Inventarios';
-
-        //     const i = document.createElement('i');
-        //     i.classList.add('ri-archive-line', 'icon');
-
-        //     a.insertAdjacentElement('afterbegin', i);
-        //     li.appendChild(a);
-
-        //     const separacion = document.createElement('hr');
-        //     separacion.classList.add('separacion');
-
-        //     sidebarList.append(li, separacion);
-        // }
-        
-
-        // if (!inventario) {
-        //     sidebarList.querySelector('.menu__items')?.remove();
-        //     if (!sidebarInfo) {
-        //         const sidebarInfo = document.createElement('div');
-        //         sidebarInfo.classList.add('sidebar-info');
-        //         const sidebarInfoText = document.createElement('p');
-        //         sidebarInfoText.textContent = 'Ingrese a un inventario para continuar con su gestión';
-        //         sidebarInfo.append(sidebarInfoText);
-
-        //         sidebarList.append(sidebarInfo);
-        //     }
-        //     if (location.hash != '#/inventarios') sidebarInfo?.remove();
-        //     requestAnimationFrame(() => marcarItem());
-        //     return;
-        // }
-        // if (location.hash != '#/inventarios') sidebarInfo?.remove();
-        // // sidebarInfo?.remove();
 
         if (!inventario) {
             sidebarList.querySelector('.menu__items')?.remove();
@@ -153,7 +113,7 @@ const actualizarHeader = (inventario) => {
 
     const header = document.querySelector('.header__title');
     header.innerHTML = ''; // Limpiar contenido anterior
-    const hash = location.hash.slice(2); // quitar "#/"
+    const hash = esRutaModal().slice(2); // quitar "#/"
     const segmentos = hash.split('/').filter(seg => seg);
 
     // Caso especial: perfil de usuario

@@ -8,7 +8,7 @@ import { errorToast, successToast } from "../../../../utils/alertas";
 import { post, get, put } from "../../../../utils/api";
 import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
-import obtenerHashBase from "../../../../utils/obtenerHashBase";
+import obtenerHashBase from "../../../../helpers/obtenerHashBase";
 
 import * as validaciones from '../../../../utils/Validaciones';
 import { actualizarStorageElementos, elementoClick, formatearElemento } from "../elemento";
@@ -71,14 +71,17 @@ export default async (modal, parametros) => {
     });
     btnAgregarTipo.classList.add('hidden');
 
-    // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
-    })
+    });
+
 
     modal.querySelector('.modal__title').textContent = 'Editar Elemento';
 

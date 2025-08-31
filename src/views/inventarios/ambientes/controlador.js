@@ -6,8 +6,7 @@ import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTempori
 import getCookie from "../../../utils/getCookie";
 
 export default async () => {
-    const inventario = JSON.parse(localStorage.getItem('inventario'));
-    const roles = getCookie('roles', []).map(r => r.id)    
+    const inventario = JSON.parse(localStorage.getItem('inventario'));    
 
     let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes || [];
     if (!ambientes || ambientes.length === 0) {

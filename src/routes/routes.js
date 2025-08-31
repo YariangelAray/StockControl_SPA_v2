@@ -37,7 +37,7 @@ export const routes = {
     "/": {
       path: 'inventarios/index.html',
       controller: inventarios,
-      meta: { can: ['inventario.view-own', 'inventarios.index'] }
+      meta: { can: ['inventario.view-own', 'inventario.view-access-own'] }
     },
     ambientes: {
       "/": {
@@ -48,7 +48,7 @@ export const routes = {
       mapa: {
         path: 'compartidas/mapas/index.html',
         controller: mapa,
-        meta: { can: 'ambiente.view', requiresInventory: true }
+        meta: { can: 'ambiente.view-card', requiresInventory: true }
       }
     },
     detalles: {
@@ -60,7 +60,7 @@ export const routes = {
       "/": {
         path: 'inventarios/elementos/index.html',
         controller: elementos,
-        meta: { can: 'elemento.view-inventory-own', requiresInventory: true }
+        meta: { can: ['elemento.view-inventory-own', 'elemento.view-inventory-access'], requiresInventory: true }
       },
       crear: {
         path: 'modalElemento',
@@ -70,17 +70,17 @@ export const routes = {
       detalles: {
         path: 'modalElemento',
         controller: elemento.detalles,
-        meta: { can: 'elemento.view-inventory-own', requiresInventory: true, modal: true, sameModal: true }
+        meta: { can: ['elemento.view-inventory-own', 'elemento.view-inventory-access'], requiresInventory: true, modal: true, sameModal: true }
       },
       editar: {
         path: 'modalElemento',
         controller: elemento.editar,
-        meta: { can: 'elemento.update-inventory-own', requiresInventory: true, modal: true, sameModal: true }
+        meta: { can: ['elemento.update-inventory-own', 'elemento.update-inventory-access'], requiresInventory: true, modal: true, sameModal: true }
       },
       reportar: {
         path: 'modalGenerarReporte',
         controller: elemento.reportar,
-        meta: { can: 'reporte.create', requiresInventory: true, modal: true }
+        meta: { can: ['reporte.create', 'reporte.create-inventory-access'], requiresInventory: true, modal: true }
       },
       "tipos-elementos": {
         "/": {

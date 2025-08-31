@@ -40,9 +40,12 @@ export default (modal, parametros) => {
 
     // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
     });
@@ -68,7 +71,7 @@ export default (modal, parametros) => {
         if (!validaciones.validarFormulario(e)) return;
         const confirmado = await mostrarConfirmacion('¿Está seguro de generar el reporte?');
 
-        if (!confirmado) return;        
+        if (!confirmado) return;
 
         const respuestaReporte = await post('reportes', {
             asunto: validaciones.datos.asunto,
@@ -82,13 +85,13 @@ export default (modal, parametros) => {
             // setTimeout(async () => mostrarUltimoModal(), 100);
             return;
         }
-        
+
         try {
             if (inputFile.files.length > 0) {
                 for (const archivo of inputFile.files) {
                     const formData = new FormData();
                     formData.append("reporte_id", respuestaReporte.data.id);
-                    formData.append("foto", archivo);                    
+                    formData.append("foto", archivo);
                     const respuesta = await post("fotos/me", formData);
 
                     if (!respuesta.success) {
@@ -100,7 +103,7 @@ export default (modal, parametros) => {
             }
         } catch (error) {
             return;
-        }        
+        }
         successToast('Reporte generado con éxito');
         cerrarModal(modal)
         location.hash = "#/inventarios/elementos/detalles/id=" + parametros.id;

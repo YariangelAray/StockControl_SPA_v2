@@ -7,7 +7,8 @@ import { initComponentes } from "../helpers/initComponentes";
 import hasPermisos from "../utils/hasPermisos";
 import modalManager from "../modals/modalManager";
 import { cerrarModal } from "../modals/modalsController";
-import obtenerHashBase from "../utils/obtenerHashBase";
+import obtenerHashBase from "../helpers/obtenerHashBase";
+import { initTemporizadorAcceso, listenerExpiracion } from "../helpers/temporizadorAcceso";
 
 let hayLayout = false;
 
@@ -59,7 +60,8 @@ export const router = async () => {
       return;
     }
   }
-
+  
+  await initTemporizadorAcceso();
 
   const desiredLayout = meta.public ? "public" : "private";
 
@@ -82,13 +84,13 @@ export const router = async () => {
       initComponentes();
       hayLayout = true;
     }
-
+    
     // Si el modal ya está abierto y es el mismo, solo refrescar el controlador
     if (modalAbierto && meta.sameModal) {
       ruta.controller(modalAbierto, parametros);
       return;
     }
-
+        
     // Si no está abierto o es diferente, abrir normalmente
     await modalManager({
       nombre: ruta.path,
@@ -99,63 +101,7 @@ export const router = async () => {
     return;
   }
 
-
-  // if (meta.modal) {
-  //   const hashBase = obtenerHashBase();
-  //   const enBase = location.hash.startsWith(hashBase);
-
-  //   const [rutaBase, paramsBase] = encontrarRuta(routes, hashBase.slice(2).split('/'));
-
-  //   if (!enBase || !document.querySelector('.dashboard__layout')) {
-  //     await cargarLayout(desiredLayout, rutaBase.path, false);
-  //     rutaBase.controller(paramsBase);
-  //     initComponentes();
-  //     hayLayout = true;
-  //   }
-
-  //   await modalManager({
-  //     nombre: ruta.path,
-  //     parametros,
-  //     controlador: ruta.controller,
-  //     mismoModal: meta.sameModal
-  //   });
-  //   return;
-  // }
-
-
-
-  // if (meta.modal) {
-  //   // Extraer la ruta base (ej: "ambientes" de "ambientes/crear")
-  //   const segmentosBase = [...segmentos];
-  //   segmentosBase.pop(); // quitar el último (crear, editar, etc.)
-
-  //   // Si no hay layout o si el main está vacío → cargar la vista base
-  //   if (!hayLayout || !document.querySelector('.dashboard__layout')) {
-  //     const [rutaBase, paramsBase] = encontrarRuta(routes, segmentosBase);
-  //     await cargarLayout(desiredLayout, rutaBase.path, hayLayout);
-  //     rutaBase.controller(paramsBase);
-  //     initComponentes();
-  //     hayLayout = true;
-  //   }
-
-  //   // Ahora sí abrir modal
-  //   await modalManager({
-  //     nombre: ruta.path,
-  //     parametros,
-  //     controlador: ruta.controller,
-  //     mismoModal: meta.sameModal
-  //   });
-  //   return;
-  // }
-
-
   // Si se necesita layout público (auth pages) o privado
-
-  // if (!hayLayout || desiredLayout === "public") {
-  //   // Si piden layout público, forzamos recarga completa del layout (útil para login)
-  //   await cargarLayout(desiredLayout, ruta.path, hayLayout);
-  //   hayLayout = (desiredLayout === "private");
-  // } else {
 
   if (!hayLayout && desiredLayout === "private") {
     await cargarLayout("private", ruta.path, false);
@@ -172,19 +118,6 @@ export const router = async () => {
     }
   }
 
-
-  // // Layout privado ya cargado: solo inyectamos la vista
-  // const main = document.querySelector('#app-main') || document.querySelector('main');
-  // if (main) {
-  //   // const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
-  //   // main.innerHTML = vista;        
-  //   await cargarLayout(desiredLayout, ruta.path, hayLayout);
-  // } else {
-  //   // si por alguna razón main faltó, recargar layout completo
-  //   await cargarLayout(desiredLayout, ruta.path, false);
-  //   hayLayout = (desiredLayout === "private");
-  // }
-  // }
 
   // Llamar controlador (si requiere parámetros, se los pasamos)
   parametros ? ruta.controller(parametros) : ruta.controller();
@@ -281,3 +214,14 @@ const extraerParametros = (parametros) => {
 
   return params;
 };
+
+
+export const esRutaModal = () => {
+  const hash = location.hash.slice(2);
+  const segmentos = hash.split("/").filter(Boolean);
+  const [ruta] = encontrarRuta(routes, segmentos);
+  return ruta?.meta?.modal ? obtenerHashBase() : location.hash;
+};
+
+document.removeEventListener('codigoAccesoExpirado', listenerExpiracion);
+document.addEventListener('codigoAccesoExpirado', listenerExpiracion);

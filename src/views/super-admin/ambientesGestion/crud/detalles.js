@@ -50,9 +50,12 @@ export default async (modal, parametros) => {
 
     // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
     });
@@ -82,7 +85,7 @@ export default async (modal, parametros) => {
     });
 
     modal.addEventListener('click', async (e) => {
-    
+
         if (e.target.closest('.editar')) {
             location.hash = "#/super-admin/ambientes/editar/id=" + parametros.id;
             return;

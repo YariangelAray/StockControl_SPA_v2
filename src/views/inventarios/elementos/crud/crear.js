@@ -7,7 +7,7 @@ import { errorToast, successToast } from "../../../../utils/alertas";
 import { post } from "../../../../utils/api";
 import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
-import obtenerHashBase from "../../../../utils/obtenerHashBase";
+import obtenerHashBase from "../../../../helpers/obtenerHashBase";
 
 import * as validaciones from '../../../../utils/Validaciones';
 import { elementoClick, formatearElemento } from "../elemento";
@@ -19,7 +19,7 @@ export default async (modal, parametros = {}) => {
     modal.dataset.modo = 'crear';
 
     const selectTipo = modal.querySelector('#tipos-elementos');
-    const btnAgregarTipo = modal.querySelector('#agregarTipo');    
+    const btnAgregarTipo = modal.querySelector('#agregarTipo');
     if (!modal.dataset.inicializado) {
         await llenarSelect({
             endpoint: 'ambientes',
@@ -68,16 +68,20 @@ export default async (modal, parametros = {}) => {
         const btn = modal.querySelector(selector);
         if (btn) btn.classList.remove('hidden');
     });
-    btnAgregarTipo.classList.add('hidden'); 
+    btnAgregarTipo.classList.add('hidden');
 
     // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
-    })    
+    });
+
 
     modal.querySelector('.modal__title').textContent = 'Crear Elemento';
 
@@ -111,7 +115,7 @@ export default async (modal, parametros = {}) => {
     });
 
 
-    const inventario = JSON.parse(localStorage.getItem('inventario'));    
+    const inventario = JSON.parse(localStorage.getItem('inventario'));
 
     form.onsubmit = async (e) => {
         e.preventDefault();

@@ -1,4 +1,4 @@
-import obtenerHashBase from "../utils/obtenerHashBase";
+import obtenerHashBase from "../helpers/obtenerHashBase";
 import { cargarModal, cerrarModal, mostrarModal } from "./modalsController";
 
 export default async (modal) => {

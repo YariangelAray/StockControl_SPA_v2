@@ -69,12 +69,16 @@ export default async (modal, parametros) => {
 
     // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
     });
+
 
     modal.querySelector("#fecha").textContent = data.fecha;
     modal.querySelector("#usuario").textContent = data.usuario;
@@ -89,7 +93,7 @@ export default async (modal, parametros) => {
 
     if (data.fotos && data.fotos.length > 0) {
         data.fotos.forEach(({ url }) => {
-            const img = document.createElement('img');            
+            const img = document.createElement('img');
             img.src = 'http://localhost:3000/stockcontrol_api/' + url;
             contenedor.appendChild(img);
         });
@@ -114,26 +118,11 @@ export default async (modal, parametros) => {
         if (e.target.closest('.ver-elemento')) {
             e.stopPropagation();
             await cerrarModal(modal);
+            sessionStorage.setItem('volverAReporteId', data.id);
             location.hash = "#/inventarios/elementos/detalles/id=" + data.elemento.id;
-            // const id_elemento = modal.querySelector("#placa").dataset.id;
 
-            // const { data } = await api.get('elementos/' + id_elemento)
-
-            // localStorage.setItem('elemento_temp', JSON.stringify(data));
-            // const form = modales.modalElemento.querySelector('form');
-
-            // llenarCamposFormulario(data, form);
-            // configurarModalElemento('editar', modalElemento);
-            // const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
-            // if (usuario.rol_id == 2) btn.classList.remove('hidden');
-            // ocultarModalTemporal(modal);
-            // abrirModal(modalElemento);
         }
 
-        // if (e.target.closest('.aceptar')) {
-        //     cerrarModal();
-        //     localStorage.removeItem('reporte_temp');
-        // }
         if (e.target.closest('.reporte__imagenes img')) {
             visorImg.src = e.target.src;
             visor.showModal();

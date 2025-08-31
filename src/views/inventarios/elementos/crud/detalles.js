@@ -8,7 +8,7 @@ import { errorToast, successToast } from "../../../../utils/alertas";
 import { get, patch, put } from "../../../../utils/api";
 import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
-import obtenerHashBase from "../../../../utils/obtenerHashBase";
+import obtenerHashBase from "../../../../helpers/obtenerHashBase";
 
 import * as validaciones from '../../../../utils/Validaciones';
 import { actualizarStorageElementos, elementoClick, formatearElemento } from "../elemento";
@@ -71,20 +71,23 @@ export default async (modal, parametros) => {
     });
     btnAgregarTipo.classList.add('hidden');
 
-    // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
-    })
-    const {data} = await get('elementos/me/' +parametros.id)
+    });
+
+    const { data } = await get('elementos/me/' + parametros.id)
     // const {data}=respuesta;    
-    
+
 
     const btn = data.activo ? modal.querySelector('.reactivar') : modal.querySelector('.dar-baja');
-    btn.classList.add('hidden');
+    btn?.classList.add('hidden');
 
     modal.querySelector('.modal__title').textContent = 'Editar Elemento';
 
@@ -148,6 +151,16 @@ export default async (modal, parametros) => {
         if (e.target.closest('.reportar')) {
             location.hash = "#/inventarios/elementos/reportar/id=" + parametros.id;
             return;
+        }
+        if (e.target.closest('.aceptar')) {
+            e.stopPropagation();
+            // si viene del reporte, regresar al reporte
+            const volverAReporteId = sessionStorage.getItem('volverAReporteId');
+            if (volverAReporteId) {
+                sessionStorage.removeItem('volverAReporteId');
+                await cerrarModal(modal);
+                location.hash = "#/inventarios/reportes/detalles/id=" + volverAReporteId;
+            }
         }
     })
 };

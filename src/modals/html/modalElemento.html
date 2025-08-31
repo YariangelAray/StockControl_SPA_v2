@@ -62,12 +62,12 @@
   </div>
 
   <div class="modal__actions">
-    <button class="button editar" data-permiso="elemento.update-inventory-own">Editar<i class="ri-edit-fill icon"></i></button>
+    <button class="button editar" data-permiso="elemento.update-inventory-own, elemento.update-inventory-access">Editar<i class="ri-edit-fill icon"></i></button> 
     <button type="submit" class="button crear" form="form-elemento" data-permiso="elemento.create-inventory-own">Crear</button>
-    <button type="submit" class="button guardar" form="form-elemento" data-permiso="elemento.update-inventory-own">Guardar</button>
+    <button type="submit" class="button guardar" form="form-elemento" data-permiso="elemento.update-inventory-own, elemento.update-inventory-access">Guardar</button>
     <button type="submit" class="button reactivar" data-permiso="elemento.change-status-inventory-own">Reactivar</button>
     <button class="button button--red dar-baja" data-permiso="elemento.change-status-inventory-own">Dar de baja</button>
-    <button class="button button--red reportar" data-permiso="reporte.create">Génerar reporte</button>
+    <button class="button button--red reportar" data-permiso="reporte.create, reporte.create-inventory-access">Génerar reporte</button>
     <button class="button button--white aceptar button--final">Aceptar</button>
     <button class="button button--red cancelar button--final">Cancelar</button>
   </div>

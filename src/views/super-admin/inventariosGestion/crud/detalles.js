@@ -39,9 +39,12 @@ export default async (modal, parametros) => {
 
     // aplicar permisos sobre los visibles
     const permisos = getCookie('permisos', []);
-    ('permisos');
+
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
-        if (!hasPermisos(btn.dataset.permiso, permisos)) {
+        const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
+        const tienePermiso = requeridos.some(p => permisos.includes(p));
+
+        if (!tienePermiso) {
             btn.remove();
         }
     });
@@ -66,8 +69,8 @@ export default async (modal, parametros) => {
             cerrarModal(modal);
             successToast('Inventario eliminado con éxito');
             removerFilar(document.querySelector('#dashboard-inventarios .table__body'), parametros.id);
-        } else {            
-            errorToast(respuesta);            
+        } else {
+            errorToast(respuesta);
         }
 
         await actualizarStorageInventarios();
