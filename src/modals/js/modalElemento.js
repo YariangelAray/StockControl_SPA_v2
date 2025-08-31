@@ -1,5 +1,5 @@
-import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "../modalsController";
-import { configurarModalTipo, initModalTipo } from "./modalTipoElemento";
+// import { abrirModal, cerrarModal, initModales, modales, mostrarConfirmacion, mostrarUltimoModal, ocultarModalTemporal } from "../modalsController";
+// import { configurarModalTipo, initModalTipo } from "./modalTipoElemento";
 import { setLecturaForm } from "../../helpers/setLecturaForm";
 import { llenarSelect } from "../../helpers/select";
 import { agregarFila, reemplazarFila } from "../../helpers/renderFilas";
@@ -250,27 +250,27 @@ export const initModalElemento = async (modal) => {
   });
 };
 
-document.addEventListener('tipoElementoCreado', async (e) => {
-  const nuevoTipo = e.detail;
+// document.addEventListener('tipoElementoCreado', async (e) => {
+//   const nuevoTipo = e.detail;
 
-  const selectTipo = modales.modalElemento.querySelector('#tipos-elementos');
-  const btnAgregarTipo = modales.modalElemento.querySelector('#agregarTipo');
+//   const selectTipo = modales.modalElemento.querySelector('#tipos-elementos');
+//   const btnAgregarTipo = modales.modalElemento.querySelector('#agregarTipo');
 
-  reiniciarSelectTipo(selectTipo);
+//   reiniciarSelectTipo(selectTipo);
 
-  await llenarSelect({
-    endpoint: 'tipos-elementos',
-    selector: '#tipos-elementos',
-    optionMapper: tipo => ({
-      id: tipo.id,
-      text: `${tipo.nombre}. Marca: ${(tipo.marca ?? "No Aplica")}. Modelo: ${(tipo.modelo ?? "No Aplica")}`
-    })
-  });
+//   await llenarSelect({
+//     endpoint: 'tipos-elementos',
+//     selector: '#tipos-elementos',
+//     optionMapper: tipo => ({
+//       id: tipo.id,
+//       text: `${tipo.nombre}. Marca: ${(tipo.marca ?? "No Aplica")}. Modelo: ${(tipo.modelo ?? "No Aplica")}`
+//     })
+//   });
 
 
-  selectTipo.value = nuevoTipo.id;
-  btnAgregarTipo.classList.add('hidden');
-});
+//   selectTipo.value = nuevoTipo.id;
+//   btnAgregarTipo.classList.add('hidden');
+// });
 
 const crearElemento = async (datos, inventario) => {
   const respuesta = await api.post('elementos', {

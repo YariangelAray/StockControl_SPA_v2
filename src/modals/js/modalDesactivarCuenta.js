@@ -2,12 +2,12 @@
 import { errorToast, successAlert } from "../../utils/alertas";
 import * as api from "../../utils/api";
 import * as validaciones from "../../utils/Validaciones";
-import { abrirModal, cargarModal, cerrarModal } from "../modalsController";
+import { cargarModal, cerrarModal, mostrarModal } from "../modalsController";
 
 export const abrirModalEliminar = async () => {
 
     const modal = await cargarModal('modalDesactivarCuenta');
-    abrirModal(modal)
+    mostrarModal(modal)
 
     const campo = modal.querySelector('input');
     campo.addEventListener('blur', validaciones.validarCampo);

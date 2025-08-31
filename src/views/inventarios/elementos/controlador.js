@@ -1,28 +1,25 @@
-import { initComponentes } from "../../../helpers/initComponentes";
+
 import { renderFilas } from "../../../helpers/renderFilas";
 import { llenarSelect } from "../../../helpers/select";
-import { configurarModalElemento, initModalElemento } from "../../../modals/js/modalElemento";
-import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
-import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTemporizadorAcceso";
+
 import { actualizarStorageElementos, cargarElementos, elementoClick } from "./elemento";
 
 
 export default async () => {
   const permisos = getCookie('permisos', [])
   const inventario = JSON.parse(localStorage.getItem('inventario'));
-
-  console.log(permisos)
+  
   if (hasPermisos('elemento.create-inventory-own', permisos)) {
     const crearBoton = document.getElementById('crearElemento');
     crearBoton.classList.remove('hidden');
-    document.getElementById('dashboard-elementos').addEventListener('click', (e) => {
-      if (e.target.closest('#crearElemento')) {
-        configurarModalElemento('crear', modalElemento);
-        abrirModal(modalElemento);
-      }
-    })
+    // document.getElementById('dashboard-elementos').addEventListener('click', (e) => {
+    //   if (e.target.closest('#crearElemento')) {
+    //     configurarModalElemento('crear', modalElemento);
+    //     abrirModal(modalElemento);
+    //   }
+    // })
   }
   if (hasPermisos('tipo-elemento.view-inventory-own', permisos)) {
     sessionStorage.setItem("rutaAnterior", location.hash);
@@ -53,11 +50,11 @@ export default async () => {
   });
 
 
-  limpiarModales();
-  await initModales(['modalElemento']);
+  // limpiarModales();
+  // await initModales(['modalElemento']);
 
-  const { modalElemento } = modales;
-  await initModalElemento(modalElemento);
+  // const { modalElemento } = modales;
+  // await initModalElemento(modalElemento);
 
 
   // Actualización en segundo plano

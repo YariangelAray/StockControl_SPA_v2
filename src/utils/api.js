@@ -17,17 +17,18 @@ export const get = async (endpoint) => {
   }
 }
 
-export const post = async (endpoint, objeto) => {
+export const post = async (endpoint, body) => {
   try {
+    const isFormData = body instanceof FormData;
+
     const respuesta = await fetch(url + endpoint, {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(objeto)
+      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+      body: isFormData ? body : JSON.stringify(body)
     });
-    return await respuesta.json();  
+
+    return await respuesta.json();
   } catch (error) {
     console.warn(error);
   }

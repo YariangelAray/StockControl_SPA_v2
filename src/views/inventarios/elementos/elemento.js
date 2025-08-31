@@ -1,9 +1,13 @@
-import { configurarModalElemento } from "../../../modals/js/modalElemento";
-import { abrirModal, modales } from "../../../modals/modalsController";
+
 import { get } from "../../../utils/api";
-import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
-import getCookie from "../../../utils/getCookie";
-import hasPermisos from "../../../utils/hasPermisos";
+
+
+import crear from './crud/crear';
+import detalles from './crud/detalles';
+import editar from './crud/editar';
+import reportar from './crud/reportar';
+
+export default { crear, detalles, editar, reportar };
 
 export const formatearElemento = (elemento) => {
 
@@ -16,23 +20,24 @@ export const formatearElemento = (elemento) => {
     elemento.fecha_adquisicion,
     elemento.ambiente ? elemento.ambiente : 'No asignado',
     elemento.estado,
-    elemento.estado_activo
+    elemento.activo
   ];
 };
 
 export const elementoClick = async (id) => {
-  const permisos = getCookie('permisos', []);
-  const { data } = await get('elementos/me/' + id)
+  location.hash = "#/inventarios/elementos/detalles/id="+id;
+  // const permisos = getCookie('permisos', []);
+  // const { data } = await get('elementos/me/' + id)
 
-  localStorage.setItem('elemento_temp', JSON.stringify(data));
-  const form = modales.modalElemento.querySelector('form');
+  // localStorage.setItem('elemento_temp', JSON.stringify(data));
+  // const form = modales.modalElemento.querySelector('form');
 
-  llenarCamposFormulario(data, form);
-  modales.modalElemento.dataset.id = data.id;
-  configurarModalElemento('editar', modales.modalElemento);
-  const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
-  if (!hasPermisos('elemento.change-status-inventory-own', permisos)) btn.classList.remove('hidden');
-  abrirModal(modales.modalElemento);
+  // llenarCamposFormulario(data, form);
+  // modales.modalElemento.dataset.id = data.id;
+  // configurarModalElemento('editar', modales.modalElemento);
+  // const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
+  // if (!hasPermisos('elemento.change-status-inventory-own', permisos)) btn.classList.remove('hidden');
+  // abrirModal(modales.modalElemento);
 }
 
 export const cargarElementos = async () => {

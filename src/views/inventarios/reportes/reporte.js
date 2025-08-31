@@ -1,3 +1,4 @@
+import { cerrarModal } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
@@ -73,7 +74,7 @@ export default async (modal, parametros) => {
         if (!hasPermisos(btn.dataset.permiso, permisos)) {
             btn.remove();
         }
-    });    
+    });
 
     modal.querySelector("#fecha").textContent = data.fecha;
     modal.querySelector("#usuario").textContent = data.usuario;
@@ -88,8 +89,7 @@ export default async (modal, parametros) => {
 
     if (data.fotos && data.fotos.length > 0) {
         data.fotos.forEach(({ url }) => {
-            const img = document.createElement('img');
-            console.log(url)
+            const img = document.createElement('img');            
             img.src = 'http://localhost:3000/stockcontrol_api/' + url;
             contenedor.appendChild(img);
         });
@@ -111,21 +111,24 @@ export default async (modal, parametros) => {
     const visorImg = visor.querySelector('img');
 
     modal.addEventListener('click', async (e) => {
-        // if (e.target.closest('.ver-elemento')) {
-        //     const id_elemento = modal.querySelector("#placa").dataset.id;
+        if (e.target.closest('.ver-elemento')) {
+            e.stopPropagation();
+            await cerrarModal(modal);
+            location.hash = "#/inventarios/elementos/detalles/id=" + data.elemento.id;
+            // const id_elemento = modal.querySelector("#placa").dataset.id;
 
-        //     const { data } = await api.get('elementos/' + id_elemento)
+            // const { data } = await api.get('elementos/' + id_elemento)
 
-        //     localStorage.setItem('elemento_temp', JSON.stringify(data));
-        //     const form = modales.modalElemento.querySelector('form');
+            // localStorage.setItem('elemento_temp', JSON.stringify(data));
+            // const form = modales.modalElemento.querySelector('form');
 
-        //     llenarCamposFormulario(data, form);
-        //     configurarModalElemento('editar', modalElemento);
-        //     const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
-        //     if (usuario.rol_id == 2) btn.classList.remove('hidden');
-        //     ocultarModalTemporal(modal);
-        //     abrirModal(modalElemento);
-        // }
+            // llenarCamposFormulario(data, form);
+            // configurarModalElemento('editar', modalElemento);
+            // const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
+            // if (usuario.rol_id == 2) btn.classList.remove('hidden');
+            // ocultarModalTemporal(modal);
+            // abrirModal(modalElemento);
+        }
 
         // if (e.target.closest('.aceptar')) {
         //     cerrarModal();

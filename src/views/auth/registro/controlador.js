@@ -89,8 +89,7 @@ export default async () => {
         
         try {
 
-            const respuesta = await api.post('auth/register', validaciones.datos);
-            console.log(respuesta);
+            const respuesta = await api.post('auth/register', validaciones.datos);            
             if (respuesta.success) {
               await successAlert("Registro éxitoso");
                 localStorage.setItem('usuario', JSON.stringify(respuesta.data));

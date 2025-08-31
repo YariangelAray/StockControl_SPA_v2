@@ -1,5 +1,4 @@
-import { configurarModalAmbiente } from "../../../modals/js/modalAmbiente";
-import { abrirModal, modales } from "../../../modals/modalsController";
+
 import { get } from "../../../utils/api";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 
@@ -38,8 +37,7 @@ export const ambienteClick = async (id) => {
 
 export const cargarAmbientes = async () => {
     const respuesta = await get('ambientes')
-    const ambientes = [];
-    console.log(respuesta)
+    const ambientes = [];    
     if (respuesta.success) {
         for (const ambiente of respuesta.data) {
             ambientes.push(formatearAmbiente(ambiente))

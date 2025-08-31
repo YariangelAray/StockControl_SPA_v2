@@ -1,7 +1,5 @@
-import { initComponentes } from "../../../helpers/initComponentes";
+
 import { renderFilas } from "../../../helpers/renderFilas";
-import { configurarModalInventario, initModalInventario } from "../../../modals/js/modalInventario";
-import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
 import { actualizarStorageInventarios, inventarioClick, cargarInventarios } from "./inventario";

@@ -1,7 +1,7 @@
 import { abrirModalConfigurar } from "../../../modals/js/modalConfigurarCodigo";
-import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
+
 import { get } from "../../../utils/api";
-import { eliminarAccesos, initTemporizadorAcceso } from "./initTemporizadorAcceso";
+
 import { infoAlert } from "../../../utils/alertas";
 import getCookie from "../../../utils/getCookie";
 

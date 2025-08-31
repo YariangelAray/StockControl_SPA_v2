@@ -1,5 +1,3 @@
-import { abrirModal, modales } from "../../../modals/modalsController"
-import { configurarModalTipo } from "../../../modals/js/modalTipoElemento"
 import { get } from "../../../utils/api"
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario"
 import getCookie from "../../../utils/getCookie"
@@ -28,17 +26,6 @@ export const tipoClick = async (id) => {
 
   if(location.hash.startsWith('#/inventarios')) location.hash = '#/inventarios/elementos/tipos-elementos/detalles/id='+id;
   else if(location.hash.startsWith('#/super-admin')) location.hash = '#/super-admin/tipos-elementos/detalles/id='+id;
-
-  // const permisos = getCookie('permisos', []);
-  // const { data } = await get('tipos-elementos/' + id)
-  // localStorage.setItem('tipo_temp', JSON.stringify(data));
-  // const form = modales.modalTipoElemento.querySelector('form');
-
-  // configurarModalTipo('editar', modales.modalTipoElemento);
-  // llenarCamposFormulario(data, form);
-  // const btn = modales.modalTipoElemento.querySelector('.eliminar');
-  // if (hasPermisos('tipo-elemento.delete', permisos)) btn.classList.remove('hidden');
-  // abrirModal(modales.modalTipoElemento);
 }
 
 export const cargarTipos = async () => {

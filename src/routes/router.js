@@ -14,7 +14,7 @@ let hayLayout = false;
 export const router = async () => {
   const hash = location.hash.slice(2);
   const segmentos = hash.split("/").filter(Boolean);
-  
+
   // Redirección por defecto
   if (segmentos.length == 0) {
     location.hash = '#/inicio';
@@ -51,7 +51,7 @@ export const router = async () => {
     const requeridos = Array.isArray(meta.can) ? meta.can : [meta.can];
     if (!requeridos.some(r => hasPermisos(r, permisos))) return render404(roles.length != 0);
   }
-  
+
   if (meta.requiresInventory) {
     const inventario = JSON.parse(localStorage.getItem('inventario') || 'null');
     if (!inventario) {
@@ -156,17 +156,34 @@ export const router = async () => {
   //   await cargarLayout(desiredLayout, ruta.path, hayLayout);
   //   hayLayout = (desiredLayout === "private");
   // } else {
-  // Layout privado ya cargado: solo inyectamos la vista
-  const main = document.querySelector('#app-main') || document.querySelector('main');
-  if (main) {
-    // const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
-    // main.innerHTML = vista;        
-    await cargarLayout(desiredLayout, ruta.path, hayLayout);
+
+  if (!hayLayout && desiredLayout === "private") {
+    await cargarLayout("private", ruta.path, false);
+    hayLayout = true;
   } else {
-    // si por alguna razón main faltó, recargar layout completo
-    await cargarLayout(desiredLayout, ruta.path, false);
-    hayLayout = (desiredLayout === "private");
+    const main = document.querySelector('#app-main') || document.querySelector('main');
+    if (main) {
+      await cargarLayout(desiredLayout, ruta.path, hayLayout);
+
+    }
+    else {
+      await cargarLayout(desiredLayout, ruta.path, false);
+      hayLayout = (desiredLayout === "private");
+    }
   }
+
+
+  // // Layout privado ya cargado: solo inyectamos la vista
+  // const main = document.querySelector('#app-main') || document.querySelector('main');
+  // if (main) {
+  //   // const vista = await fetch(`./src/views/${ruta.path}`).then(r => r.text());
+  //   // main.innerHTML = vista;        
+  //   await cargarLayout(desiredLayout, ruta.path, hayLayout);
+  // } else {
+  //   // si por alguna razón main faltó, recargar layout completo
+  //   await cargarLayout(desiredLayout, ruta.path, false);
+  //   hayLayout = (desiredLayout === "private");
+  // }
   // }
 
   // Llamar controlador (si requiere parámetros, se los pasamos)

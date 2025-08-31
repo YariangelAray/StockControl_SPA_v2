@@ -6,6 +6,7 @@ import ambientes from '../views/inventarios/ambientes/controlador.js';
 import mapa from '../views/compartidas/mapas/controlador.js';
 import detalles from '../views/inventarios/detalles/controlador.js';
 import elementos from '../views/inventarios/elementos/controlador.js';
+import elemento from '../views/inventarios/elementos/elemento.js';
 import reportes from '../views/inventarios/reportes/controlador.js';
 import reporteDetalles from '../views/inventarios/reportes/reporte.js';
 
@@ -62,23 +63,23 @@ export const routes = {
         meta: { can: 'elemento.view-inventory-own', requiresInventory: true }
       },
       crear: {
-        path: 'inventarios/elementos/index.html',
-        controller: elementos,
+        path: 'modalElemento',
+        controller: elemento.crear,
         meta: { can: 'elemento.create-inventory-own', requiresInventory: true, modal: true }
       },
       detalles: {
-        path: 'inventarios/elementos/index.html',
-        controller: elementos,
-        meta: { can: 'elemento.view-inventory-own', requiresInventory: true, modal: true }
+        path: 'modalElemento',
+        controller: elemento.detalles,
+        meta: { can: 'elemento.view-inventory-own', requiresInventory: true, modal: true, sameModal: true }
       },
       editar: {
-        path: 'inventarios/elementos/index.html',
-        controller: elementos,
-        meta: { can: 'elemento.update-inventory-own', requiresInventory: true, modal: true }
+        path: 'modalElemento',
+        controller: elemento.editar,
+        meta: { can: 'elemento.update-inventory-own', requiresInventory: true, modal: true, sameModal: true }
       },
       reportar: {
-        path: 'inventarios/elementos/index.html',
-        controller: elementos,
+        path: 'modalGenerarReporte',
+        controller: elemento.reportar,
         meta: { can: 'reporte.create', requiresInventory: true, modal: true }
       },
       "tipos-elementos": {

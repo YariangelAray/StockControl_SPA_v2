@@ -18,7 +18,7 @@ export default async (modal) => {
 
   // Si hay modal distinto, lo cerramos antes
   if (modalAbierto && !modal.mismoModal) {
-    cerrarModal(modalAbierto);
+    await cerrarModal(modalAbierto);
     // modalAbierto.remove();
     modalAbierto = null;
   }

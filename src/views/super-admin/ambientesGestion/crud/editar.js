@@ -112,23 +112,12 @@ export default async (modal, parametros) => {
 
 
   asignarEvento(cancelarBtn, 'click', async () => {
-      form.querySelectorAll('.form__control').forEach(input => {
-          input.classList.remove('error');
-      });
-      // await detalles(modal, parametros); // reutiliza la lógica
-      location.hash = '#/super-admin/ambientes/detalles/id=' + parametros.id;
-      // modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
+    form.querySelectorAll('.form__control').forEach(input => {
+      input.classList.remove('error');
     });
+    // await detalles(modal, parametros); // reutiliza la lógica
+    location.hash = '#/super-admin/ambientes/detalles/id=' + parametros.id;
+    // modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
+  });
 
-
-  // modal.addEventListener('click', async (e) => {
-  //   if (e.target.closest('.cancelar')) {
-  //     form.querySelectorAll('.form__control').forEach(input => {
-  //       input.classList.remove('errorToast');
-  //     });
-  //     modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
-  //     await detalles(modal, parametros); // reutiliza la lógica
-  //     location.hash = '#/super-admin/ambientes/detalles/id=' + parametros.id;
-  //   }
-  // })
 }

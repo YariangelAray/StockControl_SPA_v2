@@ -1,6 +1,6 @@
 import { post } from "../../utils/api";
 import * as validaciones from "../../utils/Validaciones";
-import { abrirModal, cargarModal, cerrarModal, cerrarTodo, initModales, modales, mostrarModal, ocultarModalTemporal } from "../modalsController";
+import { cargarModal, cerrarModal ,mostrarModal  } from "../modalsController";
 // import { error } from '../../utils/alertas';
 import { initTemporizadorAcceso } from "../../views/inventarios/detalles/initTemporizadorAcceso";
 import { errorToast } from "../../utils/alertas";

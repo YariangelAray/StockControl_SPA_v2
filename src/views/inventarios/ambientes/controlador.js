@@ -1,6 +1,5 @@
 import { cargarCards } from "../../../helpers/cargarCards";
-import { initComponentes } from "../../../helpers/initComponentes";
-import { limpiarModales } from "../../../modals/modalsController";
+
 import * as api from "../../../utils/api";
 import { infoToast } from "../../../utils/alertas";
 import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTemporizadorAcceso";
@@ -8,8 +7,7 @@ import getCookie from "../../../utils/getCookie";
 
 export default async () => {
     const inventario = JSON.parse(localStorage.getItem('inventario'));
-    const roles = getCookie('roles', []).map(r => r.id)
-    limpiarModales();
+    const roles = getCookie('roles', []).map(r => r.id)    
 
     let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes || [];
     if (!ambientes || ambientes.length === 0) {
@@ -96,7 +94,6 @@ const cargarAmbientes = async (ambientes) => {
 
 
 const actualizarStorageAmbientes = async (inventario) => {
-  const respuesta = await api.get(`inventarios/me/${inventario.id}/ambientes`);
-  console.log(respuesta)
+  const respuesta = await api.get(`inventarios/me/${inventario.id}/ambientes`);  
     if (respuesta.success) localStorage.setItem('ambientes', JSON.stringify({ ambientes: respuesta.data ?? [] }));
 }

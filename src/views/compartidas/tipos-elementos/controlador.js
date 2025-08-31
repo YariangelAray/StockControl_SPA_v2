@@ -1,7 +1,4 @@
-import { initComponentes } from "../../../helpers/initComponentes";
 import { agregarFila, renderFilas } from "../../../helpers/renderFilas";
-import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
-import { configurarModalTipo, initModalTipo } from "../../../modals/js/modalTipoElemento";
 import { actualizarStorageTipos, cargarTipos, formatearTipo, tipoClick } from "./tipos-elementos";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
@@ -14,9 +11,9 @@ export default async () => {
 
   if (!hasPermisos('tipo-elemento.view-inventory-own', permisos)) {
     btnVolver.classList.add('hidden')
-    const historial = sessionStorage.getItem("rutaAnterior");
-    btnVolver.setAttribute("href", historial);
   }
+  const historial = sessionStorage.getItem("rutaAnterior");
+  btnVolver.setAttribute("href", historial);
 
   let tipos = JSON.parse(localStorage.getItem('tipos') || '{}').tipos || [];
 

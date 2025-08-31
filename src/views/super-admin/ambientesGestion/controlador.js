@@ -1,7 +1,5 @@
-import { initComponentes } from "../../../helpers/initComponentes";
+
 import { renderFilas } from "../../../helpers/renderFilas";
-import { configurarModalAmbiente, initModalAmbiente } from "../../../modals/js/modalAmbiente";
-import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
 import { actualizarStorageAmbientes, ambienteClick, cargarAmbientes } from "./ambiente";

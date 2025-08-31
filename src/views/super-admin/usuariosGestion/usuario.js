@@ -1,7 +1,5 @@
-import { configurarModalUsuario } from "../../../modals/js/modalUsuario";
-import { abrirModal, modales } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
-import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
+
 
 import crear from './crud/crear';
 import detalles from './crud/detalles';

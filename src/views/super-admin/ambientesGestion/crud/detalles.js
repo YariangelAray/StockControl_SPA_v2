@@ -81,55 +81,11 @@ export default async (modal, parametros) => {
         await actualizarStorageAmbientes();
     });
 
-    // asignarEvento(editarBtn, 'click', () => {
-    //     location.hash = "#/super-admin/ambientes/editar/id=" + parametros.id;
-    // })
-    // asignarEvento(vermapaBtn, 'click', async () => {
-    //     if (data.mapa) {
-    //         location.hash = `#/super-admin/ambientes/mapa/ambiente_id=${parametros.id}&nombre=${data.nombre}`;
-    //     }
-    //     else {
-    //         ocultarModal(modal);
-    //         await infoToast("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
-    //         setTimeout(() => mostrarModal(modal), 100);
-    //     }
-    // })
-
     modal.addEventListener('click', async (e) => {
     
         if (e.target.closest('.editar')) {
             location.hash = "#/super-admin/ambientes/editar/id=" + parametros.id;
             return;
         }
-        if (e.target.closest('.ver-mapa')) {
-            // const temp = JSON.parse(localStorage.getItem('ambiente_temp'));
-            if (data.mapa) {
-                window.location.hash = `#/super-admin/ambientes/mapa/ambiente_id=${parametros.id}&nombre=${data.nombre}`;
-            }
-            else {
-                // ocultarModal(modal);
-              infoToast("Este ambiente aún no tiene un mapa disponible");
-                // setTimeout(() => mostrarModal(modal), 100);
-            }
-            return;
-        }
-        // if (e.target.closest('.eliminar')) {
-        //     const confirmado = await mostrarConfirmacion("¿Está seguro de eliminar el ambiente?");
-        //     if (!confirmado) return;
-        //     const respuesta = await del('ambientes/' + parametros.id);
-    
-        //     if (respuesta.successToast) {
-        //         cerrarModal(modal);
-        //         await successToast('Ambiente eliminado con éxito');
-        //         removerFilar(document.querySelector('#dashboard-ambientes .table__body'), parametros.id);
-        //     }
-        //     else {
-        //         ocultarModal(modal);
-        //         await errorToast(respuesta);
-        //         setTimeout(async () => mostrarModal(modal), 100);
-        //     }
-        //     await actualizarStorageAmbientes();
-        //     return;
-        // }
     })
 }

@@ -1,4 +1,4 @@
-<dialog class="modal modal--elemento" backdrop-close="false">
+<dialog class="modal modal--elemento" backdrop-close="false" id="app-modal">
 
   <div class="modal__header">
     <h2 class="modal__title">Detalles del Elemento</h2>
@@ -21,10 +21,10 @@
 
       <div class="form__control form__control--stacked form__control--span">
         <label for="tipo_elemento">Tipo de Elemento:</label>
-        <div style="display: flex; width: 100%; align-items: center; gap: 20px;">
+        <div style="display: flex; width: 100%; align-items: center; gap: 20px; max-height: 30px;">
           <select name="tipo_elemento_id" class="input input--small input--select" required id="tipos-elementos" data-rol-permitido="2">                        
           </select>
-          <button class="button" id="agregarTipo">Agregar tipo</button>
+          <button class="button" id="agregarTipo" data-permiso="tipo-elemento.create">Agregar tipo</button>
         </div>
       </div>
 
@@ -42,7 +42,7 @@
       <div class="form__control form__control--stacked">
         <label for="estado">Estado:</label>
         <select name="estado_id" class="input input--small input--select" id="estados" required>
-          <option value="" disabled selected>Seleccione el estado del elemento</option>
+          <option value="" disabled selected>Seleccione el estado</option>
         </select>
       </div>
 
@@ -62,14 +62,12 @@
   </div>
 
   <div class="modal__actions">
-    <button class="button editar">Editar
-      <i class="ri-edit-fill icon"></i>
-    </button>
-    <button type="submit" class="button crear" form="form-elemento">Crear</button>
-    <button type="submit" class="button guardar" form="form-elemento">Guardar</button>
-    <button type="submit" class="button reactivar">Reactivar</button>
-    <button class="button button--red dar-baja">Dar de baja</button>
-    <button class="button button--red reportar">Génerar reporte</button>
+    <button class="button editar" data-permiso="elemento.update-inventory-own">Editar<i class="ri-edit-fill icon"></i></button>
+    <button type="submit" class="button crear" form="form-elemento" data-permiso="elemento.create-inventory-own">Crear</button>
+    <button type="submit" class="button guardar" form="form-elemento" data-permiso="elemento.update-inventory-own">Guardar</button>
+    <button type="submit" class="button reactivar" data-permiso="elemento.change-status-inventory-own">Reactivar</button>
+    <button class="button button--red dar-baja" data-permiso="elemento.change-status-inventory-own">Dar de baja</button>
+    <button class="button button--red reportar" data-permiso="reporte.create">Génerar reporte</button>
     <button class="button button--white aceptar button--final">Aceptar</button>
     <button class="button button--red cancelar button--final">Cancelar</button>
   </div>

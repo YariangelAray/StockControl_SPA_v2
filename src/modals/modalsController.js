@@ -1,61 +1,66 @@
-export let modales = {};
+// export let modales = {};
 
-export const initModales = async (modalesUsar) => {
+// export const initModales = async (modalesUsar) => {
 
-  for (const modalNombre of modalesUsar) {
+//   for (const modalNombre of modalesUsar) {
 
-    if (modales[modalNombre]) continue;
+//     if (modales[modalNombre]) continue;
 
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = await (await fetch(`./src/modals/html/${modalNombre}.html`)).text();
-    const modal = tempDiv.querySelector('dialog');
+//     const tempDiv = document.createElement('div');
+//     tempDiv.innerHTML = await (await fetch(`./src/modals/html/${modalNombre}.html`)).text();
+//     const modal = tempDiv.querySelector('dialog');
 
-    document.body.appendChild(modal);
-    modales[modalNombre] = modal;
-  }
-};
+//     document.body.appendChild(modal);
+//     modales[modalNombre] = modal;
+//   }
+// };
 
-const modalStack = [];
+// const modalStack = [];
 
-export const abrirModal = (modal) => {
-  if (!modalStack.includes(modal)) {
-    modalStack.push(modal);
-  }
-  modal.showModal();
-  requestAnimationFrame(() => modal.classList.add('visible'));
-};
+// export const abrirModal = (modal) => {
+//   if (!modalStack.includes(modal)) {
+//     modalStack.push(modal);
+//   }
+//   modal.showModal();
+//   requestAnimationFrame(() => modal.classList.add('visible'));
+// };
 
-export const mostrarUltimoModal = () => {
-  const modal = modalStack.at(-1);
-  modal.showModal();
-  requestAnimationFrame(() => modal.classList.add('visible'));
-}
+// export const mostrarUltimoModal = () => {
+//   const modal = modalStack.at(-1);
+//   modal.showModal();
+//   requestAnimationFrame(() => modal.classList.add('visible'));
+// }
 
-export const ocultarModalTemporal = (modal) => {
-  modal.classList.remove('visible');
-  setTimeout(() => modal.close(), 300);
-};
+// export const ocultarModalTemporal = (modal) => {
+//   modal.classList.remove('visible');
+//   setTimeout(() => modal.close(), 300);
+// };
+
+// export const ocultarModalTemporal = (modal) => { // este
+//   modal.classList.remove('visible');
+//   // setTimeout(() => modal.close(), 300);
+// };
 
 export const ocultarModal = (modal) => { // este
   modal.classList.remove('visible');
-  setTimeout(() => modal.close(), 300);
+  // setTimeout(() => modal.close(), 300);
 };
 export const mostrarModal = (modal) => { // este
   modal.showModal();
   requestAnimationFrame(() => modal.classList.add('visible'));
 }
 
-export const cerrarModal = (modal) => { // este
-  if (modal.id == 'app-modal') {
-    modal.dataset.inicializado = "";
-    modal.dataset.modo = "";
-  }
-  modal.classList.remove('visible');
-  modal.addEventListener('transitionend', () => {
-    modal.close();
-    modal.remove();
-  }, { once: true });
-};
+// export const cerrarModal = (modal) => { // este
+//   if (modal.id == 'app-modal') {
+//     modal.dataset.inicializado = "";
+//     modal.dataset.modo = "";
+//   }
+//   modal.classList.remove('visible');
+//   modal.addEventListener('transitionend', () => {
+//     modal.close();
+//     modal.remove();
+//   }, { once: true });
+// };
 
 
 export const cargarModal = async (modalNombre) => { // este
@@ -64,6 +69,21 @@ export const cargarModal = async (modalNombre) => { // este
   const modal = tempDiv.querySelector('dialog');
   document.body.appendChild(modal);
   return modal;
+};
+
+export const cerrarModal = (modal) => {
+  return new Promise(resolve => {
+    if (modal.id == 'app-modal') {
+      modal.dataset.inicializado = "";
+      modal.dataset.modo = "";
+    }
+    modal.classList.remove('visible');
+    modal.addEventListener('transitionend', () => {
+      modal.close();
+      modal.remove();
+      resolve();
+    }, { once: true });
+  });
 };
 
 
@@ -105,7 +125,7 @@ export const mostrarConfirmacion = async (mensaje = '¿Está seguro de continuar
       setTimeout(() => {
         modalConfirmacion.close();
         modalConfirmacion.remove();
-        modales.modalConfirmacion = null;
+        // modales.modalConfirmacion = null;
         resolve(valor);
       }, 300);
     }
@@ -119,15 +139,15 @@ export const mostrarConfirmacion = async (mensaje = '¿Está seguro de continuar
   });
 };
 
-export const cerrarTodo = () => {
-  while (modalStack.length > 0) {
-    const modal = modalStack.pop();
-    modal.classList.remove('visible');
-    setTimeout(() => modal.close(), 400);
-  }
-};
+// export const cerrarTodo = () => {
+//   while (modalStack.length > 0) {
+//     const modal = modalStack.pop();
+//     modal.classList.remove('visible');
+//     setTimeout(() => modal.close(), 400);
+//   }
+// };
 
-export const limpiarModales = () => {
-  document.querySelectorAll('.modal').forEach(m => m.remove());
-  modales = {};
-};
+// export const limpiarModales = () => {
+//   document.querySelectorAll('.modal').forEach(m => m.remove());
+//   modales = {};
+// };

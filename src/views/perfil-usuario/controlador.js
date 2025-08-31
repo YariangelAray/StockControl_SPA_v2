@@ -1,6 +1,6 @@
-import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController";
+
 import { abrirModalEliminar } from "../../modals/js/modalDesactivarCuenta";
-import { initComponentes } from "../../helpers/initComponentes";
+
 import * as api from "../../utils/api.js";
 import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario.js";
 import { llenarSelect } from "../../helpers/select";
@@ -125,8 +125,7 @@ export default async () => {
       const respuesta = await api.put(`usuarios/me`, validaciones.datos);
 
       if (respuesta.success) {
-        successToast("Usuario actualizado exitosamente");        
-        initComponentes();
+        successToast("Usuario actualizado exitosamente");                
 
       } else {
         errorToast(respuesta);

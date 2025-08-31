@@ -2,7 +2,7 @@
 import Konva from "konva";
 import { pcEstilo, mesaEstilo } from "./estilosMapa";
 import { get } from "../../../utils/api";
-import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
+// import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
 import { configurarModalElemento, initModalElemento } from "../../../modals/js/modalElemento";
 import { initComponentes } from "../../../helpers/initComponentes";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";

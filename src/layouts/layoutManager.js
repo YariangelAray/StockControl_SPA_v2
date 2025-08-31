@@ -1,6 +1,7 @@
 import getCookie from "../utils/getCookie";
 import { get } from "../utils/api";
 import { errorToast } from "../utils/alertas";
+import hasPermisos from "../utils/hasPermisos";
 
 /**
  * Carga el layout (public/private) e inyecta la vista indicada en el main.
@@ -10,6 +11,7 @@ import { errorToast } from "../utils/alertas";
  */
 export const cargarLayout = async (tipo = "public", vistaPath = '', hayLayout = false) => {
   // Ajusta la ruta del layout según tu estructura de proyecto.
+  const permisos = getCookie('permisos', []);
   const layoutUrl = `./src/layouts/${tipo}Layout.html`;
   const layoutResp = await fetch(layoutUrl);
 
@@ -35,6 +37,11 @@ export const cargarLayout = async (tipo = "public", vistaPath = '', hayLayout = 
     // Si tienes un elemento .rol en el header del layout
     const roles = getCookie('roles', []).map(r => r.nombre);
     document.querySelector('.rol').textContent = "Usuario " + roles.join(" - ");
+
+    const btnPerfil = document.querySelector('#perfil-usuario');
+    if (!hasPermisos("usuario.view-own", permisos)) {
+        btnPerfil.remove()
+      };
 
     document.addEventListener('click', async (e) => {
       if (e.target.closest('#logout')) {

@@ -9,7 +9,7 @@ import obtenerHashBase from "../../../../utils/obtenerHashBase";
 import * as validaciones from '../../../../utils/Validaciones';
 import { tipoClick, formatearTipo } from "../tipos-elementos";
 
-export default async (modal) => {
+export default async (modal, opciones = {}) => {
 
     document.title = "Tipos Elementos - Crear"
     modal.dataset.modo = 'crear';
@@ -82,7 +82,9 @@ export default async (modal) => {
 
         cerrarModal(modal);
         setTimeout(async () => successToast('Tipo de elemento creado con éxito'), 100);
-        location.hash = obtenerHashBase();
+        if (!opciones?.evitarRedireccion) {
+            location.hash = obtenerHashBase();
+        }
 
         const datosFormateados = formatearTipo(respuesta.data);
 

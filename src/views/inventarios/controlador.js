@@ -1,7 +1,4 @@
 import { cargarCards } from "../../helpers/cargarCards.js";
-import { initComponentes } from "../../helpers/initComponentes.js";
-import { initModalPedirCodigo } from "../../modals/js/modalPedirCodigoAcceso.js";
-import { abrirModal, initModales, limpiarModales, modales } from "../../modals/modalsController.js";
 import * as api from "../../utils/api.js";
 import getCookie from "../../utils/getCookie.js";
 import { initTemporizadorAcceso } from "./detalles/initTemporizadorAcceso.js";
@@ -13,15 +10,15 @@ export default async () => {
     const sidebarList = document.querySelector('.sidebar__menu .sidebar__list');
     sidebarList.querySelector('.menu__items')?.remove();
 
-    limpiarModales();
+    // limpiarModales();
     if (roles.includes(3)) {
-        await initModales(['modalPedirCodigoAcceso']);
-        const { modalPedirCodigoAcceso } = modales;
-        initModalPedirCodigo(modalPedirCodigoAcceso);
+        // await initModales(['modalPedirCodigoAcceso']);
+        // const { modalPedirCodigoAcceso } = modales;
+        // initModalPedirCodigo(modalPedirCodigoAcceso);
         document.querySelector('.agregar-inventario').classList.remove('hidden');
         document.getElementById('dashboard-inventarios').addEventListener('click', (e) => {
             if (e.target.closest('.agregar-inventario')) {
-                abrirModal(modalPedirCodigoAcceso);
+                // abrirModal(modalPedirCodigoAcceso);
             }
         })
         const accessInfo = document.querySelector('.sidebar .access-info');
@@ -74,7 +71,6 @@ const cargarInventarios = async (roles) => {
                             document.querySelector('.sidebar .access-info').classList.add('hidden');
                             localStorage.removeItem('codigoAccesoInfo');
                             localStorage.removeItem('inventario');
-                            initComponentes(usuario);
                         });
                     }
                 }
