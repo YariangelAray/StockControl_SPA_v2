@@ -53,8 +53,7 @@ export default async (modal, parametros) => {
 
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
         const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
-        const tienePermiso = requeridos.some(p => permisos.includes(p));
-
+        const tienePermiso = requeridos.some(p => hasPermisos(p, permisos));
         if (!tienePermiso) {
             btn.remove();
         }
@@ -88,6 +87,10 @@ export default async (modal, parametros) => {
 
         if (e.target.closest('.editar')) {
             location.hash = "#/super-admin/ambientes/editar/id=" + parametros.id;
+            return;
+        }
+        if (e.target.closest('.ver-mapa')) {
+            location.hash = "#/super-admin/ambientes/mapa/ambiente_id=" + parametros.id + "&nombre=" + data.nombre;
             return;
         }
     })

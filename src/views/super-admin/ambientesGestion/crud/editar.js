@@ -51,7 +51,7 @@ export default async (modal, parametros) => {
 
   modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
     const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
-    const tienePermiso = requeridos.some(p => permisos.includes(p));
+    const tienePermiso = requeridos.some(p => hasPermisos(p, permisos));
 
     if (!tienePermiso) {
       btn.remove();
@@ -68,6 +68,7 @@ export default async (modal, parametros) => {
     }
     if (campo.name === "nombre") {
       campo.addEventListener("keydown", e => validaciones.validarLimite(e, 50));
+      campo.addEventListener("keydown", validaciones.validarTexto);
     }
   });
 

@@ -1,10 +1,10 @@
 .modal {
   width: 100%;
   max-width: 700px;
-  margin: auto;
+  /* margin: auto; */
   background-color: var(--gris-panel);
-  /* box-shadow: 0 2px 8px 0 #00000025; */
-  box-shadow: 0 0px 500px 100px #00000035;
+  box-shadow: 0 2px 8px 0 #00000035;
+  /* box-shadow: 0 0px 500px 100px #00000035; */
   border: none;
   outline: none;
   border-radius: var(--borde-redondeado);
@@ -15,32 +15,59 @@
   overflow: hidden;
 
   opacity: 0;
-  transform: translateY(-20px);
+  /* transform: translateY(-20px); */
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
   justify-items: center;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
 }
 
 .modal.visible {
   opacity: 1;
-  transform: translateY(0px);
+  /* transform: translateY(0px); */
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: all;
+  z-index: 10000;
+}
+
+.modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: #00000020;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+
+.modal__backdrop.visible {
+  opacity: 1;
   pointer-events: all;
 }
 
-.modal::backdrop {
-  /* z-index: 1000; */
-  transition: background-color 300ms ease;
-  background-color: transparent;
+.modal__backdrop--confirmacion {
+  position: fixed;
+  inset: 0;
+  background-color: #00000020;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 99999; /* Más alto que cualquier otro modal */
 }
 
-/* .toastify {
-  z-index: 2000 !important;
-} */
-
-.modal:not(.visible)::backdrop {
-  background-color: rgba(0, 0, 0, 0);
-  /* background-image: radial-gradient( #be0f0f 10%, rgba(0, 0, 0, 0) 90%); */
+.modal__backdrop--confirmacion.visible {
+  opacity: 1;
+  pointer-events: all;
 }
+
+.modal.modal--confirmacion.visible {
+  z-index: 100000; /* Encima de todo */
+}
+
 
 .modal__header {
   width: 150%;
@@ -122,12 +149,14 @@
   grid-template-columns: 1fr 1fr;
   gap: 10px 20px;
 }
+
 .modal--configurar .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
-.modal--configurar .form .input{
+
+.modal--configurar .form .input {
   min-width: 100%;
 }
 
@@ -148,7 +177,7 @@
   padding: 3px 5px 0;
   font-size: 0.9rem;
   text-overflow: ellipsis;
-  overflow-y: scroll;  
+  overflow-y: scroll;
   line-height: 1.2;
   min-height: 30px;
   max-height: 30px;

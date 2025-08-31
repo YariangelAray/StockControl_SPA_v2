@@ -3,8 +3,8 @@ import Konva from "konva";
 import { pcEstilo, mesaEstilo } from "./estilosMapa";
 import { get } from "../../../utils/api";
 // import { abrirModal, initModales, limpiarModales, modales } from "../../../modals/modalsController";
-import { configurarModalElemento, initModalElemento } from "../../../modals/js/modalElemento";
-import { initComponentes } from "../../../helpers/initComponentes";
+// import { configurarModalElemento, initModalElemento } from "../../../modals/js/modalElemento";
+// import { initComponentes } from "../../../helpers/initComponentes";
 import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario";
 // import {error} from '../../../utils/alertas';
 
@@ -21,11 +21,11 @@ import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario"
 export default async (parametros) => {
 
     const usuario = JSON.parse(localStorage.getItem('usuario'));
-    initComponentes(usuario);
+    // initComponentes(usuario);
 
     const ambiente = parametros;
 
-    limpiarModales();
+    // limpiarModales();
 
     const hash = location.hash.slice(2);
     const segmentos = hash.split('/').filter(seg=>seg);
@@ -35,9 +35,9 @@ export default async (parametros) => {
     document.querySelector('.dashboard__title').textContent = ambiente.nombre;
     document.querySelector('#btn-volver').href = `#/${hashAnterior}`;
 
-    await initModales(['modalElemento']);
-    const { modalElemento } = modales;
-    await initModalElemento(modalElemento);
+    // await initModales(['modalElemento']);
+    // const { modalElemento } = modales;
+    // await initModalElemento(modalElemento);
 
     const respuesta = await get("ambientes/"+ambiente.ambiente_id);
     if(!respuesta.success){
@@ -113,18 +113,18 @@ export default async (parametros) => {
 }
 
 const elementoClick = async (placa) => {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    const { data } = await get('elementos/placa/' + placa)
+    // const usuario = JSON.parse(localStorage.getItem('usuario'));
+    // const { data } = await get('elementos/placa/' + placa)
 
-    localStorage.setItem('elemento_temp', JSON.stringify(data));
+    // localStorage.setItem('elemento_temp', JSON.stringify(data));
 
-    const form = modales.modalElemento.querySelector('form');
-    llenarCamposFormulario(data, form);
+    // const form = modales.modalElemento.querySelector('form');
+    // llenarCamposFormulario(data, form);
 
-    modales.modalElemento.dataset.id = data.id;
-    configurarModalElemento('editar', modales.modalElemento);
+    // modales.modalElemento.dataset.id = data.id;
+    // configurarModalElemento('editar', modales.modalElemento);
 
-    const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
-    if (usuario.rol_id == 2) btn.classList.remove('hidden');
-    abrirModal(modales.modalElemento);
+    // const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
+    // if (usuario.rol_id == 2) btn.classList.remove('hidden');
+    // abrirModal(modales.modalElemento);
 }

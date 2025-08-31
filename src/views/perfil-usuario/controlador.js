@@ -1,5 +1,5 @@
 
-import { abrirModalEliminar } from "../../modals/js/modalDesactivarCuenta";
+import { abrirModalDesactivar } from "../../modals/js/modalDesactivarCuenta";
 
 import * as api from "../../utils/api.js";
 import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario.js";
@@ -29,7 +29,7 @@ export default async () => {
     contentDesactivar.classList.remove('hidden')
     document.getElementById('dashboard-perfil').addEventListener('click', async (e) => {
       if (e.target.closest('#desactivarCuenta')) {
-        await abrirModalEliminar();
+        await abrirModalDesactivar();
       }
     })
   };

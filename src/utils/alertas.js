@@ -14,6 +14,7 @@ const toastCommonOptions = {
     fontWeight: '550',
     boxShadow: '0 2px 4px #00000047',
     borderRadius: '12px',
+    maxWidth: '400px',
   }
 };
 

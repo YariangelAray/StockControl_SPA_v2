@@ -4,7 +4,7 @@ import * as api from "../../utils/api";
 import * as validaciones from "../../utils/Validaciones";
 import { cargarModal, cerrarModal, mostrarModal } from "../modalsController";
 
-export const abrirModalEliminar = async () => {
+export const abrirModalDesactivar = async () => {
 
     const modal = await cargarModal('modalDesactivarCuenta');
     mostrarModal(modal)

@@ -43,7 +43,7 @@ export default (modal, parametros) => {
 
     modal.querySelectorAll('.modal__actions .button[data-permiso]').forEach(btn => {
         const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
-        const tienePermiso = requeridos.some(p => permisos.includes(p));
+        const tienePermiso = requeridos.some(p => hasPermisos(p, permisos));
 
         if (!tienePermiso) {
             btn.remove();
