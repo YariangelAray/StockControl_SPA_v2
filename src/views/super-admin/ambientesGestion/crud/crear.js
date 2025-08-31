@@ -1,4 +1,4 @@
-import { agregarFila } from "../../../../helpers/renderFilas";
+import { agregarFila, esResponsive } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
 import { errorToast, successToast } from "../../../../utils/alertas";
@@ -104,7 +104,7 @@ export default async (modal) => {
     ambientes.unshift(datosFormateados);
     localStorage.setItem('ambientes', JSON.stringify({ ambientes }));
 
-    const tbody = document.querySelector('#dashboard-ambientes .table__body');
-    agregarFila(tbody, datosFormateados, ambienteClick);
+    const contenedor = esResponsive() ? document.querySelector('#dashboard-ambientes .acordeon') : document.querySelector('#dashboard-ambientes .table__body');
+    agregarFila(contenedor, datosFormateados, ambienteClick);
   };
 };

@@ -13,6 +13,7 @@
 @import url('components/switch.css');
 @import url('components/text.css');
 @import url('components/table.css');
+@import url('components/acordeon.css');
 @import url('components/dashboard.css');
 @import url('components/card.css');
 @import url('components/modal.css');
@@ -23,3 +24,8 @@
 
 @import url('views/auth.css');
 @import url('views/noEncontrado.css');
+
+/* ──────────────── RESPONSIVE ──────────────── */
+
+@import url('responsive/mobile.css');
+@import url('responsive/tablet.css');

@@ -2,6 +2,7 @@ import getCookie from "../utils/getCookie";
 import { get } from "../utils/api";
 import { errorToast } from "../utils/alertas";
 import hasPermisos from "../utils/hasPermisos";
+import { clearResponsiveManager } from "../helpers/responsiveManager";
 
 /**
  * Carga el layout (public/private) e inyecta la vista indicada en el main.
@@ -49,6 +50,7 @@ export const cargarLayout = async (tipo = "public", vistaPath = '', hayLayout = 
           const logout = await get('auth/logout');
           if (logout.success) {
             localStorage.clear();
+            clearResponsiveManager();
             location.hash = '#/inicio';
           }
         } catch (err) {

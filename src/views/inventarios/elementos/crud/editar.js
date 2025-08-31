@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { agregarFila, reemplazarFila } from "../../../../helpers/renderFilas";
+import { agregarFila, esResponsive, reemplazarFila } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
@@ -146,8 +146,8 @@ export default async (modal, parametros) => {
         const datosFormateados = formatearElemento(respuesta.data);
 
         // actualizar cache y tabla
-        const tbody = document.querySelector('#dashboard-elementos .table__body');
-        reemplazarFila(tbody, datosFormateados, elementoClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-elementos .acordeon') : document.querySelector('#dashboard-elementos .table__body');
+        reemplazarFila(contenedor, datosFormateados, elementoClick);
         await actualizarStorageElementos();
     };
 

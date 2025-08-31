@@ -1,4 +1,4 @@
-import { agregarFila } from "../../../../helpers/renderFilas";
+import { agregarFila, esResponsive } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { cerrarModal, mostrarConfirmacion } from "../../../../modals/modalsController";
 import { errorToast, successToast } from "../../../../utils/alertas";
@@ -90,8 +90,8 @@ export default async (modal) => {
         inventarios.unshift(datosFormateados);
         localStorage.setItem('inventarios', JSON.stringify({ inventarios }));
 
-        const tbody = document.querySelector('#dashboard-inventarios .table__body');
-        agregarFila(tbody, datosFormateados, inventarioClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-inventarios .acordeon') : document.querySelector('#dashboard-inventarios .table__body');
+        agregarFila(contenedor, datosFormateados, inventarioClick);
     });
 
 }

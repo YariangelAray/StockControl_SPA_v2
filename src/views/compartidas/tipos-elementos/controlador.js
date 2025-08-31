@@ -1,9 +1,12 @@
-import { agregarFila, renderFilas } from "../../../helpers/renderFilas";
+import { agregarFila, esResponsive, renderFilas } from "../../../helpers/renderFilas";
 import { actualizarStorageTipos, cargarTipos, formatearTipo, tipoClick } from "./tipos-elementos";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
+import { onResponsiveChange, setVistaActual } from "../../../helpers/responsiveManager";
 
 export default async () => {
+
+  setVistaActual("tipos-elementos");
   const permisos = getCookie('permisos', []);
 
   const btnVolver = document.querySelector("#btn-volver");
@@ -15,35 +18,23 @@ export default async () => {
   const historial = sessionStorage.getItem("rutaAnterior");
   btnVolver.setAttribute("href", historial);
 
-  let tipos = JSON.parse(localStorage.getItem('tipos') || '{}').tipos || [];
+  const tipos = await cargarTipos();
+  localStorage.setItem('tipos', JSON.stringify({ tipos: tipos }));
 
-  if (!tipos || tipos.length === 0) {
-    const tiposFormateados = await cargarTipos();
-    localStorage.setItem('tipos', JSON.stringify({ tipos: tiposFormateados }));
-    tipos = tiposFormateados;
-  }
-  renderFilas(tipos, tipoClick);
 
-  if(location.hash.startsWith('#/inventarios')) btnCrear.href = '#/inventarios/elementos/tipos-elementos/crear';
-  else if(location.hash.startsWith('#/super-admin')) btnCrear.href = '#/super-admin/tipos-elementos/crear';
+  const tbody = document.querySelector('#dashboard-tipos-elementos .table__body');
+  const acordeon = document.querySelector('#dashboard-tipos-elementos .acordeon');
+
+  renderFilas(tipos, tipoClick, acordeon, tbody);
+
+  if (location.hash.startsWith('#/inventarios')) btnCrear.href = '#/inventarios/elementos/tipos-elementos/crear';
+  else if (location.hash.startsWith('#/super-admin')) btnCrear.href = '#/super-admin/tipos-elementos/crear';
 
   if (!hasPermisos('tipo-elemento.create', permisos)) btnCrear.remove();
 
-  // limpiarModales();
-  // await initModales(['modalTipoElemento']);
-  // const { modalTipoElemento } = modales;
-
-  // initModalTipo(modalTipoElemento);
 
   // Actualización en segundo plano
   await actualizarStorageTipos();
-
-  // document.getElementById('dashboard-tipos-elementos').addEventListener('click', (e) => {
-  //   if (e.target.closest('#crearTipo')) {
-  //     configurarModalTipo('crear', modalTipoElemento);
-  //     abrirModal(modalTipoElemento);
-  //   }
-  // });
 
   const search = document.querySelector('[type="search"]');
   search.addEventListener('input', (e) => {
@@ -51,11 +42,19 @@ export default async () => {
 
     const valor = e.target.value.toLowerCase();
     const tiposFiltrados = tipos.filter(tipo => {
+      tipo = tipo.map(t => typeof t == 'object' ? t.value : t);
       for (const dato of tipo) {
         if (dato && dato.toString().toLowerCase().includes(valor)) return true;
       }
       return false;
     });
-    renderFilas(tiposFiltrados, tipoClick);
+    renderFilas(tiposFiltrados, tipoClick, acordeon, tbody);
+  });
+
+  onResponsiveChange("tipos-elementos", async () => {
+    console.log("Resize detectado SOLO en tipos-elementos");
+    await actualizarStorageTipos();
+    const tipos = JSON.parse(localStorage.getItem('tipos') || '{}').tipos || [];
+    renderFilas(tipos, tipoClick, acordeon, tbody);
   });
 }

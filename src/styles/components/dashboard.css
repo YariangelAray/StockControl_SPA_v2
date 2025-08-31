@@ -1,7 +1,7 @@
 .dashboard {
   background-color: var(--gris-panel);
   border-radius: var(--borde-redondeado);
-  margin: 0px 20px 20px;
+  margin: 0px 20px 25px;
   overflow: hidden;
   box-shadow: 0 2px 6px 0px #00000047;
 }
@@ -68,6 +68,7 @@
   align-items: center;
   padding: 0 30px;
   margin: 8px 0;
+  flex-wrap: wrap;
 }
 
 .dashboard__actions{
@@ -86,6 +87,7 @@
 ======================================================== */
 .dashboard--table-section .dashboard__header .dashboard__actions, .dashboard--mapa .dashboard__header .dashboard__actions {
   padding: 0;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
@@ -94,6 +96,7 @@
   display: flex;
   gap: 20px;
   align-items: center;
+  justify-content: space-between;  
 }
 
 .dashboard--table-section .dashboard__content {
@@ -127,10 +130,8 @@
   color: var(--verde-claro);
 }
 
-.dashboard--details-section .dashboard__actions .button {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
+.dashboard--details-section .dashboard__actions{
+  justify-content: end;
 }
 
 .dashboard--profile .dashboard__content {

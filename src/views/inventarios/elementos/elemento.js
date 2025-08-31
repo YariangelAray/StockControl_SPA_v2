@@ -1,4 +1,5 @@
 
+import { esResponsive } from "../../../helpers/renderFilas";
 import { get } from "../../../utils/api";
 
 
@@ -10,40 +11,42 @@ import reportar from './crud/reportar';
 export default { crear, detalles, editar, reportar };
 
 export const formatearElemento = (elemento) => {
-
-  return [
-    elemento.id,
-    elemento.placa,
-    elemento.serial,
-    elemento.tipo_elemento,
-    elemento.tipo_modelo,
-    elemento.fecha_adquisicion,
-    elemento.ambiente ? elemento.ambiente : 'No asignado',
-    elemento.estado,
-    elemento.activo
-  ];
+  if (esResponsive()) {
+    return [
+      {name: 'id-fila', value: elemento.id},
+      {name: 'Placa', value: elemento.placa},
+      {name: 'Tipo', value: elemento.tipo_elemento},
+      {name: 'Serial', value: elemento.serial},
+      {name: 'Modelo', value: elemento.tipo_modelo},
+      {name: 'Fecha de adquisición', value: elemento.fecha_adquisicion},
+      {name: 'Ambiente', value: elemento.ambiente ? elemento.ambiente : 'No asignado'},
+      {name: 'Estado', value: elemento.estado},
+      {name: 'Activo', value: elemento.activo}
+    ]
+  }
+  else {
+    return [
+      elemento.id,
+      elemento.placa,
+      elemento.serial,
+      elemento.tipo_elemento,
+      elemento.tipo_modelo,
+      elemento.fecha_adquisicion,
+      elemento.ambiente ? elemento.ambiente : 'No asignado',
+      elemento.estado,
+      elemento.activo
+    ];
+  }
 };
 
 export const elementoClick = async (id) => {
-  location.hash = "#/inventarios/elementos/detalles/id="+id;
-  // const permisos = getCookie('permisos', []);
-  // const { data } = await get('elementos/me/' + id)
-
-  // localStorage.setItem('elemento_temp', JSON.stringify(data));
-  // const form = modales.modalElemento.querySelector('form');
-
-  // llenarCamposFormulario(data, form);
-  // modales.modalElemento.dataset.id = data.id;
-  // configurarModalElemento('editar', modales.modalElemento);
-  // const btn = data.estado_activo ? modales.modalElemento.querySelector('.dar-baja') : modales.modalElemento.querySelector('.reactivar');
-  // if (!hasPermisos('elemento.change-status-inventory-own', permisos)) btn.classList.remove('hidden');
-  // abrirModal(modales.modalElemento);
+  location.hash = "#/inventarios/elementos/detalles/id=" + id;
 }
 
 export const cargarElementos = async () => {
-  const respuesta = await get('elementos/me')
-  const elementos = [];
-
+  const inventario = JSON.parse(localStorage.getItem('inventario'));
+  const respuesta = await get('elementos/me/inventario/' + inventario.id);
+  const elementos = [];  
   if (respuesta.success) {
 
     for (const elemento of respuesta.data) {
@@ -54,7 +57,7 @@ export const cargarElementos = async () => {
   return elementos;
 }
 
-export const actualizarStorageElementos = async (inventario) => {
+export const actualizarStorageElementos = async () => {
   const nuevosElementos = await cargarElementos();
   localStorage.setItem('elementos', JSON.stringify({ elementos: nuevosElementos }));
 }

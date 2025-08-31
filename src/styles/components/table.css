@@ -37,10 +37,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-.table__row:nth-last-child(odd) {
-  background-color: var(--gris-claro);
-}
-
 .table__row::after {
   content: '';
   position: absolute;
@@ -73,15 +69,15 @@
   padding:  12px 15px 10px;
 }
 
-.table__row.table__row--red {
+.table__row.row--red {
   background-color: rgba(229, 115, 115, 0.2);
 }
 
-.table__row--red .table__cell{
+.table__row.row--red .table__cell{
   color: #D32F2F;
 }
 
-.table__row--red:hover {
+.table__row.row--red:hover {
   background-color: rgba(229, 115, 115, 0.35);
 }
 

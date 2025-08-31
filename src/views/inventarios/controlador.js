@@ -15,7 +15,7 @@ export default async () => {
     if (hasPermisos('inventario.access-code', permisos)) {
 
         document.querySelector('.agregar-inventario').classList.remove('hidden');
-        document.getElementById('dashboard-inventarios').addEventListener('click', (e) => {
+        document.getElementById('dashboard-inventarios-home').addEventListener('click', (e) => {
             if (e.target.closest('.agregar-inventario')) {
                 abrirModalPedirCodigo();
             }

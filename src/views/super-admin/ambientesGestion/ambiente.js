@@ -5,17 +5,28 @@ import { llenarCamposFormulario } from "../../../helpers/llenarCamposFormulario"
 import crear from './crud/crear';
 import detalles from './crud/detalles';
 import editar from './crud/editar';
+import { esResponsive } from "../../../helpers/renderFilas";
 
 export default { crear, detalles, editar };
 
-export const formatearAmbiente = (ambiente) => {    
-    return [
-        ambiente.id,
-        ambiente.id,
-        ambiente.nombre,
-        ambiente.centro,
-        ambiente.mapa ? "Disponible" : "No disponible"
-    ];
+export const formatearAmbiente = (ambiente) => {   
+    if (esResponsive()) {
+        return [
+            {name: 'id-fila', value: ambiente.id},
+            {name: 'ID', value: ambiente.id},
+            {name: 'Nombre', value: ambiente.nombre},
+            {name: 'Centro', value: ambiente.centro},
+            {name: 'Mapa', value: ambiente.mapa ? "Disponible" : "No disponible"},
+        ]
+    } else {
+        return [
+            ambiente.id,
+            ambiente.id,
+            ambiente.nombre,
+            ambiente.centro,
+            ambiente.mapa ? "Disponible" : "No disponible"
+        ];
+    }
 }
 
 export const ambienteClick = async (id) => {

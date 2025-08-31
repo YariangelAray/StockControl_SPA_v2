@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { removerFilar } from "../../../../helpers/renderFilas";
+import { esResponsive, removerFilar } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
@@ -61,8 +61,6 @@ export default async (modal, parametros) => {
 
 
     const eliminarBtn = modal.querySelector('.eliminar');
-    const editarBtn = modal.querySelector('.editar');
-    const vermapaBtn = modal.querySelector('.ver-mapa');
 
 
     asignarEvento(eliminarBtn, 'click', async () => {
@@ -73,7 +71,8 @@ export default async (modal, parametros) => {
         if (respuesta.success) {
             cerrarModal(modal);
             successToast('Ambiente eliminado con éxito');
-            removerFilar(document.querySelector('#dashboard-ambientes .table__body'), parametros.id);
+            const contenedor = esResponsive() ? document.querySelector('#dashboard-ambientes .acordeon') : document.querySelector('#dashboard-ambientes .table__body');
+            removerFilar(contenedor, parametros.id);
         } else {
             // ocultarModal(modal);
             errorToast(respuesta);

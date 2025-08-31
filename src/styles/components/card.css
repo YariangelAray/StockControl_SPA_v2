@@ -31,9 +31,10 @@
 .card__title{
   font-size: 1.5rem;
   font-weight: 600;
-  display: block;
-  max-height: 33px;
-  overflow-x: scroll;
+  /* display: block; */
+  /* max-height: 33px; */
+  overflow-y: scroll;
+  white-space: nowrap;
   width: 100%;
   line-height: 1.2;
 }
@@ -101,7 +102,7 @@
 }
 
 .content-cards--super-admin{
-  grid-template-columns: 1fr 1fr;  
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr))
 }
 
 

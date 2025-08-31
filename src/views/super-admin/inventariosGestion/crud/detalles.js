@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { removerFilar } from "../../../../helpers/renderFilas";
+import { esResponsive, removerFilar } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { cerrarModal, mostrarConfirmacion } from "../../../../modals/modalsController";
@@ -68,7 +68,8 @@ export default async (modal, parametros) => {
         if (respuesta.success) {
             cerrarModal(modal);
             successToast('Inventario eliminado con éxito');
-            removerFilar(document.querySelector('#dashboard-inventarios .table__body'), parametros.id);
+            const contenedor = esResponsive() ? document.querySelector('#dashboard-inventarios .acordeon') : document.querySelector('#dashboard-inventarios .table__body');
+            removerFilar(contenedor, parametros.id);
         } else {
             errorToast(respuesta);
         }

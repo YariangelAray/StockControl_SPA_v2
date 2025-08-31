@@ -1,3 +1,4 @@
+import { esResponsive } from "../../../helpers/renderFilas";
 import { get } from "../../../utils/api";
 
 
@@ -9,30 +10,32 @@ export default { crear, detalles, editar };
 
 export const formatearUsuario = (usuario) => {
 
-    return [
-        usuario.id,
-        usuario.id,
-        usuario.documento,
-        usuario.nombres + " " + usuario.apellidos,
-        "Usuario " + usuario.roles.map(r => r.nombre).join(" - "),
-        usuario.activo ? "Activo" : "Inactivo",
-        usuario.activo
-    ];
+    if (esResponsive()){
+        return [
+            {name: 'id-fila', value: usuario.id},
+            {name: 'Documento', value: usuario.documento},
+            {name: 'Nombre', value: usuario.nombres + " " + usuario.apellidos},
+            {name: 'ID', value: usuario.id},
+            {name: 'Rol', value: "Usuario " + usuario.roles.map(r => r.nombre).join(" - ")},
+            {name: 'Estado', value: usuario.activo ? "Activo" : "Inactivo"},
+            {name: 'Activo', value: usuario.activo}
+        ]
+    }else{
+        return [
+            usuario.id,
+            usuario.id,
+            usuario.documento,
+            usuario.nombres + " " + usuario.apellidos,
+            "Usuario " + usuario.roles.map(r => r.nombre).join(" - "),
+            usuario.activo ? "Activo" : "Inactivo",
+            usuario.activo
+        ];
+    }
+
 }
 
 export const usuarioClick = (id) => {
     location.hash = "#/super-admin/usuarios/detalles/id="+id;
-    // const { data } = await get('usuarios/' + id)
-    // localStorage.setItem('usuario_temp', JSON.stringify(data));
-
-    // const form = modales.modalUsuario.querySelector('form');
-
-    // llenarCamposFormulario(data, form);
-    // modales.modalUsuario.dataset.id = data.id;
-    // configurarModalUsuario('editar', modales.modalUsuario);
-    // const btn = data.activo ? modales.modalUsuario.querySelector('.desactivar') : modales.modalUsuario.querySelector('.reactivar');
-    // btn.classList.remove('hidden');
-    // abrirModal(modales.modalUsuario);
 }
 
 export const cargarUsuarios = async () => {

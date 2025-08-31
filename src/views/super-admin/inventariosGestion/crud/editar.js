@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { reemplazarFila } from "../../../../helpers/renderFilas";
+import { esResponsive, reemplazarFila } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { mostrarConfirmacion } from "../../../../modals/modalsController";
@@ -90,8 +90,8 @@ export default async (modal, parametros) => {
 
         const datosFormateados = formatearInventario(respuesta.data);
 
-        const tbody = document.querySelector('#dashboard-inventarios .table__body');
-        reemplazarFila(tbody, datosFormateados, inventarioClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-inventarios .acordeon') : document.querySelector('#dashboard-inventarios .table__body');
+        reemplazarFila(contenedor, datosFormateados, inventarioClick);
         await actualizarStorageInventarios();
     };
 

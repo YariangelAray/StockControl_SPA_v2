@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { reemplazarFila } from "../../../../helpers/renderFilas";
+import { esResponsive, reemplazarFila } from "../../../../helpers/renderFilas";
 
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { mostrarConfirmacion } from "../../../../modals/modalsController";
@@ -99,8 +99,8 @@ export default async (modal, parametros) => {
 
         const datosFormateados = formatearTipo(respuesta.data);
 
-        const tbody = document.querySelector('#dashboard-tipos-elementos .table__body');
-        reemplazarFila(tbody, datosFormateados, tipoClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-tipos-elementos .acordeon') : document.querySelector('#dashboard-tipos-elementos .table__body');
+        reemplazarFila(contenedor, datosFormateados, tipoClick);
         await actualizarStorageTipos();
     };
 

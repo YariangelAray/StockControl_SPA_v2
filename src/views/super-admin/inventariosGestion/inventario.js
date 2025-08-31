@@ -1,3 +1,4 @@
+import { esResponsive } from "../../../helpers/renderFilas";
 import { get } from "../../../utils/api";
 
 import crear from './crud/crear';
@@ -7,28 +8,32 @@ import editar from './crud/editar';
 export default { crear, detalles, editar };
 
 export const formatearInventario = (inventario) => {    
-    return [
-        inventario.id,
-        inventario.id,
-        inventario.nombre,
-        inventario.fecha_creacion,
-        inventario.ultima_actualizacion,
-        inventario.cantidad_elementos,
-        inventario.gestor
-    ];
+    if (esResponsive()) {
+        return [
+            {name: 'id-fila', value: inventario.id},
+            {name: 'ID', value: inventario.id},
+            {name: 'Nombre', value: inventario.nombre},
+            {name: 'Fecha de Creación', value: inventario.fecha_creacion},
+            {name: 'Última Actualización', value: inventario.ultima_actualizacion},
+            {name: 'Cantidad de Elementos', value: inventario.cantidad_elementos},
+            {name: 'Gestor', value: inventario.gestor},
+        ]
+    }
+    else{
+        return [
+            inventario.id,
+            inventario.id,
+            inventario.nombre,
+            inventario.fecha_creacion,
+            inventario.ultima_actualizacion,
+            inventario.cantidad_elementos,
+            inventario.gestor
+        ];
+    }
 }
 
 export const inventarioClick = async (id) => {
     location.hash = '#/super-admin/inventarios/detalles/id='+id;
-    // const { data } = await get('inventarios/' + id)
-    // localStorage.setItem('inventario_temp', JSON.stringify(data));
-
-    // const form = modales.modalInventario.querySelector('form');
-
-    // llenarCamposFormulario(data, form);
-    // modales.modalInventario.dataset.id = data.id;
-    // configurarModalInventario('editar', modales.modalInventario);        
-    // abrirModal(modales.modalInventario);
 }
 
 export const cargarInventarios = async () => {

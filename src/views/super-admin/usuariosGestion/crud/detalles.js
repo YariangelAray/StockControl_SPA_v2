@@ -9,6 +9,7 @@ import getCookie from "../../../../utils/getCookie";
 import hasPermisos from "../../../../utils/hasPermisos";
 import obtenerHashBase from "../../../../helpers/obtenerHashBase";
 import { actualizarStorageUsuarios } from "../usuario";
+import { esResponsive } from "../../../../helpers/renderFilas";
 
 export default async (modal, parametros) => {
     document.title = "Usuarios - Detalles: " + parametros.id;
@@ -126,10 +127,10 @@ export default async (modal, parametros) => {
 
         const respuesta = await patch('usuarios/' + parametros.id, { activo: false });
         if (respuesta.success) {
-            const fila = document.querySelector(`#dashboard-usuarios .table__row[data-id="${parametros.id}"]`);
+            const fila = esResponsive() ? document.querySelector(`#dashboard-usuarios .acordeon__item[data-id="${parametros.id}"]`) : document.querySelector(`#dashboard-usuarios .table__row[data-id="${parametros.id}"]`);
             if (fila) {
-                fila.classList.add('table__row--red')
-                const ultimaCelda = fila.querySelector('td:last-child');
+                fila.classList.add('row--red')
+                const ultimaCelda = esResponsive() ? fila.querySelector('.acordeon__detalle p:last-child') : fila.querySelector('td:last-child');
                 ultimaCelda.textContent = 'Inactivo';
             }
             cerrarModal(modal);
@@ -151,10 +152,10 @@ export default async (modal, parametros) => {
 
         const respuesta = await patch('usuarios/' + parametros.id, { activo: true });
         if (respuesta.success) {
-            const fila = document.querySelector(`#dashboard-usuarios .table__row[data-id="${parametros.id}"]`);
+            const fila = esResponsive() ? document.querySelector(`#dashboard-usuarios .acordeon__item[data-id="${parametros.id}"]`) : document.querySelector(`#dashboard-usuarios .table__row[data-id="${parametros.id}"]`);
             if (fila) {
-                fila.classList.remove('table__row--red')
-                const ultimaCelda = fila.querySelector('td:last-child');
+                fila.classList.remove('row--red')
+                const ultimaCelda = esResponsive() ? fila.querySelector('.acordeon__detalle p:last-child') : fila.querySelector('td:last-child');
                 ultimaCelda.textContent = 'Activo';
             }
             cerrarModal(modal);
@@ -193,36 +194,7 @@ export default async (modal, parametros) => {
             location.hash = "#/super-admin/usuarios/editar/id=" + parametros.id;
             return;
         }
-        // if (e.target.closest('.ver-mapa')) {
-        //     // const temp = JSON.parse(localStorage.getItem('ambiente_temp'));
-        //     if (data.mapa) {
-        //         window.location.hash = `#/super-admin/ambientes/mapa/ambiente_id=${parametros.id}&nombre=${data.nombre}`;
-        //     }
-        //     else {
-        //         // ocultarModal(modal);
-        //         infoToast("Este ambiente aún no tiene un mapa disponible");
-        //         // setTimeout(() => mostrarModal(modal), 100);
-        //     }
-        //     return;
-        // }
-        // if (e.target.closest('.eliminar')) {
-        //     const confirmado = await mostrarConfirmacion("¿Está seguro de eliminar el ambiente?");
-        //     if (!confirmado) return;
-        //     const respuesta = await del('ambientes/' + parametros.id);
 
-        //     if (respuesta.successToast) {
-        //         cerrarModal(modal);
-        //         await successToast('Ambiente eliminado con éxito');
-        //         removerFilar(document.querySelector('#dashboard-ambientes .table__body'), parametros.id);
-        //     }
-        //     else {
-        //         ocultarModal(modal);
-        //         await errorToast(respuesta);
-        //         setTimeout(async () => mostrarModal(modal), 100);
-        //     }
-        //     await actualizarStorageAmbientes();
-        //     return;
-        // }
     })
 }
 

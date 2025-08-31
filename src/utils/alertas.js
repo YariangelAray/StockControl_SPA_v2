@@ -20,7 +20,7 @@ const toastCommonOptions = {
 
 export function successToast(message = 'Operación realizada con éxito') {
   Toastify({
-    text: message,    
+    text: message,
     backgroundColor: "#39A900",
     ...toastCommonOptions,
   }).showToast();
@@ -117,7 +117,14 @@ export const successAlert = (mensaje = 'Operación realizada con éxito') => {
     icon: 'success',
     title: mensaje,
     confirmButtonText: 'Aceptar',
-    allowOutsideClick: false
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    timer: 1000,
+    timerProgressBar: true,
+    allowOutsideClick: false,
+    didOpen: (popup) => {
+      Swal.showLoading();
+    }
   });
 };
 
@@ -161,7 +168,7 @@ export const infoAlert = (titulo, mensaje) => {
 
 //   if (respuesta?.message) {
 //     mensajes = [respuesta.message];
-//   }  
+//   }
 //   if (Array.isArray(respuesta?.errors) && respuesta.errors.length > 0) {
 //     mensajes = [...mensajes,...respuesta.errors];
 //   }

@@ -1,0 +1,103 @@
+.acordeon {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.acordeon__item {
+    background-color: var(--blanco);
+    border: 1px solid #e2e8f0;
+    border-radius: var(--borde-redondeado-min);
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.3s ease;
+}
+.acordeon__item.row--red {
+    background-color: #FDE2E2;
+}
+
+.acordeon__item:active:not(.row--red) {
+    background-color: hsla(100, 50%, 85%, 0.8);
+}
+
+.acordeon__header {
+    width: 100%;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.acordeon__columna-principal {
+    font-weight: 550;
+    color: var(--gris-letras);
+    font-size: 0.9rem;
+}
+
+.acordeon__columna-secundaria {
+    font-weight: 600;
+    font-size: var(--fuente-normal);
+    color: var(--verde-claro);
+}
+.acordeon__item.row--red .acordeon__columna-secundaria,
+.acordeon__item.row--red .icon {
+    color: #D32F2F;
+}
+
+.acordeon__header .info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.acordeon__item .icon {
+    font-size: 1.2rem;
+    border-radius: 50%;
+    padding: 2px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    color: var(--verde-oscuro);
+}
+
+.acordeon__item:hover .icon {
+    background-color: hsla(100, 50%, 85%, 0.8);
+}
+.acordeon__item.row--red:hover .icon {
+    background-color: hsla(5, 81%, 73%, 0.5);
+}
+
+.acordeon__item.activo .icon {
+    transform: rotate(180deg);
+}
+
+.acordeon__content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;    
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 16px;
+}
+
+.acordeon__item.activo .acordeon__content {
+    max-height: 500px;
+    padding: 12px 16px 16px;
+}
+
+.acordeon__detalle {
+    display: flex;
+    justify-content: space-between;    
+}
+
+.acordeon__content .button {
+    margin-top: 8px;
+    font-size: var(--fuente-pequena);
+    width: 100%;
+}
+.acordeon__item.row--red .button {
+    background-color: #D32F2F;
+}

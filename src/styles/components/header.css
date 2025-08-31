@@ -13,6 +13,9 @@
   color: var(--gris-letras);
   text-transform: uppercase;
   white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  overflow-x: scroll;
 }
 
 .header__inventario {

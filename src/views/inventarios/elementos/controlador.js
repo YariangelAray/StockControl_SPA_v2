@@ -1,5 +1,6 @@
 
-import { renderFilas } from "../../../helpers/renderFilas";
+import { esResponsive, renderFilas } from "../../../helpers/renderFilas";
+import { onResponsiveChange, setVistaActual } from "../../../helpers/responsiveManager";
 import { llenarSelect } from "../../../helpers/select";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
@@ -8,18 +9,14 @@ import { actualizarStorageElementos, cargarElementos, elementoClick } from "./el
 
 
 export default async () => {
+
+  setVistaActual("elementos");
   const permisos = getCookie('permisos', [])
   const inventario = JSON.parse(localStorage.getItem('inventario'));
-  
+
   if (hasPermisos('elemento.create-inventory-own', permisos)) {
     const crearBoton = document.getElementById('crearElemento');
     crearBoton.classList.remove('hidden');
-    // document.getElementById('dashboard-elementos').addEventListener('click', (e) => {
-    //   if (e.target.closest('#crearElemento')) {
-    //     configurarModalElemento('crear', modalElemento);
-    //     abrirModal(modalElemento);
-    //   }
-    // })
   }
   if (hasPermisos('tipo-elemento.view-inventory-own', permisos)) {
     sessionStorage.setItem("rutaAnterior", location.hash);
@@ -28,15 +25,13 @@ export default async () => {
 
   }
 
-  let elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
+  const elementos = await cargarElementos();
+  localStorage.setItem('elementos', JSON.stringify({ elementos: elementos }));
 
-  if (!elementos || elementos.length === 0) {
-    const elementosFormateados = await cargarElementos();
-    localStorage.setItem('elementos', JSON.stringify({ elementos: elementosFormateados }));
-    elementos = elementosFormateados;
-  }
+  const tbody = document.querySelector('#dashboard-elementos .table__body');
+  const acordeon = document.querySelector('#dashboard-elementos .acordeon');
 
-  renderFilas(elementos, elementoClick);
+  renderFilas(elementos, elementoClick, acordeon, tbody);
 
   await llenarSelect({
     endpoint: `inventarios/me/${inventario.id}/ambientes`,
@@ -50,50 +45,22 @@ export default async () => {
   });
 
 
-  // limpiarModales();
-  // await initModales(['modalElemento']);
-
-  // const { modalElemento } = modales;
-  // await initModalElemento(modalElemento);
-
 
   // Actualización en segundo plano
-  await actualizarStorageElementos(inventario);
+  await actualizarStorageElementos();
 
-  // if (usuario.rol_id === 3) {
-  //     const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-
-  //     if (codigoInfo) {
-  //         const limpiar = () => {
-  //           document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-  //           localStorage.removeItem('codigoAccesoInfo');
-  //           localStorage.removeItem('inventario');
-  //         }
-  //         const expiracion = new Date(codigoInfo.expiracion);
-  //         const ahora = new Date();
-
-  //         if (expiracion > ahora) {
-  //             document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
-  //             await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
-  //         } else {
-  //             await eliminarAccesos(inventario.id, limpiar);
-  //             window.location.hash = '#/inventarios';
-  //         }
-  //     } else {
-  //         window.location.hash = '#/inventarios';
-  //     }
-  // }
   const search = document.querySelector('[type="search"]');
   search.addEventListener('input', (e) => {
     let elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
     const valor = e.target.value.toLowerCase();
     const elementosFiltrados = elementos.filter(elemento => {
+      elemento = elemento.map(e => typeof e == 'object' ? e.value : e);
       for (const dato of elemento) {
         if (dato && dato.toString().toLowerCase().includes(valor)) return true;
       }
       return false;
     });
-    renderFilas(elementosFiltrados, elementoClick);
+    renderFilas(elementosFiltrados, elementoClick, acordeon, tbody);
   });
 
   const filtroEstado = document.getElementById('filtro-estados');
@@ -109,7 +76,7 @@ export default async () => {
     const elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
     const resultado = filtrarElementos({ elementos, estado: estadoActual, ambiente: ambienteActual });
 
-    renderFilas(resultado, elementoClick);
+    renderFilas(resultado, elementoClick, acordeon, tbody);
   });
 
   filtroAmbiente.addEventListener('change', (e) => {
@@ -119,14 +86,20 @@ export default async () => {
     const elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
     const resultado = filtrarElementos({ elementos, estado: estadoActual, ambiente: ambienteActual });
 
-    renderFilas(resultado, elementoClick);
+    renderFilas(resultado, elementoClick, acordeon, tbody);
   });
 
-
+  onResponsiveChange("elementos", async () => {
+    console.log("Resize detectado SOLO en elementos");
+    await actualizarStorageElementos();
+    const elementos = JSON.parse(localStorage.getItem('elementos') || '{}').elementos || [];
+    renderFilas(elementos, elementoClick, acordeon, tbody);
+  });
 }
 
 const filtrarElementos = ({ elementos, estado = '', ambiente = '' }) => {
   return elementos.filter(lista => {
+    lista = lista.map(e => typeof e == 'object' ? e.value : e);
     const contieneEstado = estado ? lista.some(d => d?.toString().toLowerCase() === estado.toLowerCase()) : true;
     const contieneAmbiente = ambiente ? lista.some(d => d?.toString().toLowerCase() === ambiente.toLowerCase()) : true;
     return contieneEstado && contieneAmbiente;

@@ -1,3 +1,6 @@
+.content{
+    transition: all 0.3s ease;
+}
 .content,
 .content--auth,
 .content--ui {

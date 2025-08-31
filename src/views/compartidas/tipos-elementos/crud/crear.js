@@ -1,4 +1,4 @@
-import { agregarFila } from "../../../../helpers/renderFilas";
+import { agregarFila, esResponsive } from "../../../../helpers/renderFilas";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
 import { errorToast, successToast } from "../../../../utils/alertas";
 import { post } from "../../../../utils/api";
@@ -97,8 +97,8 @@ export default async (modal, opciones = {}) => {
         tipos.unshift(datosFormateados);
         localStorage.setItem('tipos', JSON.stringify({ tipos }));
 
-        const tbody = document.querySelector('#dashboard-tipos-elementos .table__body');
-        agregarFila(tbody, datosFormateados, tipoClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-tipos-elementos .acordeon') : document.querySelector('#dashboard-tipos-elementos .table__body');
+        agregarFila(contenedor, datosFormateados, tipoClick);
 
         document.dispatchEvent(new CustomEvent('tipoElementoCreado', { detail: respuesta.data }));
 

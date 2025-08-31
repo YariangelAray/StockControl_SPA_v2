@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { agregarFila } from "../../../../helpers/renderFilas";
+import { agregarFila, esResponsive } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
 import { errorToast, successToast } from "../../../../utils/alertas";
@@ -147,11 +147,10 @@ export default async (modal, parametros = {}) => {
         elementos.unshift(datosFormateados);
         localStorage.setItem('elementos', JSON.stringify({ elementos }));
 
-        const tbody = document.querySelector('#dashboard-elementos .table__body');
-        agregarFila(tbody, datosFormateados, elementoClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-elementos .acordeon') : document.querySelector('#dashboard-elementos .table__body');
+        agregarFila(contenedor, datosFormateados, elementoClick);
     };
 
-    // asignarEvento(btnAgregarTipo, 'click', ()=>gestionarTipoElemento(modal, 'crear', validaciones.datos))
     document.removeEventListener('tipoElementoCreado', tipoElementoCreado)
     document.addEventListener('tipoElementoCreado', tipoElementoCreado);
 };

@@ -1,0 +1,94 @@
+@media (max-width: 1024px) {
+    .dashboard--profile .form__body {
+        grid-template-columns: 1fr;
+    }
+
+    .desactivar-cuenta {
+        border-top: solid 1px #0000001a;
+    }
+
+    .content-cards:not(.content-cards--super-admin) {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    
+    .dashboard--table-section .dashboard__header .dashboard__actions {
+        gap: 10px;
+    }
+
+    .dashboard--table-section .dashboard__header .input {
+        min-width: inherit;
+    }
+
+    .dashboard--table-section .dashboard__header .dashboard__filters,
+    .dashboard--table-section .dashboard__header .dashboard__buttons {
+        width: 100%;
+    }
+
+    .dashboard--table-section .dashboard__header .dashboard__buttons {
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 900px) {
+
+
+    .content--ui {
+        grid-template-columns: 180px calc(100vw - 180px);
+        grid-template-rows: 70px calc(100vh - 60px);
+        grid-template-areas:
+            "sidebar header"
+            "sidebar main";
+    }
+
+    .sidebar__logos>img {
+        height: 45%;
+    }
+
+    .header__title {
+        overflow-x: scroll;
+    }
+
+    .header__title,
+    .dashboard__title {
+        font-size: 1.6rem;
+    }
+
+    .header__inventario {
+        max-width: 35vw;
+    }
+
+    .dashboard__layout {
+        padding: 10px 10px 20px;
+    }
+
+    .access-info {
+        padding: 8px 30px;
+    }
+
+    .dashboard__layout:not(#dashboard-inventarios-home, #dashboard-perfil, #dashboard-mapa, #dashboard-detalles, #dashboard-super-admin) {
+        grid-template-rows: auto auto 1fr;
+    }
+
+    .dashboard__header {
+        padding: 5px 10px 10px;
+    }
+
+    .search {
+        position: static;
+        width: auto;
+        margin: 5px 10px;
+    }
+
+    .dashboard--table-section .dashboard__content {
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+    .table {
+        display: none;
+    }
+
+    .acordeon {
+        display: block;
+    }
+}

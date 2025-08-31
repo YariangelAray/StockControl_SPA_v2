@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { reemplazarFila } from "../../../../helpers/renderFilas";
+import { esResponsive, reemplazarFila } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { mostrarConfirmacion } from "../../../../modals/modalsController";
@@ -100,15 +100,13 @@ export default async (modal, parametros) => {
     }
 
     successToast('Ambiente actualizado con éxito');
-    // cerrarModal(modal);
-    // modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
-    // await detalles(modal, parametros); // reutiliza la lógica
+
     location.hash = "#/super-admin/ambientes/detalles/id=" + parametros.id;
 
     const datosFormateados = formatearAmbiente(respuesta.data);
 
-    const tbody = document.querySelector('#dashboard-ambientes .table__body');
-    reemplazarFila(tbody, datosFormateados, ambienteClick);
+    const contenedor = esResponsive() ? document.querySelector('#dashboard-ambientes .acordeon') : document.querySelector('#dashboard-ambientes .table__body');
+    reemplazarFila(contenedor, datosFormateados, ambienteClick);
     await actualizarStorageAmbientes();
   };
 

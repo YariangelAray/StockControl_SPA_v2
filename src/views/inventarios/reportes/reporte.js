@@ -1,33 +1,34 @@
+import { esResponsive } from "../../../helpers/renderFilas";
 import { cerrarModal } from "../../../modals/modalsController";
 import { get } from "../../../utils/api";
 import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
 
 export const formatearReporte = (reporte) => {
+  if (esResponsive()) {
+    // Retorna arreglo de objetos {name, value}
     return [
-        reporte.id,
-        reporte.fecha,
-        reporte.usuario,
-        reporte.elemento.placa,
-        reporte.asunto
+      { name: 'id-fila', value: reporte.id },
+      { name: 'Fecha', value: reporte.fecha },
+      { name: 'Autor', value: reporte.usuario },
+      { name: 'Placa del elemento', value: reporte.elemento.placa },
+      { name: 'Asunto', value: reporte.asunto }
     ];
-}
+  } else {
+    // Retorna arreglo simple para tabla
+    return [
+      reporte.id,
+      reporte.fecha,
+      reporte.usuario,
+      reporte.elemento.placa,
+      reporte.asunto
+    ];
+  }
+};
+
 
 export const reporteClick = async (id) => {
     location.hash = '#/inventarios/reportes/detalles/id=' + id;
-    // const { data } = await get('reportes/me/' + id)
-
-    // localStorage.setItem('reporte_temp', JSON.stringify(data));
-    // configurarModalReporte({
-    //     id: data.id,
-    //     fecha: data.fecha,
-    //     placa: data.elemento.placa,
-    //     usuario: data.usuario,
-    //     asunto: data.asunto, 
-    //     mensaje: data.mensaje,
-    //     fotos: data.fotos
-    // }, modales.modalReporte, data.elemento.id);
-    // abrirModal(modales.modalReporte);
 }
 
 export const cargarReportes = async () => {

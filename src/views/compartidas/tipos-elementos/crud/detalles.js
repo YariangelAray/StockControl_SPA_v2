@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { removerFilar } from "../../../../helpers/renderFilas";
+import { esResponsive, removerFilar } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
@@ -62,7 +62,10 @@ export default async (modal, parametros) => {
         if (respuesta.success) {
             cerrarModal(modal);
             successToast('Tipo de elemento eliminado con éxito');
-            removerFilar(document.querySelector('#dashboard-tipos-elementos .table__body'), parametros.id);
+
+            const contenedor = esResponsive() ? document.querySelector('#dashboard-tipos-elementos .acordeon') : document.querySelector('#dashboard-tipos-elementos .table__body');
+
+            removerFilar(contenedor, parametros.id);
         } else {
             // ocultarModal(modal);
             errorToast(respuesta);
@@ -72,19 +75,6 @@ export default async (modal, parametros) => {
         await actualizarStorageTipos();
     });
 
-    // asignarEvento(editarBtn, 'click', () => {
-    //     location.hash = "#/super-admin/ambientes/editar/id=" + parametros.id;
-    // })
-    // asignarEvento(vermapaBtn, 'click', async () => {
-    //     if (data.mapa) {
-    //         location.hash = `#/super-admin/ambientes/mapa/ambiente_id=${parametros.id}&nombre=${data.nombre}`;
-    //     }
-    //     else {
-    //         ocultarModal(modal);
-    //         await infoToast("Mapa del ambiente", "Este ambiente aún no tiene un mapa disponible");
-    //         setTimeout(() => mostrarModal(modal), 100);
-    //     }
-    // })
 
     modal.addEventListener('click', async (e) => {
 
@@ -93,23 +83,5 @@ export default async (modal, parametros) => {
             else if (location.hash.startsWith('#/super-admin')) location.hash = '#/super-admin/tipos-elementos/editar/id=' + parametros.id;
             return;
         }
-        // if (e.target.closest('.eliminar')) {
-        //     const confirmado = await mostrarConfirmacion("¿Está seguro de eliminar el ambiente?");
-        //     if (!confirmado) return;
-        //     const respuesta = await del('ambientes/' + parametros.id);
-
-        //     if (respuesta.successToast) {
-        //         cerrarModal(modal);
-        //         await successToast('Ambiente eliminado con éxito');
-        //         removerFilar(document.querySelector('#dashboard-ambientes .table__body'), parametros.id);
-        //     }
-        //     else {
-        //         ocultarModal(modal);
-        //         await errorToast(respuesta);
-        //         setTimeout(async () => mostrarModal(modal), 100);
-        //     }
-        //     await actualizarStorageAmbientes();
-        //     return;
-        // }
     })
 }

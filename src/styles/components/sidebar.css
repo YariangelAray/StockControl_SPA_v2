@@ -63,6 +63,7 @@
   width: 100%;
   height: 100%;
   padding: 8px 10px;
+  align-items: center;
 }
 
 .sidebar__item:hover:not(.sidebar__item--selected){

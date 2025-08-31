@@ -121,7 +121,7 @@ export const router = async () => {
 
   // Llamar controlador (si requiere parámetros, se los pasamos)
   parametros ? ruta.controller(parametros) : ruta.controller();
-  initComponentes();
+  initComponentes();  
 };
 
 const encontrarRuta = (routes, segmentos) => {

@@ -6,26 +6,39 @@ import hasPermisos from "../../../utils/hasPermisos"
 import crear from './crud/crear';
 import detalles from './crud/detalles';
 import editar from './crud/editar';
+import { esResponsive } from "../../../helpers/renderFilas";
 
 export default { crear, detalles, editar };
 
 export const formatearTipo = (tipo) => {
-  return [
-    tipo.id,
-    tipo.id,
-    tipo.consecutivo,
-    tipo.nombre,
-    tipo.marca,
-    tipo.modelo,
-    tipo.atributos,
-    tipo.cantidadElementos,
-  ]
+  if (esResponsive()) {    
+    return [
+      {name: 'id-fila', value: tipo.id},
+      {name: 'ID', value: tipo.id},
+      {name: 'Nombre', value: tipo.nombre},
+      {name: 'Consecutivo', value: tipo.consecutivo},
+      {name: 'Marca', value: tipo.marca},
+      {name: 'Modelo', value: tipo.modelo},
+      {name: 'Cantidad de elementos', value: tipo.cantidad_elementos},
+    ]
+  } else {
+    return [
+      tipo.id,
+      tipo.id,
+      tipo.consecutivo,
+      tipo.nombre,
+      tipo.marca,
+      tipo.modelo,
+      tipo.atributos,
+      tipo.cantidad_elementos,
+    ]
+  }
 }
 
 export const tipoClick = async (id) => {
 
-  if(location.hash.startsWith('#/inventarios')) location.hash = '#/inventarios/elementos/tipos-elementos/detalles/id='+id;
-  else if(location.hash.startsWith('#/super-admin')) location.hash = '#/super-admin/tipos-elementos/detalles/id='+id;
+  if (location.hash.startsWith('#/inventarios')) location.hash = '#/inventarios/elementos/tipos-elementos/detalles/id=' + id;
+  else if (location.hash.startsWith('#/super-admin')) location.hash = '#/super-admin/tipos-elementos/detalles/id=' + id;
 }
 
 export const cargarTipos = async () => {

@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { reemplazarFila } from "../../../../helpers/renderFilas";
+import { esResponsive, reemplazarFila } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { mostrarConfirmacion } from "../../../../modals/modalsController";
@@ -182,8 +182,8 @@ export default async (modal, parametros) => {
         // refrescar tabla y storage
         const { data } = await get('usuarios/' + parametros.id);
         const datosFormateados = formatearUsuario(data);
-        const tbody = document.querySelector('#dashboard-usuarios .table__body');
-        reemplazarFila(tbody, datosFormateados, usuarioClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-usuarios .acordeon') : document.querySelector('#dashboard-usuarios .table__body');
+        reemplazarFila(contenedor, datosFormateados, usuarioClick);
         await actualizarStorageUsuarios();
 
         location.hash = "#/super-admin/usuarios/detalles/id=" + parametros.id;
@@ -197,22 +197,10 @@ export default async (modal, parametros) => {
         form.querySelectorAll('.form__control').forEach(input => {
             input.classList.remove('error');
         });
-        // await detalles(modal, parametros); // reutiliza la lógica
         location.hash = '#/super-admin/usuarios/detalles/id=' + parametros.id;
-        // modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
+
     });
 
-
-    // modal.addEventListener('click', async (e) => {
-    //   if (e.target.closest('.cancelar')) {
-    //     form.querySelectorAll('.form__control').forEach(input => {
-    //       input.classList.remove('errorToast');
-    //     });
-    //     modal.dataset.modo = 'detalles'; // para que modalManager no lo cierre
-    //     await detalles(modal, parametros); // reutiliza la lógica
-    //     location.hash = '#/super-admin/ambientes/detalles/id=' + parametros.id;
-    //   }
-    // })
 }
 
 const agregarFichas = (selectFichas, programa) => {

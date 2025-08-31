@@ -1,6 +1,6 @@
 import asignarEvento from "../../../../helpers/asignarEvento";
 import { llenarCamposFormulario } from "../../../../helpers/llenarCamposFormulario";
-import { agregarFila } from "../../../../helpers/renderFilas";
+import { agregarFila, esResponsive } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { setLecturaForm } from "../../../../helpers/setLecturaForm";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
@@ -106,8 +106,8 @@ export default async (modal, parametros) => {
 
         if (respuesta.success) {
             await actualizarStorageElementos();
-            const fila = document.querySelector(`#dashboard-elementos .table__row[data-id="${parametros.id}"]`);
-            if (fila) fila.classList.add('table__row--red');
+            const fila = esResponsive() ? document.querySelector(`#dashboard-elementos .acordeon__item[data-id="${parametros.id}"]`) : document.querySelector(`#dashboard-elementos .table__row[data-id="${parametros.id}"]`);
+            if (fila) fila.classList.add('row--red');
 
             cerrarModal(modal);
             requestAnimationFrame(() => location.hash = obtenerHashBase());
@@ -128,8 +128,8 @@ export default async (modal, parametros) => {
         const respuesta = await patch('elementos/me/' + parametros.id, { activo: true });
         if (respuesta.success) {
             await actualizarStorageElementos();
-            const fila = document.querySelector(`#dashboard-elementos .table__row[data-id="${parametros.id}"]`);
-            if (fila) fila.classList.remove('table__row--red');
+            const fila = esResponsive() ? document.querySelector(`#dashboard-elementos .acordeon__item[data-id="${parametros.id}"]`) : document.querySelector(`#dashboard-elementos .table__row[data-id="${parametros.id}"]`);
+            if (fila) fila.classList.remove('row--red');
             cerrarModal(modal);
             requestAnimationFrame(() => location.hash = obtenerHashBase());
             successToast('Elemento reactivado con éxito');

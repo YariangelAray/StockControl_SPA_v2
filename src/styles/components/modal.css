@@ -49,26 +49,6 @@
   pointer-events: all;
 }
 
-.modal__backdrop--confirmacion {
-  position: fixed;
-  inset: 0;
-  background-color: #00000020;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 99999; /* Más alto que cualquier otro modal */
-}
-
-.modal__backdrop--confirmacion.visible {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.modal.modal--confirmacion.visible {
-  z-index: 100000; /* Encima de todo */
-}
-
-
 .modal__header {
   width: 150%;
   padding: 15px 0;
@@ -212,6 +192,25 @@
   border-radius: var(--borde-redondeado);
   object-fit: cover;
   cursor: pointer;
+}
+
+.modal__backdrop--confirmacion {
+  position: fixed;
+  inset: 0;
+  background-color: #00000020;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 99999;
+}
+
+.modal__backdrop--confirmacion.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal.modal--confirmacion.visible {
+  z-index: 100000;
 }
 
 /* ──────────────── MODAL VISOR DE IMAGEN ──────────────── */

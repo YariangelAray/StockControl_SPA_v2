@@ -1,4 +1,4 @@
-import { agregarFila } from "../../../../helpers/renderFilas";
+import { agregarFila, esResponsive } from "../../../../helpers/renderFilas";
 import { llenarSelect } from "../../../../helpers/select";
 import { cerrarModal, mostrarConfirmacion, mostrarModal, ocultarModal } from "../../../../modals/modalsController";
 import { errorToast, successToast } from "../../../../utils/alertas";
@@ -151,8 +151,8 @@ export default async (modal) => {
         usuarios.unshift(datosFormateados);
         localStorage.setItem('usuarios', JSON.stringify({ usuarios }));
 
-        const tbody = document.querySelector('#dashboard-usuarios .table__body');
-        agregarFila(tbody, datosFormateados, usuarioClick);
+        const contenedor = esResponsive() ? document.querySelector('#dashboard-usuarios .acordeon') : document.querySelector('#dashboard-usuarios .table__body');
+        agregarFila(contenedor, datosFormateados, usuarioClick);
     };
 };
 
