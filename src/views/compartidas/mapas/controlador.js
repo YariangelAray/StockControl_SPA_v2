@@ -87,10 +87,6 @@ export default async (parametros) => {
             tooltip.innerText = `Placa: ${elemento.placa}`;
         });
 
-        rect.on("click", () => {
-            elementoClick(elemento.placa);
-        });
-
         rect.on("mouseleave", () => {
             document.body.style.cursor = "default";
             tooltip.style.display = "none";
