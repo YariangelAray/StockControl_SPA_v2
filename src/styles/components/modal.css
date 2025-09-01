@@ -88,6 +88,7 @@
   position: relative;
   width: 100%;
   min-height: 60px;
+  align-items: center;
 }
 
 .modal:not(.modal--small) .modal__actions .button--final {

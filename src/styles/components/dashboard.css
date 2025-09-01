@@ -131,6 +131,7 @@
 }
 
 .dashboard--details-section .dashboard__actions{
+  padding-bottom: 0;
   justify-content: end;
 }
 

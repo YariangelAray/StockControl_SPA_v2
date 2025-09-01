@@ -45,7 +45,7 @@ export const cargarTipos = async () => {
   const permisos = getCookie('permisos', []);
   const inventario = JSON.parse(localStorage.getItem('inventario'));
 
-  const respuesta = hasPermisos('tipo-elemento.view', permisos) ? await get('tipos-elementos/') : await get('tipos-elementos/inventario/me/' + inventario.id);
+  const respuesta = !hasPermisos('tipo-elemento.view-inventory-own', permisos) ? await get('tipos-elementos/') : await get('tipos-elementos/inventario/me/' + inventario.id);
   const tipos = [];
 
   if (respuesta.success) {

@@ -42,7 +42,8 @@
   z-index: 100;
 }
 
-.menu-activar{
+.menu-activar,
+.menu-hamburguer{
   display: none;
 }
 
@@ -133,7 +134,7 @@
   width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--gris-oscuro);
-  border-radius: 12px;
+  border-radius: var(--borde-redondeado-min);
   box-shadow: 0 0 1px 0 #00000047;
   transition: all 0.3s ease-in-out;
   font-size: inherit;

@@ -18,8 +18,8 @@ export const ocultarModal = (modal) => {
 export const cerrarModal = (modal) => {
   return new Promise(resolve => {
     const backdrop = document.querySelector('.modal__backdrop');
-    modal.classList.remove('visible');
     backdrop?.classList.remove('visible');
+    modal.classList.remove('visible');
 
     modal.addEventListener('transitionend', () => {
       modal.remove();

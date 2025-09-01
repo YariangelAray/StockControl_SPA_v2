@@ -5,6 +5,7 @@
 .content--auth,
 .content--ui {
     height: 100vh;
+    overflow: hidden;
 }
 
 .content--ui {

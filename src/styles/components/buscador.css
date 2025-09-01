@@ -4,7 +4,7 @@
   height: 35px;
   background-color: var(--blanco);
   border: 1px solid var(--verde-claro);
-  border-radius: 12px;
+  border-radius: var(--borde-redondeado-min);
   padding: 0 15px 0;
   transition: all 0.3s ease-in-out;
   filter: drop-shadow(0px 0px 1px #00000047);

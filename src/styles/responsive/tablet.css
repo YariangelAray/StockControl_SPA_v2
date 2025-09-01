@@ -5,6 +5,7 @@
 
     .desactivar-cuenta {
         border-top: solid 1px #0000001a;
+        padding-bottom: 0;
     }
 
     .content-cards:not(.content-cards--super-admin) {

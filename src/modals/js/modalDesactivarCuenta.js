@@ -38,9 +38,9 @@ export const abrirModalDesactivar = async () => {
         }        
     })
 
-    modal.addEventListener('click', (e) => {
+    modal.addEventListener('click', async (e) => {
         if (e.target.closest('.cancelar')) {
-            cerrarModal(modal);
+            await cerrarModal(modal);
         }
     })
 }

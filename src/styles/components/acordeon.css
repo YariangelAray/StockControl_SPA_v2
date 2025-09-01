@@ -36,12 +36,19 @@
     font-weight: 550;
     color: var(--gris-letras);
     font-size: 0.9rem;
+    width: min-content;
+    white-space: nowrap;
 }
 
 .acordeon__columna-secundaria {
     font-weight: 600;
     font-size: var(--fuente-normal);
     color: var(--verde-claro);
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
 }
 .acordeon__item.row--red .acordeon__columna-secundaria,
 .acordeon__item.row--red .icon {
@@ -52,6 +59,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 90%;
 }
 
 .acordeon__item .icon {
@@ -91,6 +99,10 @@
 .acordeon__detalle {
     display: flex;
     justify-content: space-between;    
+}
+
+.acordeon__detalle p:last-child{
+    text-align: end;
 }
 
 .acordeon__content .button {

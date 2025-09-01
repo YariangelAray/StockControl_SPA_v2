@@ -8,13 +8,13 @@
   color: var(--blanco);
   border: none;
   outline: none;
-  border-radius: 12px;
+  border-radius: var(--borde-redondeado-min);
   background-color: var(--verde-oscuro);
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s ease-in-out;
   gap: 10px;
-
+  white-space: nowrap;
   font-size: var(--fuente-normal);
   padding: 8px 12px;
   height: min-content;

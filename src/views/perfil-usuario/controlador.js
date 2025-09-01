@@ -17,14 +17,6 @@ export default async () => {
   const rolesName = getCookie('roles', []).map(r => r.nombre);
   const contentDesactivar = document.querySelector('.desactivar-cuenta');
 
-
-
-  // limpiarModales();
-  // await initModales(['modalDesactivarCuenta']);
-
-  // const { modalDesactivarCuenta } = modales;
-  // initModalEliminar(modalDesactivarCuenta);
-
   if (hasPermisos("usuario.disable-own", permisos)) {
     contentDesactivar.classList.remove('hidden')
     document.getElementById('dashboard-perfil').addEventListener('click', async (e) => {

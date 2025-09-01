@@ -9,6 +9,11 @@ export const initComponentes = () => {
     actualizarHeader(inventario);
     marcarItem();
 
+    const menuActivo = document.getElementById('menu-hamburguer-activar');
+    menuActivo.checked = false;
+    const menuUserActivo = document.getElementById('menu-activar');
+    menuUserActivo.checked = false;
+
     if ((!roles.includes(1) && !document.querySelector('.menu__items')) || (roles.includes(1) && !document.querySelector('.sidebar__item'))) {
         generarSidebar(roles, inventario);
     }
