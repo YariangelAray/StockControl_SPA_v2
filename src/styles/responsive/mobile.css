@@ -1,9 +1,63 @@
+@media (max-width: 768px) {
+    .home__title {
+        width: 60vw;
+    }
+
+    .home.home--signup {
+        overflow-y: scroll;
+    }
+
+    .home--signup .home__form {
+        padding-top: 150px;
+        padding-bottom: 30px;
+    }
+
+    .home--signup .home__logos {
+        position: fixed;
+        top: 2vh;
+    }
+
+    .form--signup {
+        width: 80%;        
+    }
+
+    .form--signup .form__body {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 480px) {
     :root {
         --fuente-pequena: 0.7rem;
         --fuente-normal: 0.8rem;
         --borde-redondeado-min: 10px;
         --borde-redondeado: 12px;
+    }
+
+    .home__intro {
+        padding: 0;
+    }
+
+    .form__title{
+        font-size: 1.8rem;
+    }
+
+    .form--signin, .form--signup {
+        width: 100%;
+    }
+
+    .home .form .input{
+        height: 30px;
+    }
+    .home .form__body{
+        gap: 10px;
+    }
+    .home .form__action{
+        margin-top: 10px;
+    }
+
+    .home:not(.home--signup) {        
+        grid-template-rows: 150px 2fr;
     }
 
     .content--ui {
@@ -335,7 +389,7 @@
         padding-bottom: 10px;
         overflow: hidden;
         border-top: solid 1px #0000001a;
-        justify-content: space-between;        
+        justify-content: space-between;
         overflow-x: scroll;
     }
 
@@ -355,17 +409,18 @@
         height: 100px;
     }
 
-    .modal--reporte .modal__body {        
-        height: 100%;         
+    .modal--reporte .modal__body {
+        height: 100%;
     }
+
     .modal--reporte .form {
         display: flex;
         flex-direction: column;
         gap: 15px;
-        padding: 0 15px 10px;        
+        padding: 0 15px 10px;
     }
 
-    .modal--usuario   .button.restaurar{
+    .modal--usuario .button.restaurar {
         min-width: auto;
     }
 }

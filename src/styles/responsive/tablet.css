@@ -11,7 +11,7 @@
     .content-cards:not(.content-cards--super-admin) {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
-    
+
     .dashboard--table-section .dashboard__header .dashboard__actions {
         gap: 10px;
     }
@@ -27,6 +27,63 @@
 
     .dashboard--table-section .dashboard__header .dashboard__buttons {
         justify-content: space-between;
+    }
+
+    .error__container {
+        padding: 0 15px;
+        text-align: center;
+    }
+
+    .error__codigo {
+        font-size: 8rem;
+    }
+
+    .home{
+        grid-template-columns: 1fr;        
+        grid-template-rows: 1fr 2fr;
+    }
+
+    .home__intro{
+        padding-top: 5vh;
+        position: static;
+    }
+
+    .home__title{
+        width: 50vw;
+    }
+    .home__description{        
+        display: none;        
+    }
+    .home__logos{
+        top: auto;
+        bottom: 4vh;
+    }
+
+    .home__form{
+        padding-top: 4vh;
+        align-items: start;
+    }
+    
+    .home.home--signup{
+        grid-template-columns: 1fr;        
+        grid-template-rows: 3fr 1fr;
+        overflow-y: auto;
+    }
+
+    .home--signup .home__form{
+        padding-top: 0;
+        align-items: end;
+    }
+    .home--signup .home__intro{
+        padding-top: 0;        
+    }
+    .home--signup .home__logos {
+        position: fixed;
+        top: 2vh;
+    }
+
+    .form--signup {        
+        z-index: 2;
     }
 }
 

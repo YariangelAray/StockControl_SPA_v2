@@ -33,6 +33,7 @@ export default async () => {
   document.getElementById('dashboard-detalles').addEventListener('click', async (e) => {
     if (e.target.closest('.generar-codigo')) {
       const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
+      console.log(codigoInfo)
       if (codigoInfo) {        
         const expiracion = new Date(codigoInfo.expiracion);
         // Obtiene la fecha y hora actual
