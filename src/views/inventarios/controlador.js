@@ -1,11 +1,12 @@
 import { cargarCards } from "../../helpers/cargarCards.js";
+import { setVistaActual } from "../../helpers/responsiveManager.js";
 import { abrirModalPedirCodigo } from "../../modals/js/modalPedirCodigoAcceso.js";
 import * as api from "../../utils/api.js";
 import getCookie from "../../utils/getCookie.js";
 import hasPermisos from "../../utils/hasPermisos.js";
-import { initTemporizadorAcceso } from "./detalles/initTemporizadorAcceso.js";
 
 export default async () => {
+    setVistaActual('inventarios-home')
     const permisos = getCookie('permisos', []);
     localStorage.clear();
 

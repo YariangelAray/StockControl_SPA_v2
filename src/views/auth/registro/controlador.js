@@ -1,9 +1,12 @@
+import { setVistaActual } from "../../../helpers/responsiveManager";
 import { llenarSelect } from "../../../helpers/select";
 import * as validaciones from "../../../utils/Validaciones";
 import { errorToast, successAlert } from "../../../utils/alertas";
 import * as api from "../../../utils/api";
 
 export default async () => {
+
+    setVistaActual('registro')
 
     localStorage.clear();
 

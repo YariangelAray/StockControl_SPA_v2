@@ -5,8 +5,12 @@ import { get } from "../../../utils/api";
 import { infoAlert } from "../../../utils/alertas";
 import getCookie from "../../../utils/getCookie";
 import { initTemporizadorAcceso } from "../../../helpers/temporizadorAcceso";
+import { setVistaActual } from "../../../helpers/responsiveManager";
 
 export default async () => {  
+
+  setVistaActual('detalles');
+
   const usuario = getCookie('usuario',{})
   const inventarioInfo = JSON.parse(localStorage.getItem('inventario'));
 

@@ -2,10 +2,12 @@ import { cargarCards } from "../../../helpers/cargarCards";
 
 import * as api from "../../../utils/api";
 import { infoToast } from "../../../utils/alertas";
-import { eliminarAccesos, initTemporizadorAcceso } from "../detalles/initTemporizadorAcceso";
-import getCookie from "../../../utils/getCookie";
+import { setVistaActual } from "../../../helpers/responsiveManager";
 
 export default async () => {
+
+    setVistaActual('ambientes');
+
     const inventario = JSON.parse(localStorage.getItem('inventario'));    
 
     let ambientes = JSON.parse(localStorage.getItem('ambientes') || '{}').ambientes || [];
@@ -18,30 +20,6 @@ export default async () => {
     }
 
     await cargarAmbientes(ambientes, inventario)
-
-    // if (roles.includes(3)) {
-    //     const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-        
-    //     if (codigoInfo) {
-    //         const limpiar = () => {
-    //             document.querySelector('.sidebar .access-info')?.classList.add('hidden');
-    //           localStorage.removeItem('inventario');
-    //           localStorage.removeItem('codigoAccesoInfo');
-    //         }
-    //         const expiracion = new Date(codigoInfo.expiracion);
-    //         const ahora = new Date();
-
-    //         if (expiracion > ahora) {
-    //             document.querySelector('.sidebar .access-info')?.classList.remove('hidden');
-    //             await initTemporizadorAcceso(expiracion, inventario.id, limpiar);
-    //         } else {
-    //             await eliminarAccesos(inventario.id, limpiar);
-    //             window.location.hash = '#/inventarios';
-    //         }
-    //     } else {
-    //         window.location.hash = '#/inventarios';
-    //     }
-    // }
 
     await actualizarStorageAmbientes(inventario);
     const search = document.querySelector('[type="search"]');

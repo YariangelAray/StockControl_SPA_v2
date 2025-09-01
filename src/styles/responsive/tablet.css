@@ -1,15 +1,65 @@
+/* ========================================
+   RESPONSIVE BREAKPOINT: 1024px
+======================================== */
+
 @media (max-width: 1024px) {
+    
+    /* === HOME / LANDING SECTION === */
+    .home {
+        grid-template-columns: 1fr;        
+        grid-template-rows: 1fr 2fr;
+    }
+
+    .home__intro {
+        padding-top: 5vh;
+        position: static;
+    }
+
+    .home__title {
+        width: 50vw;
+    }
+
+    .home__description {        
+        display: none;        
+    }
+
+    .home__logos {
+        top: auto;
+        bottom: 4vh;
+    }
+
+    .home__form {
+        padding-top: 4vh;
+        align-items: start;
+    }
+    
+    .home.home--signup {
+        grid-template-columns: 1fr;        
+        grid-template-rows: 3fr 1fr;
+        overflow-y: auto;
+    }
+
+    .home--signup .home__form {
+        padding-top: 0;
+        align-items: end;
+    }
+
+    .home--signup .home__intro {
+        padding-top: 0;        
+    }
+
+    .home--signup .home__logos {
+        position: fixed;
+        top: 2vh;
+    }
+
+    .form--signup {        
+        z-index: 2;
+    }
+
+    /* === DASHBOARD SECTION === */
     .dashboard--profile .form__body {
         grid-template-columns: 1fr;
-    }
-
-    .desactivar-cuenta {
-        border-top: solid 1px #0000001a;
-        padding-bottom: 0;
-    }
-
-    .content-cards:not(.content-cards--super-admin) {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 
     .dashboard--table-section .dashboard__header .dashboard__actions {
@@ -29,6 +79,18 @@
         justify-content: space-between;
     }
 
+    /* === CONTENT CARDS SECTION === */
+    .content-cards:not(.content-cards--super-admin) {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    /* === ACCOUNT SECTION === */
+    .desactivar-cuenta {
+        border-top: solid 1px #0000001a;
+        padding-bottom: 0;
+    }
+
+    /* === ERROR PAGES === */
     .error__container {
         padding: 0 15px;
         text-align: center;
@@ -37,59 +99,15 @@
     .error__codigo {
         font-size: 8rem;
     }
-
-    .home{
-        grid-template-columns: 1fr;        
-        grid-template-rows: 1fr 2fr;
-    }
-
-    .home__intro{
-        padding-top: 5vh;
-        position: static;
-    }
-
-    .home__title{
-        width: 50vw;
-    }
-    .home__description{        
-        display: none;        
-    }
-    .home__logos{
-        top: auto;
-        bottom: 4vh;
-    }
-
-    .home__form{
-        padding-top: 4vh;
-        align-items: start;
-    }
-    
-    .home.home--signup{
-        grid-template-columns: 1fr;        
-        grid-template-rows: 3fr 1fr;
-        overflow-y: auto;
-    }
-
-    .home--signup .home__form{
-        padding-top: 0;
-        align-items: end;
-    }
-    .home--signup .home__intro{
-        padding-top: 0;        
-    }
-    .home--signup .home__logos {
-        position: fixed;
-        top: 2vh;
-    }
-
-    .form--signup {        
-        z-index: 2;
-    }
 }
+
+/* ========================================
+   RESPONSIVE BREAKPOINT: 900px
+======================================== */
 
 @media (max-width: 900px) {
 
-
+    /* === LAYOUT / GRID STRUCTURE === */
     .content--ui {
         grid-template-columns: 180px calc(100vw - 180px);
         grid-template-rows: 70px calc(100vh - 60px);
@@ -98,10 +116,12 @@
             "sidebar main";
     }
 
+    /* === SIDEBAR SECTION === */
     .sidebar__logos>img {
         height: 45%;
     }
 
+    /* === HEADER SECTION === */
     .header__title {
         overflow-x: scroll;
     }
@@ -115,12 +135,9 @@
         max-width: 35vw;
     }
 
+    /* === DASHBOARD SECTION === */
     .dashboard__layout {
         padding: 10px 10px 20px;
-    }
-
-    .access-info {
-        padding: 8px 30px;
     }
 
     .dashboard__layout:not(#dashboard-inventarios-home, #dashboard-perfil, #dashboard-mapa, #dashboard-detalles, #dashboard-super-admin) {
@@ -131,17 +148,24 @@
         padding: 5px 10px 10px;
     }
 
+    .dashboard--table-section .dashboard__content {
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+    /* === SEARCH SECTION === */
     .search {
         position: static;
         width: auto;
         margin: 5px 10px;
     }
 
-    .dashboard--table-section .dashboard__content {
-        height: 100%;
-        overflow-y: scroll;
+    /* === ACCESS INFO SECTION === */
+    .access-info {
+        padding: 8px 30px;
     }
 
+    /* === TABLE / ACCORDION SECTION === */
     .table {
         display: none;
     }

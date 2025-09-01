@@ -1,3 +1,4 @@
+import { setVistaActual } from "../../../helpers/responsiveManager";
 import * as validaciones from "../../../utils/Validaciones";
 import {errorToast, successAlert } from "../../../utils/alertas";
 import * as api from "../../../utils/api";
@@ -5,6 +6,8 @@ import getCookie from "../../../utils/getCookie";
 import hasPermisos from "../../../utils/hasPermisos";
 
 export default async () => {
+
+  setVistaActual('inicio')
 
   localStorage.clear();
 

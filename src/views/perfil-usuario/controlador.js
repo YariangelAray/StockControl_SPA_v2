@@ -6,12 +6,14 @@ import { llenarCamposFormulario } from "../../helpers/llenarCamposFormulario.js"
 import { llenarSelect } from "../../helpers/select";
 import * as validaciones from "../../utils/Validaciones";
 import { errorToast, successToast } from "../../utils/alertas.js";
-import { eliminarAccesos, initTemporizadorAcceso } from "../inventarios/detalles/initTemporizadorAcceso.js";
 import { setLecturaForm } from "../../helpers/setLecturaForm.js";
 import getCookie from "../../utils/getCookie.js";
 import hasPermisos from "../../utils/hasPermisos.js";
+import { setVistaActual } from "../../helpers/responsiveManager.js";
 
 export default async () => {
+
+  setVistaActual('perfil')
 
   const permisos = getCookie('permisos', []);
   const rolesName = getCookie('roles', []).map(r => r.nombre);

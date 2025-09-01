@@ -1,7 +1,11 @@
 import { initComponentes } from "../../helpers/initComponentes";
+import { setVistaActual } from "../../helpers/responsiveManager";
 import { get } from "../../utils/api";
 
 export default async () => {    
+
+    setVistaActual('super-admin')
+
     const respuestaU = await get('usuarios');
     const respuestaA = await get('ambientes');
     const respuestaI = await get('inventarios');

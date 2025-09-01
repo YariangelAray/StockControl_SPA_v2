@@ -3,6 +3,7 @@ import 'sweetalert2/src/sweetalert2.scss'
 import Toastify from 'toastify-js';
 import "toastify-js/src/toastify.css";
 
+// Configuración común para todos los toasts
 const toastCommonOptions = {
   duration: 3000,
   gravity: "top",
@@ -18,38 +19,7 @@ const toastCommonOptions = {
   }
 };
 
-export function successToast(message = 'Operación realizada con éxito') {
-  Toastify({
-    text: message,
-    backgroundColor: "#39A900",
-    ...toastCommonOptions,
-  }).showToast();
-}
-
-export function errorToast(response) {
-  const messages = [];
-  if (Array.isArray(response?.errors)) {
-    response.errors.forEach(err => messages.unshift(err));
-    messages.forEach(({ message }) => {
-      Toastify({
-        text: `${response.message}: ${message}`,
-        backgroundColor: "hsla(0, 70%,55%, 1.00)",
-        ...toastCommonOptions,
-      }).showToast();
-    });
-  } else if (response?.message) {
-    Toastify({
-      text: `${response.message}`,
-      backgroundColor: "hsla(0, 70%,55%, 1.00)",
-      ...toastCommonOptions,
-    }).showToast();
-  }
-}
-
-
-
-
-// Configuración base
+// Configuración base para SweetAlert2
 const configuracionBase = {
   background: '#F6F6F6',
   customClass: {
@@ -58,60 +28,75 @@ const configuracionBase = {
   buttonsStyling: false,
 };
 
-// const activeToasts = [];
+/**
+ * Muestra un toast de éxito
+ * 
+ * @param {string} message - Mensaje a mostrar (default: 'Operación realizada con éxito')
+ */
+export function successToast(message = 'Operación realizada con éxito') {
+  // Crea y muestra el toast con estilo de éxito
+  Toastify({
+    text: message,
+    backgroundColor: "#39A900",
+    ...toastCommonOptions,
+  }).showToast();
+}
 
-// const Toast = Swal.mixin({
-//   toast: true,
-//   position: 'top-end',
-//   iconColor: 'white',
-//   customClass: {
-//     popup: 'colored-toast',
-//   },
-//   showConfirmButton: false,
-//   timer: 3000,
-//   timerProgressBar: true,
-//   showClass: {
-//     popup: ''
-//   },
-//   hideClass: {
-//     popup: ''
-//   },
-//   didOpen: (toast) => {
-//     // Calcular offset dinámico
-//     const offset = activeToasts.length * 60; // 60px por toast (ajustable)
-//     toast.style.top = `${offset}px`;
-//     toast.style.margin = '10px 10px 0 0';
-//     toast.style.position = 'absolute';
-//     toast.style.right = '0';
+/**
+ * Muestra toasts de error basados en la respuesta del backend
+ * Maneja tanto errores individuales como arrays de errores
+ * 
+ * @param {Object} response - Respuesta del backend con errores
+ */
+export function errorToast(response) {
+  // Array para almacenar mensajes de error
+  const messages = [];
+  
+  // Procesa errores si vienen en formato array
+  if (Array.isArray(response?.errors)) {
+    // Extrae cada error del array
+    response.errors.forEach(err => messages.unshift(err));
+    
+    // Muestra cada mensaje de error como toast separado
+    messages.forEach(({ message }) => {
+      Toastify({
+        text: `${response.message}: ${message}`,
+        backgroundColor: "hsla(0, 70%,55%, 1.00)",
+        ...toastCommonOptions,
+      }).showToast();
+    });
+  } else if (response?.message) {
+    // Muestra mensaje de error simple
+    Toastify({
+      text: `${response.message}`,
+      backgroundColor: "hsla(0, 70%,55%, 1.00)",
+      ...toastCommonOptions,
+    }).showToast();
+  }
+}
 
-//     // Agregar a la lista
-//     activeToasts.push(toast);
-//   },
-//   willClose: (toast) => {
-//     // Quitar de la lista
-//     const index = activeToasts.indexOf(toast);
-//     if (index !== -1) {
-//       activeToasts.splice(index, 1);
-//     }
+/**
+ * Muestra un toast informativo
+ * 
+ * @param {string} message - Mensaje informativo a mostrar
+ */
+export const infoToast = (message) => {
+  // Crea y muestra el toast con estilo informativo
+  Toastify({
+    text: message,
+    backgroundColor: "#1e73be",
+    ...toastCommonOptions,
+  }).showToast();
+}
 
-//     // Reorganizar los toasts restantes
-//     activeToasts.forEach((t, i) => {
-//       const newOffset = i * 60;
-//       t.style.top = `${newOffset}px`;
-//     });
-//   }
-// });
-
-// // Alerta de éxito
-// export const success = (mensaje = 'Operación realizada con éxito') => {
-
-//   return Toast.fire({
-//     icon: 'success',
-//     title: mensaje
-//   });
-// };
-
+/**
+ * Muestra una alerta modal de éxito con auto-cierre
+ * 
+ * @param {string} mensaje - Mensaje de éxito (default: 'Operación realizada con éxito')
+ * @returns {Promise} Promesa de SweetAlert2
+ */
 export const successAlert = (mensaje = 'Operación realizada con éxito') => {
+  // Retorna alerta modal con configuración de éxito
   return Swal.fire({
     ...configuracionBase,
     icon: 'success',
@@ -123,19 +108,21 @@ export const successAlert = (mensaje = 'Operación realizada con éxito') => {
     timerProgressBar: true,
     allowOutsideClick: false,
     didOpen: (popup) => {
+      // Muestra loading mientras se auto-cierra
       Swal.showLoading();
     }
   });
 };
 
-export const infoToast = (message) => {
-  Toastify({
-    text: message,
-    backgroundColor: "#1e73be",
-    ...toastCommonOptions,
-  }).showToast();
-}
+/**
+ * Muestra una alerta modal informativa
+ * 
+ * @param {string} titulo - Título de la alerta
+ * @param {string} mensaje - Mensaje informativo
+ * @returns {Promise} Promesa de SweetAlert2
+ */
 export const infoAlert = (titulo, mensaje) => {
+  // Retorna alerta modal con información
   return Swal.fire({
     ...configuracionBase,
     icon: 'info',
@@ -143,39 +130,3 @@ export const infoAlert = (titulo, mensaje) => {
     text: mensaje,
   });
 }
-
-// // Alerta de error que recibe tu respuesta del backend
-// // export const error = (respuesta) => {
-// //   let mensaje = 'Error desconocido.';
-
-// //   if (respuesta.hasOwnProperty('errors') && Array.isArray(respuesta.errors) && respuesta.errors.length > 0) {
-// //     mensaje = respuesta.errors.map(err => `${err}`).join('<br>');
-// //   } else if (respuesta.message) {
-// //     mensaje = `${respuesta.message}`;
-// //   }
-
-// //   return Swal.fire({
-// //     ...configuracionBase,
-// //     icon: 'error',
-// //     title: 'Se produjo un error',
-// //     html: mensaje,
-// //     confirmButtonText: 'Cerrar',
-// //   });
-// // };
-
-// export const error = (respuesta) => {
-//   let mensajes = ['Error desconocido.'];
-
-//   if (respuesta?.message) {
-//     mensajes = [respuesta.message];
-//   }
-//   if (Array.isArray(respuesta?.errors) && respuesta.errors.length > 0) {
-//     mensajes = [...mensajes,...respuesta.errors];
-//   }
-//   mensajes.forEach(({message}) => {
-//     Toast.fire({
-//       icon: 'error',
-//       title: message
-//     });
-//   });
-// };
