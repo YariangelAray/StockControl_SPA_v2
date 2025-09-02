@@ -105,7 +105,7 @@ export default (modal, parametros) => {
             return;
         }
         successToast('Reporte generado con éxito');
-        cerrarModal(modal)
+        await cerrarModal(modal)
         location.hash = "#/inventarios/elementos/detalles/id=" + parametros.id;
 
         await actualizarStorageReportes();
@@ -113,9 +113,9 @@ export default (modal, parametros) => {
 
     const cancelarBtn = modal.querySelector('.cancelar');
 
-    cancelarBtn.addEventListener('click', e => {
+    cancelarBtn.addEventListener('click',async e => {
         e.stopPropagation(); // evita que el listener global lo capture
-        cerrarModal(modal);
+        await cerrarModal(modal);
         location.hash = "#/inventarios/elementos/detalles/id=" + parametros.id;
     });
 

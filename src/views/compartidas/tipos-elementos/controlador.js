@@ -49,7 +49,7 @@ export default async () => {
   }
 
   // Elimina el botón crear si el usuario no tiene permiso para crear tipos
-  if (!hasPermisos('tipo-elemento.create', permisos)) {
+  if (!hasPermisos('tipo-elemento.create', permisos) || !hasPermisos('tipo-elemento.create-inventory-own', permisos)) {
     btnCrear.remove();
   }
 
