@@ -16,9 +16,6 @@ export default async () => {
   const btnVolver = document.querySelector("#btn-volver");
   const btnCrear = document.querySelector('#crearTipo');
 
-  // Obtiene el historial de navegación previo guardado en sessionStorage
-  const historial = sessionStorage.getItem("rutaAnterior");
-
   // Referencias a elementos donde se renderizan los tipos
   const tbody = document.querySelector('#dashboard-tipos-elementos .table__body');
   const acordeon = document.querySelector('#dashboard-tipos-elementos .acordeon');
@@ -33,7 +30,7 @@ export default async () => {
   }
 
   // Establece el enlace del botón volver al historial guardado
-  btnVolver.setAttribute("href", historial);
+  btnVolver.setAttribute("href", '#/inventarios/elementos');
 
   // Carga los tipos desde la fuente de datos (API o local)
   const tipos = await cargarTipos();
@@ -83,8 +80,7 @@ export default async () => {
   });
 
   // Evento que se ejecuta cuando cambia el tamaño de pantalla (responsive)
-  onResponsiveChange("tipos-elementos", async () => {
-    console.log("Resize detectado SOLO en tipos-elementos");
+  onResponsiveChange("tipos-elementos", async () => {    
 
     // Actualiza los tipos en segundo plano
     await actualizarStorageTipos();

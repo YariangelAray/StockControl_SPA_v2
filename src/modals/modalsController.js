@@ -5,9 +5,14 @@
  */
 export const mostrarModal = (modal) => {
   // Crea el elemento backdrop para oscurecer el fondo
-  const backdrop = document.createElement('div');
-  backdrop.className = 'modal__backdrop';
-  document.body.appendChild(backdrop);
+  let backdrop = document.querySelector('.modal__backdrop');
+
+  // Si no existe, lo creamos
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'modal__backdrop';
+    document.body.appendChild(backdrop);
+  }
 
   // Usa requestAnimationFrame para asegurar que las clases se apliquen correctamente
   requestAnimationFrame(() => {
@@ -25,7 +30,7 @@ export const mostrarModal = (modal) => {
 export const ocultarModal = (modal) => {
   // Busca el backdrop existente en el DOM
   const backdrop = document.querySelector('.modal__backdrop');
-  
+
   // Remueve las clases de visibilidad para activar animaciones de salida
   modal.classList.remove('visible');
   backdrop?.classList.remove('visible');
@@ -41,7 +46,7 @@ export const cerrarModal = (modal) => {
   return new Promise(resolve => {
     // Busca el backdrop para removerlo también
     const backdrop = document.querySelector('.modal__backdrop');
-    
+
     // Inicia las animaciones de salida
     backdrop?.classList.remove('visible');
     modal.classList.remove('visible');
@@ -66,16 +71,16 @@ export const cerrarModal = (modal) => {
 export const cargarModal = async (modalNombre) => {
   // Crea un contenedor temporal para parsear el HTML
   const tempDiv = document.createElement('div');
-  
+
   // Carga el contenido HTML del modal desde el archivo
   tempDiv.innerHTML = await (await fetch(`./src/modals/html/${modalNombre}.html`)).text();
-  
+
   // Extrae el elemento modal del HTML cargado
   const modal = tempDiv.querySelector('.modal');
-  
+
   // Agrega el modal al DOM
   document.body.appendChild(modal);
-  
+
   // Retorna el elemento modal para su uso
   return modal;
 };
@@ -89,7 +94,7 @@ export const cargarModal = async (modalNombre) => {
 export const mostrarConfirmacion = async (mensaje = '¿Está seguro de continuar?') => {
   // Carga el modal de confirmación desde archivo HTML
   const modalConfirmacion = await cargarModal('modalConfirmacion');
-  
+
   // Busca el elemento donde se mostrará el mensaje
   const mensajeSpan = modalConfirmacion.querySelector('.modal__mensaje');
   mensajeSpan.textContent = mensaje;

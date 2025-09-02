@@ -46,7 +46,7 @@ export default async (modal, parametros) => {
 
         selectTipo.addEventListener('change', () => {
             const valor = selectTipo.value;
-            if (valor == 'otro' && hasPermisos("tipo-elemento.create", permisos)) btnAgregarTipo.classList.remove('hidden');
+            if (valor == 'otro' && (hasPermisos("tipo-elemento.create", permisos) || hasPermisos("tipo-elemento.create-inventory-own", permisos))) btnAgregarTipo.classList.remove('hidden');
             else btnAgregarTipo.classList.add('hidden');
         });
 

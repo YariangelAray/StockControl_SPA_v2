@@ -51,7 +51,8 @@ export default async (modal) => {
           // Cierra el modal con animación
           cerrarModal(modalCargado);
           // Navega de vuelta al hash base después del cierre
-          requestAnimationFrame(() => location.hash = obtenerHashBase());
+          // requestAnimationFrame(() => location.hash = obtenerHashBase());          
+          requestAnimationFrame(() => window.history.pushState(null, '', obtenerHashBase()));
         }
       }
     });

@@ -59,8 +59,6 @@ export default async () => {
 
   // Evento que se ejecuta cuando cambia el tamaño de pantalla (responsive) para la vista "inventarios"
   onResponsiveChange("inventarios", async () => {
-    // Mensaje en consola para debug cuando se detecta resize en esta vista
-    console.log("Resize detectado SOLO en inventarios");
 
     // Actualiza en segundo plano los inventarios almacenados
     await actualizarStorageInventarios();

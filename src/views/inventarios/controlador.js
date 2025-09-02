@@ -76,7 +76,7 @@ const cargarInventarios = async (permisos) => {
 
         // Si no hay código de acceso guardado, intenta obtenerlo
         if (!localStorage.getItem('codigoAccesoInfo')) {
-          const respuesta = await api.get('accesos/inventario/' + inventario.id);
+          const respuesta = await api.get('accesos/inventarios/' + inventario.id);
           if (respuesta.success) {
             // Guarda el código y su expiración en localStorage
             localStorage.setItem('codigoAccesoInfo', JSON.stringify({

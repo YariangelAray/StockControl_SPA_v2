@@ -63,7 +63,7 @@ export const abrirModalConfigurar = async () => {
     }));
     
     // Cierra modal actual y abre modal de código generado
-    cerrarModal(modal);
+    await cerrarModal(modal);
     const modalCodigoAcceso = await cargarModal("modalCodigoAcceso");
     
     // Muestra el código generado en el nuevo modal

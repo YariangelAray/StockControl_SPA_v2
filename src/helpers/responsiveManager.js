@@ -48,8 +48,6 @@ export const onResponsiveChange = (vista, callback) => {
 
 // Listener global de resize que distribuye eventos a la vista activa
 window.addEventListener("resize", () => {
-  // Marca que hubo un cambio de tamaño
-  cambioResize = true;
   
   // Obtiene la vista actualmente activa
   const actual = getVistaActual();

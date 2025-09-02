@@ -81,7 +81,7 @@ export default async (modal) => {
 
         cerrarModal(modal);
         setTimeout(async () => successToast('Inventario creado con éxito'), 100);
-        location.hash = obtenerHashBase();
+        requestAnimationFrame(() => window.history.pushState(null, '', obtenerHashBase()));
 
         const datosFormateados = formatearInventario(respuesta.data);
 

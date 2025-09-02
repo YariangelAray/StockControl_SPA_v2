@@ -26,9 +26,7 @@ export default async () => {
   }
 
   // Verifica si el usuario tiene permiso para ver tipos de elementos
-  if (hasPermisos('tipo-elemento.view-inventory-own', permisos)) {
-    // Guarda la ruta actual en sessionStorage
-    sessionStorage.setItem("rutaAnterior", location.hash);
+  if (hasPermisos('tipo-elemento.view-inventory-own', permisos)) {  
     // Muestra el botón de ver tipos
     const verTiposBoton = document.getElementById('verTipos');
     verTiposBoton.classList.remove('hidden');
@@ -79,7 +77,7 @@ export default async () => {
 
     // Filtra los elementos que coincidan con el texto
     const elementosFiltrados = elementos.filter(elemento => {
-      elemento = elemento.map(e => typeof e === 'object' ? e.value : e);
+      elemento = elemento.map(e => (e && typeof e === 'object' && e.value != null) ? e.value : e);
       for (const dato of elemento) {
         if (dato && dato.toString().toLowerCase().includes(valor)) return true;
       }
@@ -139,9 +137,7 @@ export default async () => {
   });
 
   // Escucha cambios de tamaño de pantalla
-  onResponsiveChange("elementos", async () => {
-    // Muestra mensaje en consola
-    console.log("Resize detectado SOLO en elementos");
+  onResponsiveChange("elementos", async () => {    
 
     // Actualiza los elementos en segundo plano
     await actualizarStorageElementos();
@@ -159,7 +155,7 @@ const filtrarElementos = ({ elementos, estado = '', ambiente = '' }) => {
   // Filtra cada lista de datos
   return elementos.filter(lista => {
     // Convierte objetos a valores simples
-    lista = lista.map(e => typeof e === 'object' ? e.value : e);
+    lista = lista.map(e => (e && typeof e === 'object' && e.value != null) ? e.value : e);
 
     // Verifica si contiene el estado buscado
     const contieneEstado = estado ? lista.some(d => d?.toString().toLowerCase() === estado.toLowerCase()) : true;

@@ -62,8 +62,6 @@ export default async () => {
 
   // Evento que se ejecuta cuando cambia el tamaño de pantalla (responsive) para la vista "ambientes"
   onResponsiveChange("ambientes", async () => {
-    // Mensaje en consola para debug cuando se detecta resize en esta vista
-    console.log("Resize detectado SOLO en ambientes");
 
     // Actualiza en segundo plano los ambientes almacenados
     await actualizarStorageAmbientes();

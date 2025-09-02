@@ -123,7 +123,7 @@ export const routes = {
         crear: {
           path: 'modalTipoElemento',
           controller: tipoElemento.crear,
-          meta: { can: 'tipo-elemento.create', requiresInventory: true, modal: true }
+          meta: { can: 'tipo-elemento.create-inventory-own', requiresInventory: true, modal: true }
         },
         // Modal para ver detalles del tipo de elemento
         detalles: {
@@ -135,7 +135,7 @@ export const routes = {
         editar: {
           path: 'modalTipoElemento',
           controller: tipoElemento.editar,
-          meta: { can: 'tipo-elemento.update', requiresInventory: true, modal: true, sameModal: true }
+          meta: { can: 'tipo-elemento.update-inventory-own', requiresInventory: true, modal: true, sameModal: true }
         },
       }
     },

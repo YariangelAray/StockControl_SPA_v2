@@ -84,10 +84,14 @@ export default async (modal, opciones = {}) => {
             return;
         }
 
-        cerrarModal(modal);
+        await cerrarModal(modal);
         setTimeout(async () => successToast('Tipo de elemento creado con éxito'), 100);
         if (!opciones?.evitarRedireccion) {
-            location.hash = obtenerHashBase();
+            requestAnimationFrame(() => window.history.pushState(null, '', obtenerHashBase()));
+        }
+        else{
+            const modal = document.querySelector('.modal');
+            mostrarModal(modal)
         }
 
         const datosFormateados = formatearTipo(respuesta.data);

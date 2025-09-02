@@ -51,8 +51,7 @@ export default async () => {
     if (e.target.closest('.generar-codigo')) {
 
       // Obtiene info del código de acceso desde localStorage
-      const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));
-      console.log(codigoInfo);
+      const codigoInfo = JSON.parse(localStorage.getItem('codigoAccesoInfo'));      
 
       if (codigoInfo) {
         // Calcula tiempo restante del código actual

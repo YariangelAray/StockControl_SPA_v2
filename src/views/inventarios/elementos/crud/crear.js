@@ -45,7 +45,7 @@ export default async (modal, parametros = {}) => {
 
         selectTipo.addEventListener('change', () => {
             const valor = selectTipo.value;
-            if (valor == 'otro' && hasPermisos("tipo-elemento.create", permisos)) btnAgregarTipo.classList.remove('hidden');
+            if (valor == 'otro' && (hasPermisos("tipo-elemento.create", permisos) || hasPermisos("tipo-elemento.create-inventory-own", permisos))) btnAgregarTipo.classList.remove('hidden');
             else btnAgregarTipo.classList.add('hidden');
         });
 
@@ -68,6 +68,7 @@ export default async (modal, parametros = {}) => {
         const btn = modal.querySelector(selector);
         if (btn) btn.classList.remove('hidden');
     });
+
     btnAgregarTipo.classList.add('hidden');
 
     // aplicar permisos sobre los visibles
@@ -77,7 +78,7 @@ export default async (modal, parametros = {}) => {
         const requeridos = btn.dataset.permiso.split(',').map(p => p.trim());
         const tienePermiso = requeridos.some(p => hasPermisos(p, permisos));
 
-        if (!tienePermiso) {
+        if (!tienePermiso) {            
             btn.remove();
         }
     });
@@ -138,7 +139,7 @@ export default async (modal, parametros = {}) => {
 
         cerrarModal(modal);
         setTimeout(async () => successToast('Elemento creado con éxito'), 100);
-        location.hash = obtenerHashBase();
+        requestAnimationFrame(() => window.history.pushState(null, '', obtenerHashBase()));
 
         const datosFormateados = formatearElemento(respuesta.data);
 

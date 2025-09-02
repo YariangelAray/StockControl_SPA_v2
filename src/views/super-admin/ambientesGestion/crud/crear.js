@@ -95,7 +95,7 @@ export default async (modal) => {
 
     cerrarModal(modal);
     setTimeout(async () => successToast('Ambiente creado con éxito'), 100);
-    location.hash = obtenerHashBase();
+    requestAnimationFrame(() => window.history.pushState(null, '', obtenerHashBase()));
 
     const datosFormateados = formatearAmbiente(respuesta.data);
 

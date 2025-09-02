@@ -14,22 +14,15 @@ export const gestionarTipoElemento = async (modalElemento, modo, datosPrevios = 
   await tipoElemento.crear(modalTipo, { evitarRedireccion: true });
   mostrarModal(modalTipo);
 
-  // Escuchar el evento 'close' ANTES de cerrar el modal
-  modalTipo.addEventListener('close', async () => {
-    mostrarModal(modalElemento);
-
-    // Reejecutar controlador si quieres refrescar datos
-    if (modo === 'crear') {
-      // await crearElemento(modalElemento, datosPrevios);
-    } else if (modo === 'editar') {
-      // await editarElemento(modalElemento, datosPrevios);
-    }
-  }, { once: true });
-
   modalTipo.addEventListener('click', async (e) => {
-    if (e.target.matches('.cancelar, .aceptar')) {
-      cerrarModal(modalTipo);
-      // No agregues aquí el listener 'close' porque ya está arriba
+    if (e.target.matches('.cancelar')) {
+      await cerrarModal(modalTipo);
+      mostrarModal(modalElemento);
+      if (modo === 'crear') {
+        await crearElemento(modalElemento, datosPrevios);
+      } else if (modo === 'editar') {
+        await editarElemento(modalElemento, datosPrevios);
+      }
     }
   });
 };

@@ -54,10 +54,7 @@ export default async () => {
     });
 
     // Escucha cambios de tamaño de pantalla
-    onResponsiveChange("reportes", async () => {
-
-        // Muestra mensaje en consola
-        console.log("Resize detectado SOLO en reportes");
+    onResponsiveChange("reportes", async () => {                
 
         // Actualiza los reportes en segundo plano
         await actualizarStorageReportes();

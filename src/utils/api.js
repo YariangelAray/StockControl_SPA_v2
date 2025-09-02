@@ -186,7 +186,6 @@ export const patch = async (endpoint, objeto) => {
 
     // Parsea y retorna la respuesta JSON
     const data = await respuesta.json();
-    console.log(`✅ PATCH ${endpoint} exitoso`);
     return data;
 
   } catch (error) {

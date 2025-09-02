@@ -52,6 +52,15 @@ export const initTemporizadorAcceso = async () => {
   intervalo = setInterval(async () => {
     const ahora = new Date();
 
+    if(location.hash == "#/inicio" || location.hash == "#/registro" || location.hash == "#/inventarios"){
+      clearInterval(intervalo)
+      temporizadorActivo = false;      
+      document.querySelector('.sidebar .access-info')?.classList.add('hidden');
+      localStorage.removeItem('codigoAccesoInfo');
+      if (hasPermisos('inventario.view-access-own', permisos)) localStorage.removeItem('inventario');
+      return;
+    }
+
     // Si el tiempo actual supera la expiración, limpia el intervalo y elimina accesos
     if (ahora >= expiracion) {
       clearInterval(intervalo);
@@ -156,7 +165,7 @@ const eliminarAccesos = async (inventarioId, permisos) => {
   // Si el usuario tiene permiso, elimina también la información del inventario
   if (hasPermisos('inventario.view-access-own', permisos)) localStorage.removeItem('inventario');
   // Realiza una petición DELETE para eliminar el acceso en el backend
-  await del('accesos/inventario/' + inventarioId);
+  await del('accesos/inventarios/' + inventarioId);
 
   // Dispara un evento personalizado para notificar que el código de acceso expiró
   document.dispatchEvent(new CustomEvent('codigoAccesoExpirado', {

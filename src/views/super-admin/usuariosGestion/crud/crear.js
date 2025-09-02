@@ -141,7 +141,7 @@ export default async (modal) => {
         cerrarModal(modal);
 
         setTimeout(async () => successToast('Usuario creado con éxito'), 100);
-        location.hash = obtenerHashBase();
+        requestAnimationFrame(() => window.history.pushState(null, '', obtenerHashBase()));
 
         const { data } = await get('usuarios/' + respuesta.data.id);
         const datosFormateados = formatearUsuario(data);
