@@ -264,6 +264,10 @@
         top: 60%;
     }
 
+    .text-floating {
+      font-size: 3rem;
+    }
+
     /* === CONTENT CARDS SECTION === */
     .content-cards:not(.content-cards--super-admin) {
         grid-template-columns: 1fr;
